@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Animals are fun! (Continued)</name>
+  
+  <author>ColossalFossil</author>
+  
+  <packageId>ColossalFossil.AnimalsAreFunContinued</packageId>
+  
+  <supportedVersions>
+    <li>1.5</li>
+  </supportedVersions>
+
+  <loadAfter>
+    <li>Ludeon.RimWorld</li>
+  </loadAfter>
+
+  <description>Spend time and have fun with your pets! This mod lets your pawns play fetch or go for a walk. Your pawns will gain a little animal skill as well. This mod is a continuation of the Animals are fun mod by Revolus.</description>
+</ModMetaData>
