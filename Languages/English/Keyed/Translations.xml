@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+  <Animals_are_fun_Continued>Animals are fun! (Continued)</Animals_are_fun_Continued>
+  <DebuggingCategory>Debugging:</DebuggingCategory>
+  <MaxBodySize>Max. body size ({0}cm)</MaxBodySize>
+  <MaxWildness>Max. wildness ({0}%)</MaxWildness>
+  <MinConsciousness>Min. consciousness ({0}%)</MinConsciousness>
+  <MinMoving>Min. moving ({0}%)</MinMoving>
+  <MustBeCute>Must be cute</MustBeCute>
+  <MustBeCuteTooltip>Only play with or walk nuzzling animals</MustBeCuteTooltip>
+  <RequirementsCategory>Requirements:</RequirementsCategory>
+  <ShowDebugMessages>Show debug messages</ShowDebugMessages>
+</LanguageData>

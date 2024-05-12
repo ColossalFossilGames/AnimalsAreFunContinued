@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net481</TargetFramework>
+    <Title>Animals Are Fun! (Continued)</Title>
+    <Version>1.5.1</Version>
+    <Authors>ColossalFossil</Authors>
+    <Product>Animals Are Fun! (Continued)</Product>
+    <Description>A RimWorld mod that allows your pawns to play fetch or go for a walk with your pets.</Description>
+    <Copyright>Copyright © 2024 ColossalFossil</Copyright>
+    <BaseOutputPath></BaseOutputPath>
+    <SignAssembly>False</SignAssembly>
+    <Configurations>Release</Configurations>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <PackageProjectUrl>https://github.com/ColossalFossilGames/AnimalsAreFunContinued</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/ColossalFossilGames/AnimalsAreFunContinued</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ModPackageFolder\**" />
+    <EmbeddedResource Remove="ModPackageFolder\**" />
+    <None Remove="ModPackageFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Krafs.Publicizer" Version="2.2.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4085" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Publicize Include="Assembly-CSharp;UnityEngine.CoreModule" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="XCOPY &quot;$(SolutionDir)About&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\About\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Defs&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Defs\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Languages&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Languages\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)bin\Release&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\v1.5\Assemblies\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)*.xml&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.sln&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.csproj&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)*.cs&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y" />
+  </Target>
+
+</Project>
