@@ -10,34 +10,46 @@ namespace AnimalsAreFunContinued
     {
         public List<LocalTargetInfo> Path = null;
 
-        public LocalTargetInfo PullNextPathIndex()
-        {
-            if (Path == null || Path.Count <= 0)
-            {
-                return null;
-            }
+        public Func<LocalTargetInfo> GetNextWaypointGenerator() => () => PullNextWaypoint();
 
-            LocalTargetInfo nextPathIndex = Path[0];
-            Path.RemoveAt(0);
-            return nextPathIndex;
-        }
-
-        public Func<LocalTargetInfo> GetNextPathGenerator() => () => PullNextPathIndex();
-
-        public Action GetInitActionBuilder(Toil toil) => () => JumpToToil(toil);
-
-        public Action GetRepeatActionBuilder(Toil toil) => () =>
+        public Action GetRepeatActionGenerator(Toil toilToRepeat, string continueMessage = null, string finishMessage = null) => () =>
         {
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             if (Find.TickManager.TicksGame > startTick + job.def.joyDuration)
             {
-                AnimalsAreFunContinued.Debug($"pawn is ending walk with animal: {pawn} => {animal.Name}");
+                if (finishMessage != null)
+                {
+                    AnimalsAreFunContinued.Debug(finishMessage);
+                }
                 return;
             }
 
-            AnimalsAreFunContinued.Debug($"pawn is continuing walk with animal: {pawn} => {animal.Name}");
-            JumpToToil(toil);
+            if (continueMessage != null)
+            {
+                AnimalsAreFunContinued.Debug(continueMessage);
+            }
+            JumpToToil(toilToRepeat);
         };
+
+        public bool FindOutsideWalkingPath()
+        {
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            if (
+                FindWalkingDestination(pawn, animal, out IntVec3 walkingDestination) &&
+                WalkPathFinder.TryFindWalkPath(pawn, walkingDestination, out List<IntVec3> path)
+            )
+            {
+                Path = new List<LocalTargetInfo>(path.Count);
+                for (int pathIndex = 0; pathIndex < path.Count; pathIndex++)
+                {
+                    Path.Add(path[pathIndex]);
+                }
+                return true;
+            }
+
+            Path = null;
+            return false;
+        }
 
         public static bool FindWalkingDestination(Pawn pawn, Pawn animal, out IntVec3 walkingDestination)
         {
@@ -66,23 +78,16 @@ namespace AnimalsAreFunContinued
             return isValidDestination;
         }
 
-        public static bool FindOutsideWalkingPath(Pawn pawn, Pawn animal, out List<LocalTargetInfo> walkingPath)
+        private LocalTargetInfo PullNextWaypoint()
         {
-            if (
-                FindWalkingDestination(pawn, animal, out IntVec3 walkingDestination) &&
-                WalkPathFinder.TryFindWalkPath(pawn, walkingDestination, out List<IntVec3> path)
-            )
+            if (Path == null || Path.Count <= 0)
             {
-                walkingPath = new List<LocalTargetInfo>(path.Count);
-                for (int pathIndex = 0; pathIndex < path.Count; pathIndex++)
-                {
-                    walkingPath.Add(path[pathIndex]);
-                }
-                return true;
+                return null;
             }
 
-            walkingPath = default;
-            return false;
+            LocalTargetInfo nextPathIndex = Path[0];
+            Path.RemoveAt(0);
+            return nextPathIndex;
         }
     }
 }

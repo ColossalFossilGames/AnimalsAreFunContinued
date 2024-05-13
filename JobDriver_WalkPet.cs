@@ -10,28 +10,37 @@ namespace AnimalsAreFunContinued {
 
         public override IEnumerable<Toil> MakeNewToils()
         {
-            // load the walking path
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
-            if (!FindOutsideWalkingPath(pawn, animal, out Path))
+
+            // load the walking path
+            if (!FindOutsideWalkingPath())
             {
                 AnimalsAreFunContinued.Debug($"could not find a valid walking path: {pawn} => {animal.Name}");
                 yield break;
             }
 
             // initial go to animal
-            yield return Toils_PawnActions.WalkToPet(job, pawn, LocomotionUrgency.Jog);
+            yield return Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
 
             // say hello to animal
-            yield return Toils_PawnActions.TalkToPet(job, pawn);
+            yield return Toils_PawnActions.TalkToPet(this);
 
-            // wander around with pet
-            Toil walkToWaypoint = Toils_PawnActions.WalkToWaypoint(job, pawn, GetNextPathGenerator());
+            // walk with pet
+            Toil walkToWaypoint = Toils_PawnActions.WalkToWaypoint(this, GetNextWaypointGenerator());
             yield return walkToWaypoint;
-            Toil sayGoodbye = Toils_PawnActions.TalkToPet(job, pawn, LocomotionUrgency.Jog);
-            yield return Toils_PawnActions.WalkToLocation(job, GetRepeatActionBuilder(walkToWaypoint));
 
-            // register remaining waypoints
-            yield return sayGoodbye;
+            // walk more with pet
+            yield return Toils_PawnActions.WalkToNextWaypoint(this, GetRepeatActionGenerator(
+                walkToWaypoint,
+                $"pawn is continuing walk with animal: {pawn} => {animal.Name}",
+                $"pawn is ending walk with animal: {pawn} => {animal.Name}"
+            ));
+
+            // go back to animal
+            yield return Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+
+            // say goodbye to pet
+            yield return Toils_PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
         }
     }
 }

@@ -7,8 +7,10 @@ namespace AnimalsAreFunContinued
 {
     public static class Toils_PawnActions
     {
-        public static Toil WalkToPet(Job job, Pawn pawn, LocomotionUrgency urgency = LocomotionUrgency.Walk)
+        public static Toil WalkToPet(PathableJobDriver jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
         {
+            Job job = jobDriver.job;
+            Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
             Toil walkToPet = new Toil()
@@ -18,7 +20,6 @@ namespace AnimalsAreFunContinued
                     AnimalsAreFunContinued.Debug($"approaching pet: {pawn} => {animal.Name}");
                     if (pawn.Position == animal.Position)
                     {
-                        pawn.jobs.curDriver.ReadyForNextToil();
                         AnimalsAreFunContinued.Debug($"done approaching pet: {pawn} => {animal.Name}");
                         return;
                     }
@@ -36,8 +37,10 @@ namespace AnimalsAreFunContinued
             return walkToPet;
         }
 
-        public static Toil TalkToPet(Job job, Pawn pawn, LocomotionUrgency urgency = LocomotionUrgency.Walk)
+        public static Toil TalkToPet(PathableJobDriver jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
         {
+            Job job = jobDriver.job;
+            Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
             Toil talkToPet = new Toil()
@@ -59,8 +62,10 @@ namespace AnimalsAreFunContinued
             return talkToPet;
         }
 
-        public static Toil WalkToWaypoint(Job job, Pawn pawn, Func<LocalTargetInfo> getLocation)
+        public static Toil WalkToWaypoint(PathableJobDriver jobDriver, Func<LocalTargetInfo> getLocation)
         {
+            Job job = jobDriver.job;
+            Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
             Toil walkToWaypoint = new Toil()
@@ -91,8 +96,9 @@ namespace AnimalsAreFunContinued
             return walkToWaypoint;
         }
 
-        public static Toil WalkToLocation(Job job, Action repeatAction)
+        public static Toil WalkToNextWaypoint(PathableJobDriver jobDriver, Action repeatAction)
         {
+            Job job = jobDriver.job;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
  
             Toil walkToLocation = new Toil()
