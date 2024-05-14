@@ -20,7 +20,7 @@ namespace AnimalsAreFunContinued
                 return null;
             }
 
-            var job = JobMaker.MakeJob(def.jobDef, animal);
+            var job = JobMaker.MakeJob(def.jobDef, null, animal);
             AnimalsAreFunContinued.Debug($"found animal {animal.Name}, made WalkPet job {job}");
             return job;
         }

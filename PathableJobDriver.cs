@@ -10,11 +10,11 @@ namespace AnimalsAreFunContinued
     {
         public List<LocalTargetInfo> Path = null;
 
-        public Func<LocalTargetInfo> GetNextWaypointGenerator() => () => PullNextWaypoint();
+        public Func<LocalTargetInfo> GetNextWaypointGenerator(bool preserveStack = false) => () => PullNextWaypoint(preserveStack);
 
         public Action GetRepeatActionGenerator(Toil toilToRepeat, string continueMessage = null, string finishMessage = null) => () =>
         {
-            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             if (Find.TickManager.TicksGame > startTick + job.def.joyDuration)
             {
                 if (finishMessage != null)
@@ -33,7 +33,7 @@ namespace AnimalsAreFunContinued
 
         public bool FindOutsideWalkingPath()
         {
-            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             if (
                 FindWalkingDestination(pawn, animal, out IntVec3 walkingDestination) &&
                 WalkPathFinder.TryFindWalkPath(pawn, walkingDestination, out List<IntVec3> path)
@@ -78,7 +78,7 @@ namespace AnimalsAreFunContinued
             return isValidDestination;
         }
 
-        private LocalTargetInfo PullNextWaypoint()
+        private LocalTargetInfo PullNextWaypoint(bool preserveStack = false)
         {
             if (Path == null || Path.Count <= 0)
             {
@@ -86,7 +86,10 @@ namespace AnimalsAreFunContinued
             }
 
             LocalTargetInfo nextPathIndex = Path[0];
-            Path.RemoveAt(0);
+            if (!preserveStack)
+            {
+                Path.RemoveAt(0);
+            }
             return nextPathIndex;
         }
     }

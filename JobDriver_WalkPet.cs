@@ -6,11 +6,11 @@ namespace AnimalsAreFunContinued {
     public class JobDriver_WalkPet : PathableJobDriver
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed) =>
-            pawn.Reserve(job.GetTarget(TargetIndex.A), job, errorOnFailed: errorOnFailed);
+            pawn.Reserve(job.GetTarget(TargetIndex.B), job, errorOnFailed: errorOnFailed);
 
         public override IEnumerable<Toil> MakeNewToils()
         {
-            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
             // load the walking path
             if (!FindOutsideWalkingPath())

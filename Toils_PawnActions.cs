@@ -11,7 +11,7 @@ namespace AnimalsAreFunContinued
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
-            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
             Toil walkToPet = new Toil()
             {
@@ -41,7 +41,7 @@ namespace AnimalsAreFunContinued
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
-            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
             Toil talkToPet = new Toil()
             {
@@ -66,7 +66,7 @@ namespace AnimalsAreFunContinued
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
-            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
             Toil walkToWaypoint = new Toil()
             {
@@ -96,20 +96,45 @@ namespace AnimalsAreFunContinued
             return walkToWaypoint;
         }
 
-        public static Toil WalkToNextWaypoint(PathableJobDriver jobDriver, Action repeatAction)
+        public static Toil WalkToNextWaypoint(PathableJobDriver jobDriver, Action repeatAction) => new Toil()
+        {
+            initAction = () =>
+            {
+                repeatAction();
+            },
+            defaultCompleteMode = ToilCompleteMode.Instant
+        };
+
+        public static Toil ThrowBall(PathableJobDriver jobDriver, Func<LocalTargetInfo> getLocation)
         {
             Job job = jobDriver.job;
-            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
- 
-            Toil walkToLocation = new Toil()
+            Pawn pawn = jobDriver.pawn;
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+
+            Toil throwBall = new Toil()
             {
                 initAction = () =>
                 {
-                    repeatAction();
+                    HaveAnimalFollowPawn(pawn, animal);
+                    LocalTargetInfo throwTarget = getLocation();
+                    job.targetA = throwTarget;
+                    pawn.rotationTracker.FaceTarget(throwTarget);
+                    FleckMaker.ThrowStone(pawn, throwTarget.Cell);
                 },
-                defaultCompleteMode = ToilCompleteMode.Instant
+                socialMode = RandomSocialMode.SuperActive,
+                defaultCompleteMode = ToilCompleteMode.Delay,
+                defaultDuration = 300,
             };
-            return walkToLocation;
+            throwBall.AddPreInitAction(() =>
+            {
+                job.locomotionUrgency = LocomotionUrgency.None;
+            });
+            throwBall.AddFinishAction(() =>
+            {
+                HaveAnimalStopFollowingPawn(animal);
+            });
+            throwBall.FailOn(ToilsFailOn(pawn, animal));
+            return throwBall;
         }
 
         private static void HaveAnimalFollowPawn(Pawn pawn, Pawn animal)
