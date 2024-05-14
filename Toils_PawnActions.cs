@@ -11,7 +11,7 @@ namespace AnimalsAreFunContinued
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
 
             Toil walkToPet = new Toil()
             {
@@ -41,7 +41,7 @@ namespace AnimalsAreFunContinued
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
 
             Toil talkToPet = new Toil()
             {
@@ -66,7 +66,7 @@ namespace AnimalsAreFunContinued
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
 
             Toil walkToWaypoint = new Toil()
             {
@@ -99,7 +99,7 @@ namespace AnimalsAreFunContinued
         public static Toil WalkToNextWaypoint(PathableJobDriver jobDriver, Action repeatAction)
         {
             Job job = jobDriver.job;
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
  
             Toil walkToLocation = new Toil()
             {

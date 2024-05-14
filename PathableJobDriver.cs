@@ -14,7 +14,7 @@ namespace AnimalsAreFunContinued
 
         public Action GetRepeatActionGenerator(Toil toilToRepeat, string continueMessage = null, string finishMessage = null) => () =>
         {
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
             if (Find.TickManager.TicksGame > startTick + job.def.joyDuration)
             {
                 if (finishMessage != null)
@@ -33,7 +33,7 @@ namespace AnimalsAreFunContinued
 
         public bool FindOutsideWalkingPath()
         {
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            Pawn animal = job.GetTarget(TargetIndex.A).Pawn;
             if (
                 FindWalkingDestination(pawn, animal, out IntVec3 walkingDestination) &&
                 WalkPathFinder.TryFindWalkPath(pawn, walkingDestination, out List<IntVec3> path)
