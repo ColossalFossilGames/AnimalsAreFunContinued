@@ -4,7 +4,7 @@ using Verse.AI;
 
 namespace AnimalsAreFunContinued
 {
-    public class JoyGiver_AnimalSocial : JoyGiver
+    public class JoyGiver_WalkPet : JoyGiver
     {
         public override Job TryGiveJob(Pawn pawn)
         {
