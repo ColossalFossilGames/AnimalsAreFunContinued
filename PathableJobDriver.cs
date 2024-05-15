@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace AnimalsAreFunContinued
 {
@@ -12,7 +13,7 @@ namespace AnimalsAreFunContinued
 
         public Func<LocalTargetInfo> GetNextWaypointGenerator(bool preserveStack = false) => () => PullNextWaypoint(preserveStack);
 
-        public Action GetRepeatActionGenerator(Toil toilToRepeat, string continueMessage = null, string finishMessage = null) => () =>
+        public Action GetNextToilActionGenerator(Toil toilToRepeat, Toil toilOnEnd, string continueMessage = null, string finishMessage = null) => () =>
         {
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             if (Find.TickManager.TicksGame > startTick + job.def.joyDuration)
@@ -21,7 +22,8 @@ namespace AnimalsAreFunContinued
                 {
                     AnimalsAreFunContinued.Debug(finishMessage);
                 }
-                return;
+                animal.jobs.EndCurrentJob(JobCondition.Succeeded);
+                JumpToToil(toilOnEnd);
             }
 
             if (continueMessage != null)

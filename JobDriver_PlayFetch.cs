@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
@@ -6,8 +7,23 @@ namespace AnimalsAreFunContinued
 {
     public class JobDriver_PlayFetch : PathableJobDriver
     {
+        public int CurrentAnimalJobId = 0;
+
         public override bool TryMakePreToilReservations(bool errorOnFailed) =>
             pawn.Reserve(job.GetTarget(TargetIndex.B), job, errorOnFailed: errorOnFailed);
+
+        public Action<LocalTargetInfo, LocalTargetInfo> GetQueueAnimalJobGenerator(JobDef jobDef)
+        {
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+
+            return (LocalTargetInfo targetA, LocalTargetInfo targetB) =>
+            {
+                animal.jobs.StopAll();
+                Job job = JobMaker.MakeJob(jobDef, targetA, targetB);
+                CurrentAnimalJobId = job.loadID;
+                animal.jobs.StartJob(job);
+            };
+        }
 
         public override IEnumerable<Toil> MakeNewToils()
         {
@@ -31,24 +47,41 @@ namespace AnimalsAreFunContinued
             yield return walkToWaypoint;
 
             // throw ball
-            yield return Toils_PawnActions.ThrowBall(this, GetNextWaypointGenerator(true));
+            yield return Toils_PawnActions.ThrowBall(
+                this,
+                GetNextWaypointGenerator(true),
+                GetQueueAnimalJobGenerator(AnimalsAreFunContinuedDefOf.FetchItem)
+            );
 
-            // wait for animal to fetch and return ball
-
-            // walk with pet to next waypoint
-            yield return Toils_PawnActions.WalkToNextWaypoint(this, GetRepeatActionGenerator(
-                walkToWaypoint,
-                $"pawn is continuing walk with animal: {pawn} => {animal.Name}",
-                $"pawn is ending walk with animal: {pawn} => {animal.Name}"
-            ));
-
-            // loop back to throw ball
+            // wait for animal to fetch and return ball and then walk with pet to next waypoint
+            Toil goBackToAnimal = Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return Toils_PawnActions.WaitForAnimalToReturn(this,
+                GetNextToilActionGenerator(
+                    walkToWaypoint,
+                    goBackToAnimal,
+                    $"pawn is continuing to play fetch with animal: {pawn} => {animal.Name}",
+                    $"pawn is ending play fetch with animal: {pawn} => {animal.Name}"
+                ),
+                GetValidateAnimalJobGenerator()
+            );
 
             // go back to animal
-            yield return Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return goBackToAnimal;
 
             // say goodbye to pet
             yield return Toils_PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
+        }
+
+        public Func<Job, bool> GetValidateAnimalJobGenerator()
+        {
+            return (Job curJob) =>
+            {
+                if (curJob.loadID != CurrentAnimalJobId)
+                {
+                    CurrentAnimalJobId = 0;
+                }
+                return curJob.loadID == CurrentAnimalJobId;
+            };
         }
     }
 }

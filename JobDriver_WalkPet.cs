@@ -30,14 +30,16 @@ namespace AnimalsAreFunContinued {
             yield return walkToWaypoint;
 
             // walk more with pet
-            yield return Toils_PawnActions.WalkToNextWaypoint(this, GetRepeatActionGenerator(
+            Toil goBackToAnimal = Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return Toils_PawnActions.WalkToNextWaypoint(this, GetNextToilActionGenerator(
                 walkToWaypoint,
+                goBackToAnimal,
                 $"pawn is continuing walk with animal: {pawn} => {animal.Name}",
                 $"pawn is ending walk with animal: {pawn} => {animal.Name}"
             ));
 
             // go back to animal
-            yield return Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return goBackToAnimal;
 
             // say goodbye to pet
             yield return Toils_PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
