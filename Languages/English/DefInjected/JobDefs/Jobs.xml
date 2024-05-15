@@ -2,5 +2,7 @@
 <LanguageData>
   
   <WalkPet.reportString>walking a pet.</WalkPet.reportString>
+  <PlayFetch.reportString>playing fetch.</PlayFetch.reportString>
+  <FetchItem.reportString>playing fetch.</FetchItem.reportString>
   
 </LanguageData>

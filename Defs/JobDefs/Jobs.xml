@@ -10,5 +10,21 @@
     <joySkill>Animals</joySkill>
     <joyXpPerTick>0.004</joyXpPerTick>
   </JobDef>
+
+  <JobDef>
+    <defName>PlayFetch</defName>
+    <driverClass>AnimalsAreFunContinued.JobDriver_PlayFetch</driverClass>
+    <reportString>playing fetch.</reportString>
+    <joyDuration>6000</joyDuration>
+    <joyKind>Gaming_Dexterity</joyKind>
+    <joySkill>Animals</joySkill>
+    <joyXpPerTick>0.002</joyXpPerTick>
+  </JobDef>
+
+  <JobDef>
+    <defName>FetchItem</defName>
+    <driverClass>AnimalsAreFunContinued.JobDriver_FetchItem</driverClass>
+    <reportString>playing fetch.</reportString>
+  </JobDef>
   
 </Defs>
