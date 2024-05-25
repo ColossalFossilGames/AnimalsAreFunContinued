@@ -3,7 +3,7 @@
 
   <JoyGiverDef>
     <defName>WalkPet</defName>
-    <giverClass>AnimalsAreFunContinued.JoyGiver_WalkPet</giverClass>
+    <giverClass>AnimalsAreFunContinued.JoyGivers.WalkPet</giverClass>
     <baseChance>4</baseChance>
     <pctPawnsEverDo>0.67</pctPawnsEverDo>
     <jobDef>WalkPet</jobDef>
@@ -12,7 +12,7 @@
 
   <JoyGiverDef>
     <defName>PlayFetch</defName>
-    <giverClass>AnimalsAreFunContinued.JoyGiver_PlayFetch</giverClass>
+    <giverClass>AnimalsAreFunContinued.JoyGivers.PlayFetch</giverClass>
     <baseChance>2</baseChance>
     <pctPawnsEverDo>0.67</pctPawnsEverDo>
     <jobDef>PlayFetch</jobDef>
