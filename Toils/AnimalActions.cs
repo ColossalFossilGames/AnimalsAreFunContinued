@@ -4,9 +4,9 @@ using Unity.Jobs;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.Toils
 {
-    public static class Toils_AnimalActions
+    public static class AnimalActions
     {
         public static Toil FaceLocation(PathableJobDriver jobDriver, LocalTargetInfo targetLocation) => new Toil()
         {

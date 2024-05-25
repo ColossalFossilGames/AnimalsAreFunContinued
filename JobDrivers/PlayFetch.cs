@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AnimalsAreFunContinued.Toils;
 using Verse;
 using Verse.AI;
 
@@ -37,25 +38,25 @@ namespace AnimalsAreFunContinued.JobDrivers
             }
 
             // initial go to animal
-            yield return Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
 
             // say hello to animal
-            yield return Toils_PawnActions.TalkToPet(this);
+            yield return PawnActions.TalkToPet(this);
 
             // walk with pet
-            Toil walkToWaypoint = Toils_PawnActions.WalkToWaypoint(this, GetNextWaypointGenerator());
+            Toil walkToWaypoint = PawnActions.WalkToWaypoint(this, GetNextWaypointGenerator());
             yield return walkToWaypoint;
 
             // throw ball
-            yield return Toils_PawnActions.ThrowBall(
+            yield return PawnActions.ThrowBall(
                 this,
                 GetNextWaypointGenerator(true),
                 GetQueueAnimalJobGenerator(AnimalsAreFunContinuedDefOf.FetchItem)
             );
 
             // wait for animal to fetch and return ball and then walk with pet to next waypoint
-            Toil goBackToAnimal = Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
-            yield return Toils_PawnActions.WaitForAnimalToReturn(this,
+            Toil goBackToAnimal = PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.WaitForAnimalToReturn(this,
                 GetNextToilActionGenerator(
                     walkToWaypoint,
                     goBackToAnimal,
@@ -69,7 +70,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return goBackToAnimal;
 
             // say goodbye to pet
-            yield return Toils_PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
         }
 
         public Func<Job, bool> GetValidateAnimalJobGenerator()

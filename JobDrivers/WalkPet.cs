@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AnimalsAreFunContinued.Toils;
 using Verse;
 using Verse.AI;
 
@@ -21,18 +22,18 @@ namespace AnimalsAreFunContinued.JobDrivers
             }
 
             // initial go to animal
-            yield return Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
 
             // say hello to animal
-            yield return Toils_PawnActions.TalkToPet(this);
+            yield return PawnActions.TalkToPet(this);
 
             // walk with pet
-            Toil walkToWaypoint = Toils_PawnActions.WalkToWaypoint(this, GetNextWaypointGenerator());
+            Toil walkToWaypoint = PawnActions.WalkToWaypoint(this, GetNextWaypointGenerator());
             yield return walkToWaypoint;
 
             // walk more with pet
-            Toil goBackToAnimal = Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
-            yield return Toils_PawnActions.WalkToNextWaypoint(this, GetNextToilActionGenerator(
+            Toil goBackToAnimal = PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.WalkToNextWaypoint(this, GetNextToilActionGenerator(
                 walkToWaypoint,
                 goBackToAnimal,
                 $"pawn is continuing walk with animal: {pawn} => {animal.Name}",
@@ -43,7 +44,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return goBackToAnimal;
 
             // say goodbye to pet
-            yield return Toils_PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
         }
     }
 }

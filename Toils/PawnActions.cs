@@ -3,9 +3,9 @@ using System;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.Toils
 {
-    public static class Toils_PawnActions
+    public static class PawnActions
     {
         public static Toil WalkToPet(PathableJobDriver jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
         {
