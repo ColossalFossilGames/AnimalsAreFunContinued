@@ -3,7 +3,7 @@
   
   <JobDef>
     <defName>WalkPet</defName>
-    <driverClass>AnimalsAreFunContinued.JobDriver_WalkPet</driverClass>
+    <driverClass>AnimalsAreFunContinued.JobDrivers.WalkPet</driverClass>
     <reportString>walking a pet.</reportString>
     <joyDuration>8000</joyDuration>
     <joyKind>Social</joyKind>
@@ -13,7 +13,7 @@
 
   <JobDef>
     <defName>PlayFetch</defName>
-    <driverClass>AnimalsAreFunContinued.JobDriver_PlayFetch</driverClass>
+    <driverClass>AnimalsAreFunContinued.JobDrivers.PlayFetch</driverClass>
     <reportString>playing fetch.</reportString>
     <joyDuration>6000</joyDuration>
     <joyKind>Gaming_Dexterity</joyKind>
@@ -23,7 +23,7 @@
 
   <JobDef>
     <defName>FetchItem</defName>
-    <driverClass>AnimalsAreFunContinued.JobDriver_FetchItem</driverClass>
+    <driverClass>AnimalsAreFunContinued.JobDrivers.FetchItem</driverClass>
     <reportString>playing fetch.</reportString>
   </JobDef>
   

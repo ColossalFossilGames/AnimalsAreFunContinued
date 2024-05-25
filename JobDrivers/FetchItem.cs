@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.JobDrivers
 {
-    public class JobDriver_FetchItem : PathableJobDriver
+    public class FetchItem : PathableJobDriver
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed) => true;
 

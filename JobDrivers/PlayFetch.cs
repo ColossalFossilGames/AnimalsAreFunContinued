@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.JobDrivers
 {
-    public class JobDriver_PlayFetch : PathableJobDriver
+    public class PlayFetch : PathableJobDriver
     {
         public int CurrentAnimalJobId = 0;
 
@@ -16,7 +16,7 @@ namespace AnimalsAreFunContinued
         {
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            return (LocalTargetInfo targetA, LocalTargetInfo targetB) =>
+            return (targetA, targetB) =>
             {
                 animal.jobs.StopAll();
                 Job job = JobMaker.MakeJob(jobDef, targetA, targetB);
@@ -74,7 +74,7 @@ namespace AnimalsAreFunContinued
 
         public Func<Job, bool> GetValidateAnimalJobGenerator()
         {
-            return (Job curJob) =>
+            return (curJob) =>
             {
                 if (curJob.loadID != CurrentAnimalJobId)
                 {
