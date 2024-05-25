@@ -6,14 +6,14 @@ namespace AnimalsAreFunContinued
 {
     public class JoyGiver_PlayFetch : JoyGiver
     {
-        public override Job TryGiveJob(Pawn pawn)
+        public override Job? TryGiveJob(Pawn pawn)
         {
             if (!EligibilityFlags.PawnMayEnjoyPlayingOutside(pawn))
             {
                 return null;
             }
 
-            Pawn animal = AnimalCache.GetAvailableAnimal(pawn);
+            Pawn? animal = AnimalCache.GetAvailableAnimal(pawn);
             if (animal == null)
             {
                 AnimalsAreFunContinued.Debug($"no valid animal found");

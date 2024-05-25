@@ -9,11 +9,11 @@ namespace AnimalsAreFunContinued
 {
     public abstract class PathableJobDriver : JobDriver
     {
-        public List<LocalTargetInfo> Path = null;
+        public List<LocalTargetInfo>? Path = null;
 
         public Func<LocalTargetInfo> GetNextWaypointGenerator(bool preserveStack = false) => () => PullNextWaypoint(preserveStack);
 
-        public Action GetNextToilActionGenerator(Toil toilToRepeat, Toil toilOnEnd, string continueMessage = null, string finishMessage = null) => () =>
+        public Action GetNextToilActionGenerator(Toil toilToRepeat, Toil toilOnEnd, string? continueMessage = null, string? finishMessage = null) => () =>
         {
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             if (Find.TickManager.TicksGame > startTick + job.def.joyDuration)
@@ -55,7 +55,7 @@ namespace AnimalsAreFunContinued
 
         public static bool FindWalkingDestination(Pawn pawn, Pawn animal, out IntVec3 walkingDestination)
         {
-            IntVec3 potentialDestination = new IntVec3();
+            IntVec3 potentialDestination = new();
             bool CellGoodForWalking(IntVec3 cell)
             {
                 Map map = animal.MapHeld;

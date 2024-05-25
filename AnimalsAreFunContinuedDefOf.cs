@@ -7,7 +7,7 @@ namespace AnimalsAreFunContinued
     public class AnimalsAreFunContinuedDefOf
     {
         // play fetch
-        public static JobDef FetchItem;
+        public static JobDef FetchItem = null!;
 
         static AnimalsAreFunContinuedDefOf()
         {

@@ -25,9 +25,9 @@ namespace AnimalsAreFunContinued
             return false;
         }
 
-        public static bool PawnOrAnimalIsIncapable(Pawn pawn)
+        public static bool PawnOrAnimalIsIncapable(Pawn? pawn)
         {
-            PawnCapacitiesHandler capacities = pawn?.health?.capacities;
+            PawnCapacitiesHandler? capacities = pawn?.health?.capacities;
             if (capacities == null)
             {
                 AnimalsAreFunContinued.Debug($"no health capatibilities: {pawn}");
@@ -85,9 +85,9 @@ namespace AnimalsAreFunContinued
             return true;
         }
 
-        public static bool AnimalRaceIsAllowed(Pawn animal)
+        public static bool AnimalRaceIsAllowed(Pawn? animal)
         {
-            RaceProperties race = animal?.def?.race;
+            RaceProperties? race = animal?.def?.race;
             if (race == null)
             {
                 AnimalsAreFunContinued.Debug($"no race: {animal}");
@@ -133,9 +133,9 @@ namespace AnimalsAreFunContinued
             return true;
         }
 
-        public static bool AnimalIsAvailable(Pawn animal)
+        public static bool AnimalIsAvailable(Pawn? animal)
         {
-            if (PawnOrAnimalIsGoneOrIncapable(animal) || !AnimalRaceIsAllowed(animal))
+            if (animal == null || PawnOrAnimalIsGoneOrIncapable(animal) || !AnimalRaceIsAllowed(animal))
             {
                 return false;
             }
