@@ -3,11 +3,10 @@ using System;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
-using static UnityEngine.GraphicsBuffer;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.JobDrivers
 {
-    public abstract class PathableJobDriver : JobDriver
+    public abstract class PathableBase : JobDriver
     {
         public List<LocalTargetInfo>? Path = null;
 
@@ -59,21 +58,21 @@ namespace AnimalsAreFunContinued
             bool CellGoodForWalking(IntVec3 cell)
             {
                 Map map = animal.MapHeld;
-                return (
+                return 
                     !PawnUtility.KnownDangerAt(cell, map, pawn) &&
                     !cell.GetTerrain(map).avoidWander &&
                     cell.Standable(map) &&
                     !cell.Roofed(map)
-                );
+                ;
             };
 
-            bool RegionGoodForWalking(Region region) => (
+            bool RegionGoodForWalking(Region region) => 
                 region.Room.PsychologicallyOutdoors &&
                 !region.IsForbiddenEntirely(animal) &&
                 !region.IsForbiddenEntirely(pawn) &&
                 region.TryFindRandomCellInRegionUnforbidden(animal, CellGoodForWalking, out potentialDestination) &&
                 !potentialDestination.IsForbidden(pawn)
-            );
+            ;
 
             bool isValidDestination = CellFinder.TryFindClosestRegionWith(animal.GetRegion(), TraverseParms.For(animal), RegionGoodForWalking, 100, out _);
             walkingDestination = potentialDestination;

@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AnimalsAreFunContinued.JobDrivers;
+using RimWorld;
 using System;
 using Verse;
 using Verse.AI;
@@ -7,7 +8,7 @@ namespace AnimalsAreFunContinued.Toils
 {
     public static class PawnActions
     {
-        public static Toil WalkToPet(PathableJobDriver jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
+        public static Toil WalkToPet(PathableBase jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
@@ -37,7 +38,7 @@ namespace AnimalsAreFunContinued.Toils
             return walkToPet;
         }
 
-        public static Toil TalkToPet(PathableJobDriver jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
+        public static Toil TalkToPet(PathableBase jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
@@ -62,7 +63,7 @@ namespace AnimalsAreFunContinued.Toils
             return talkToPet;
         }
 
-        public static Toil WalkToWaypoint(PathableJobDriver jobDriver, Func<LocalTargetInfo> getLocation)
+        public static Toil WalkToWaypoint(PathableBase jobDriver, Func<LocalTargetInfo> getLocation)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
@@ -96,7 +97,7 @@ namespace AnimalsAreFunContinued.Toils
             return walkToWaypoint;
         }
 
-        public static Toil WalkToNextWaypoint(PathableJobDriver jobDriver, Action nextToilAction) => new Toil()
+        public static Toil WalkToNextWaypoint(PathableBase jobDriver, Action nextToilAction) => new Toil()
         {
             initAction = () =>
             {
@@ -105,7 +106,7 @@ namespace AnimalsAreFunContinued.Toils
             defaultCompleteMode = ToilCompleteMode.Instant
         };
 
-        public static Toil ThrowBall(PathableJobDriver jobDriver, Func<LocalTargetInfo> getLocation, Action<LocalTargetInfo, LocalTargetInfo> queueAnimalJob)
+        public static Toil ThrowBall(PathableBase jobDriver, Func<LocalTargetInfo> getLocation, Action<LocalTargetInfo, LocalTargetInfo> queueAnimalJob)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
@@ -136,7 +137,7 @@ namespace AnimalsAreFunContinued.Toils
             return throwBall;
         }
 
-        public static Toil WaitForAnimalToReturn(PathableJobDriver jobDriver, Action nextToilAction, Func<Job, bool> validateMatchingJob)
+        public static Toil WaitForAnimalToReturn(PathableBase jobDriver, Action nextToilAction, Func<Job, bool> validateMatchingJob)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;

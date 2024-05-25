@@ -6,7 +6,7 @@ using Verse.AI;
 
 namespace AnimalsAreFunContinued.JobDrivers
 {
-    public class FetchItem : PathableJobDriver
+    public class FetchItem : PathableBase
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed) => true;
 

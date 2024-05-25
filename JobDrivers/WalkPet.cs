@@ -5,7 +5,7 @@ using Verse.AI;
 
 namespace AnimalsAreFunContinued.JobDrivers
 {
-    public class WalkPet : PathableJobDriver
+    public class WalkPet : PathableBase
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed) =>
             pawn.Reserve(job.GetTarget(TargetIndex.B), job, errorOnFailed: errorOnFailed);

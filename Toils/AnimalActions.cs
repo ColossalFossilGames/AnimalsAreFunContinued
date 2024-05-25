@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AnimalsAreFunContinued.JobDrivers;
+using RimWorld;
 using System;
 using Unity.Jobs;
 using Verse;
@@ -8,7 +9,7 @@ namespace AnimalsAreFunContinued.Toils
 {
     public static class AnimalActions
     {
-        public static Toil FaceLocation(PathableJobDriver jobDriver, LocalTargetInfo targetLocation) => new Toil()
+        public static Toil FaceLocation(PathableBase jobDriver, LocalTargetInfo targetLocation) => new Toil()
         {
             initAction = () =>
             {

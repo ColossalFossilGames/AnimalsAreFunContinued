@@ -6,7 +6,7 @@ using Verse.AI;
 
 namespace AnimalsAreFunContinued.JobDrivers
 {
-    public class PlayFetch : PathableJobDriver
+    public class PlayFetch : PathableBase
     {
         public int CurrentAnimalJobId = 0;
 
