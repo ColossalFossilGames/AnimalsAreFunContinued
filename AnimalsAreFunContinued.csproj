@@ -2,12 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net481</TargetFramework>
+    <LangVersion>9</LangVersion>
+    <Nullable>enable</Nullable>
     <Title>Animals Are Fun! (Continued)</Title>
-    <Version>1.5.2</Version>
+    <Version>1.5.3</Version>
     <Authors>ColossalFossil</Authors>
     <Product>Animals Are Fun! (Continued)</Product>
     <Description>A RimWorld mod that allows your pawns to play fetch or go for a walk with your pets.</Description>
     <Copyright>Copyright © 2024 ColossalFossil</Copyright>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <BaseOutputPath></BaseOutputPath>
     <SignAssembly>False</SignAssembly>
     <Configurations>Release</Configurations>
@@ -49,7 +52,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="XCOPY &quot;$(SolutionDir)About&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\About\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Defs&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Defs\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Languages&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Languages\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)bin\Release&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\v1.5\Assemblies\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)*.xml&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.sln&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.csproj&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)*.cs&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y" />
+    <Exec Command="XCOPY &quot;$(SolutionDir)About&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\About\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Defs&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Defs\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Languages&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Languages\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)bin\Release&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\v1.5\Assemblies\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)*.xml&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.sln&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.csproj&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)*.*&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Data&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Data\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Externals&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Externals\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)JobDrivers&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\JobDrivers\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)JoyGivers&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\JoyGivers\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Toils&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Toils\&quot; /S /Y&#xD;&#xA;XCOPY &quot;$(SolutionDir)Validators&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Validators\&quot; /S /Y" />
   </Target>
 
 </Project>

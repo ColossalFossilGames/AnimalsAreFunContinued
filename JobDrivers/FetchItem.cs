@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AnimalsAreFunContinued.Toils;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.JobDrivers
 {
-    public class JobDriver_FetchItem : PathableJobDriver
+    public class FetchItem : PathableJobBase
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed) => true;
 
@@ -15,10 +15,10 @@ namespace AnimalsAreFunContinued
             LocalTargetInfo pawnLocation = job.targetB;
 
             // watch ball leave
-            yield return Toils_AnimalActions.FaceLocation(this, fetchDestination);
+            yield return AnimalActions.FaceLocation(this, fetchDestination);
 
             // wait for a moment
-            yield return Toils_AnimalActions.HoldPosition(120);
+            yield return AnimalActions.HoldPosition(120);
 
             // go to ball
             Toil sprintToItem = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.OnCell);
@@ -29,10 +29,10 @@ namespace AnimalsAreFunContinued
             yield return sprintToItem;
 
             // turn and face pawn
-            yield return Toils_AnimalActions.FaceLocation(this, pawnLocation);
+            yield return AnimalActions.FaceLocation(this, pawnLocation);
 
             // wait for a moment
-            yield return Toils_AnimalActions.HoldPosition(90);
+            yield return AnimalActions.HoldPosition(90);
 
             // return to pawn
             Toil jogBackToPawn = Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.Touch);
@@ -43,7 +43,7 @@ namespace AnimalsAreFunContinued
             yield return jogBackToPawn;
 
             // wait for a moment
-            yield return Toils_AnimalActions.HoldPosition(120);
+            yield return AnimalActions.HoldPosition(120);
         }
     }
 }

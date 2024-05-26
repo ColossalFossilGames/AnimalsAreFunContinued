@@ -1,19 +1,21 @@
-﻿using RimWorld;
+﻿using AnimalsAreFunContinued.Data;
+using AnimalsAreFunContinued.Validators;
+using RimWorld;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.JoyGivers
 {
-    public class JoyGiver_PlayFetch : JoyGiver
+    public class WantToPlayFetch : JoyGiver
     {
-        public override Job TryGiveJob(Pawn pawn)
+        public override Job? TryGiveJob(Pawn pawn)
         {
-            if (!EligibilityFlags.PawnMayEnjoyPlayingOutside(pawn))
+            if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn))
             {
                 return null;
             }
 
-            Pawn animal = AnimalCache.GetAvailableAnimal(pawn);
+            Pawn? animal = AnimalCache.GetAvailableAnimal(pawn);
             if (animal == null)
             {
                 AnimalsAreFunContinued.Debug($"no valid animal found");

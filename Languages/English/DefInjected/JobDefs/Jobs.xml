@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
-  
-  <WalkPet.reportString>walking a pet.</WalkPet.reportString>
-  <PlayFetch.reportString>playing fetch.</PlayFetch.reportString>
-  <FetchItem.reportString>playing fetch.</FetchItem.reportString>
+
+  <AAFC_WalkPet.reportString>walking a pet.</AAFC_WalkPet.reportString>
+  <AAFC_PlayFetch.reportString>playing fetch.</AAFC_PlayFetch.reportString>
+  <AAFC_FetchItem.reportString>playing fetch.</AAFC_FetchItem.reportString>
   
 </LanguageData>

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using AnimalsAreFunContinued.Toils;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued {
-    public class JobDriver_WalkPet : PathableJobDriver
+namespace AnimalsAreFunContinued.JobDrivers
+{
+    public class WalkPet : PathableJobBase
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed) =>
             pawn.Reserve(job.GetTarget(TargetIndex.B), job, errorOnFailed: errorOnFailed);
@@ -20,18 +22,18 @@ namespace AnimalsAreFunContinued {
             }
 
             // initial go to animal
-            yield return Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
 
             // say hello to animal
-            yield return Toils_PawnActions.TalkToPet(this);
+            yield return PawnActions.TalkToPet(this);
 
             // walk with pet
-            Toil walkToWaypoint = Toils_PawnActions.WalkToWaypoint(this, GetNextWaypointGenerator());
+            Toil walkToWaypoint = PawnActions.WalkToWaypoint(this, CreateNextWaypointDelegate());
             yield return walkToWaypoint;
 
             // walk more with pet
-            Toil goBackToAnimal = Toils_PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
-            yield return Toils_PawnActions.WalkToNextWaypoint(this, GetNextToilActionGenerator(
+            Toil goBackToAnimal = PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.WalkToNextWaypoint(this, CreateNextToilActionDelegate(
                 walkToWaypoint,
                 goBackToAnimal,
                 $"pawn is continuing walk with animal: {pawn} => {animal.Name}",
@@ -42,7 +44,7 @@ namespace AnimalsAreFunContinued {
             yield return goBackToAnimal;
 
             // say goodbye to pet
-            yield return Toils_PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
         }
     }
 }
