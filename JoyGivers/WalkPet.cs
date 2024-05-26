@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AnimalsAreFunContinued.Validators;
+using RimWorld;
 using Verse;
 using Verse.AI;
 
@@ -8,7 +9,7 @@ namespace AnimalsAreFunContinued.JoyGivers
     {
         public override Job? TryGiveJob(Pawn pawn)
         {
-            if (!EligibilityFlags.PawnMayEnjoyPlayingOutside(pawn))
+            if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn))
             {
                 return null;
             }

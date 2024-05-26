@@ -1,4 +1,5 @@
 ﻿using AnimalsAreFunContinued.JobDrivers;
+using AnimalsAreFunContinued.Validators;
 using RimWorld;
 using System;
 using Verse;
@@ -188,19 +189,21 @@ namespace AnimalsAreFunContinued.Toils
             animal.jobs.StopAll();
         }
 
-        private static bool PawnIsNoLongerAvailable(Pawn pawn) => EligibilityFlags.PawnOrAnimalIsGoneOrIncapable(pawn) || !JoyUtility.EnjoyableOutsideNow(pawn);
-
-        private static bool AnimalIsNoLongerAvailable(Pawn animal) => EligibilityFlags.PawnOrAnimalIsGoneOrIncapable(animal);
-
         private static Func<bool> ToilsFailOn(Pawn pawn, Pawn animal) => () =>
         {
-            if (PawnIsNoLongerAvailable(pawn))
+            if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(pawn))
             {
                 AnimalsAreFunContinued.Debug($"pawn no longer available: {pawn}");
                 return true;
             }
 
-            if (AnimalIsNoLongerAvailable(animal))
+            if (!JoyUtility.EnjoyableOutsideNow(pawn))
+            {
+                AnimalsAreFunContinued.Debug($"pawn no longer finds joy in being outside: {pawn}");
+                return true;
+            }
+
+            if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(animal))
             {
                 AnimalsAreFunContinued.Debug($"animal no longer available: {animal.Name}");
                 return true;

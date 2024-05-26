@@ -1,23 +1,26 @@
 ﻿using RimWorld;
 using Verse;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.Validators
 {
-    public static class EligibilityFlags
+    public static class AvailabilityChecks
     {
-        public static bool PawnOrAnimalIsGone(Pawn pawn)
+        private static bool IsPawnOrAnimalGone(Pawn pawn)
         {
-            if (pawn.DestroyedOrNull()) {
+            if (pawn.DestroyedOrNull())
+            {
                 AnimalsAreFunContinued.Debug($"destroyed or null: {pawn}");
                 return true;
             }
-            
-            if (pawn.Dead) {
+
+            if (pawn.Dead)
+            {
                 AnimalsAreFunContinued.Debug($"dead: {pawn}");
                 return true;
             }
-            
-            if (!pawn.Spawned) {
+
+            if (!pawn.Spawned)
+            {
                 AnimalsAreFunContinued.Debug($"not spawned: {pawn}");
                 return true;
             }
@@ -25,7 +28,7 @@ namespace AnimalsAreFunContinued
             return false;
         }
 
-        public static bool PawnOrAnimalIsIncapable(Pawn? pawn)
+        private static bool IsPawnOrAnimalIncapable(Pawn? pawn)
         {
             PawnCapacitiesHandler? capacities = pawn?.health?.capacities;
             if (capacities == null)
@@ -39,7 +42,7 @@ namespace AnimalsAreFunContinued
                 AnimalsAreFunContinued.Debug($"not enough Consciousness: {pawn}");
                 return true;
             }
-            
+
             if (capacities.GetLevel(PawnCapacityDefOf.Moving) < Settings.MinMoving)
             {
                 AnimalsAreFunContinued.Debug($"not enough Moving: {pawn}");
@@ -49,11 +52,11 @@ namespace AnimalsAreFunContinued
             return false;
         }
 
-        public static bool PawnOrAnimalIsGoneOrIncapable(Pawn p) => PawnOrAnimalIsGone(p) || PawnOrAnimalIsIncapable(p);
+        public static bool IsPawnOrAnimalGoneOrIncapable(Pawn p) => IsPawnOrAnimalGone(p) || IsPawnOrAnimalIncapable(p);
 
-        public static bool PawnMayEnjoyPlayingOutside(Pawn pawn)
+        public static bool WillPawnEnjoyPlayingOutside(Pawn pawn)
         {
-            if (PawnOrAnimalIsGoneOrIncapable(pawn))
+            if (IsPawnOrAnimalGoneOrIncapable(pawn))
             {
                 return false;
             }
@@ -85,7 +88,7 @@ namespace AnimalsAreFunContinued
             return true;
         }
 
-        public static bool AnimalRaceIsAllowed(Pawn? animal)
+        private static bool IsAnimalRaceAllowed(Pawn? animal)
         {
             RaceProperties? race = animal?.def?.race;
             if (race == null)
@@ -93,37 +96,37 @@ namespace AnimalsAreFunContinued
                 AnimalsAreFunContinued.Debug($"no race: {animal}");
                 return false;
             }
-            
+
             if (!race.Animal)
             {
                 AnimalsAreFunContinued.Debug($"not an animal: {animal}");
                 return false;
             }
-            
+
             if (race.Humanlike)
             {
                 AnimalsAreFunContinued.Debug($"humanlike: {animal}");
                 return false;
             }
-            
+
             if (race.FleshType != FleshTypeDefOf.Normal)
             {
                 AnimalsAreFunContinued.Debug($"not flesh: {animal}");
                 return false;
             }
-            
+
             if (race.baseBodySize > Settings.MaxBodySize)
             {
                 AnimalsAreFunContinued.Debug($"too big: {animal}");
                 return false;
             }
-            
+
             if (race.wildness > Settings.MaxWildness)
             {
                 AnimalsAreFunContinued.Debug($"too wild: {animal}");
                 return false;
             }
-            
+
             if (!Settings.MustBeCute && race.nuzzleMtbHours < 0f)
             {
                 AnimalsAreFunContinued.Debug($"not cute: {animal}");
@@ -133,25 +136,25 @@ namespace AnimalsAreFunContinued
             return true;
         }
 
-        public static bool AnimalIsAvailable(Pawn? animal)
+        public static bool IsAnimalAvailable(Pawn? animal)
         {
-            if (animal == null || PawnOrAnimalIsGoneOrIncapable(animal) || !AnimalRaceIsAllowed(animal))
+            if (animal == null || IsPawnOrAnimalGoneOrIncapable(animal) || !IsAnimalRaceAllowed(animal))
             {
                 return false;
             }
-            
+
             if (PawnUtility.WillSoonHaveBasicNeed(animal))
             {
                 AnimalsAreFunContinued.Debug($"will soon have basic need: {animal}");
                 return false;
             }
-            
-            if (TimetableUtility.GetTimeAssignment(animal) != TimeAssignmentDefOf.Anything)
+
+            if (animal.GetTimeAssignment() != TimeAssignmentDefOf.Anything)
             {
                 AnimalsAreFunContinued.Debug($"it's time to sleep: {animal}");
                 return false;
             }
-            
+
             if (animal.carryTracker?.CarriedThing != null)
             {
                 AnimalsAreFunContinued.Debug($"currently hauling something: {animal}");

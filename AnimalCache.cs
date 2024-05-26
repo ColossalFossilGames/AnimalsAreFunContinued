@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using AnimalsAreFunContinued.Validators;
+using RimWorld;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace AnimalsAreFunContinued
         {
             bool animalValidator(Thing animalThing)
             {
-                if (!EligibilityFlags.AnimalIsAvailable(animalThing as Pawn))
+                if (!AvailabilityChecks.IsAnimalAvailable(animalThing as Pawn))
                 {
                     return false;
                 }
@@ -75,7 +76,7 @@ namespace AnimalsAreFunContinued
                 return true;
             }
 
-            IEnumerable animals = AnimalCache.Instance(pawn.MapHeld, pawn.Faction).AvailableAnimals;
+            IEnumerable animals = Instance(pawn.MapHeld, pawn.Faction).AvailableAnimals;
             return GenClosest.ClosestThing_Global(pawn.Position, animals, 30f, animalValidator) as Pawn;
         }
     }
