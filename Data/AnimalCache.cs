@@ -1,67 +1,55 @@
 ﻿using AnimalsAreFunContinued.Validators;
 using RimWorld;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
 using Verse.AI;
 
+using AnimalCacheKey = System.Tuple<int, System.Collections.Generic.IEnumerable<Verse.Thing>>;
+
 namespace AnimalsAreFunContinued.Data
 {
-    public sealed class AnimalCache
+    public static class AnimalCache
     {
-        private IEnumerable<Thing> _availableAnimals = new List<Thing>();
-        private int _expirationTick = 0;
-        public const int ExpirationTimeout = 1800;
-        private readonly Map _map = null!;
-        private readonly Faction _faction = null!;
+        private const int ExpirationTimeout = 1800;
+        private static readonly Dictionary<int, AnimalCacheKey> _availableAnimals = new();
 
-        private static AnimalCache _instance = new();
-
-        private AnimalCache() { }
-        private AnimalCache(Map map, Faction faction)
+        public static IEnumerable<Thing> GetAvailableAnimals(Map map)
         {
-            _map = map;
-            _faction = faction;
-        }
-
-        // Singleton cache currently will only support 1 map and 1 faction, may change in the future for multiplayer, multi-base support
-        public static AnimalCache Instance(Map map, Faction faction)
-        {
-            if (_instance.Map == null || _instance.Map.uniqueID != map.uniqueID ||
-                _instance.Faction == null || _instance.Faction != faction)
+            int mapId = map.uniqueID;
+            int currentTick = Find.TickManager.TicksGame;
+            bool updateExistingAnimalList = _availableAnimals.ContainsKey(mapId);
+            if (!updateExistingAnimalList || currentTick > _availableAnimals[mapId].Item1)
             {
-                _instance = new AnimalCache(map, faction);
-            }
-            return _instance;
-        }
+                AnimalsAreFunContinued.Debug($"{(updateExistingAnimalList ? "re" : "")}generating cached animal list for map {mapId}");
+                IEnumerable<Thing> animals = (from animal in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.Pawn))
+                                              where (animal as Pawn)?.def?.race?.Animal == true &&
+                                                    animal.Faction != null
+                                              select animal) ?? new List<Thing>();
+                int expirationTick = currentTick + ExpirationTimeout;
 
-        public int ExpirationTick { get { return _expirationTick; } }
-        public Map Map { get { return _map; } }
-        public Faction Faction { get { return _faction; } }
-
-        public IEnumerable AvailableAnimals
-        {
-            get
-            {
-                int currentTick = Find.TickManager.TicksGame;
-                if (currentTick > _expirationTick || _availableAnimals == null)
+                if (updateExistingAnimalList)
                 {
-                    AnimalsAreFunContinued.Debug($"generating cached animal list for map {_map.uniqueID}, faction {_faction}");
-                    _availableAnimals = (from animalList in _map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.Pawn))
-                                         where animalList.Faction == _faction &&
-                                               (animalList as Pawn)?.def?.race?.Animal == true
-                                         select animalList) ?? new List<Thing>();
-                    _expirationTick = currentTick + ExpirationTimeout;
+                    _availableAnimals.Remove(mapId);
                 }
-                return _availableAnimals;
+
+                _availableAnimals.Add(mapId, new AnimalCacheKey(expirationTick, animals));
             }
+
+            return _availableAnimals[mapId].Item2;
         }
 
         public static Pawn? GetAvailableAnimal(Pawn pawn)
         {
             bool animalValidator(Thing animalThing)
             {
+                if (animalThing.Faction.loadID != pawn.Faction?.loadID)
+                {
+                    return false;
+                }
+
                 if (!AvailabilityChecks.IsAnimalAvailable(animalThing as Pawn))
                 {
                     return false;
@@ -76,7 +64,7 @@ namespace AnimalsAreFunContinued.Data
                 return true;
             }
 
-            IEnumerable animals = Instance(pawn.MapHeld, pawn.Faction).AvailableAnimals;
+            IEnumerable<Thing> animals = GetAvailableAnimals(pawn.MapHeld);
             return GenClosest.ClosestThing_Global(pawn.Position, animals, 30f, animalValidator) as Pawn;
         }
     }
