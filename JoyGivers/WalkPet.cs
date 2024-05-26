@@ -1,4 +1,5 @@
-﻿using AnimalsAreFunContinued.Validators;
+﻿using AnimalsAreFunContinued.Data;
+using AnimalsAreFunContinued.Validators;
 using RimWorld;
 using Verse;
 using Verse.AI;

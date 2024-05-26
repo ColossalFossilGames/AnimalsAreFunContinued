@@ -6,7 +6,7 @@ using System.Linq;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.Data
 {
     public sealed class AnimalCache
     {
