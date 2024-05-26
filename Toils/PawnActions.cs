@@ -1,19 +1,21 @@
-﻿using RimWorld;
+﻿using AnimalsAreFunContinued.JobDrivers;
+using AnimalsAreFunContinued.Validators;
+using RimWorld;
 using System;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.Toils
 {
-    public static class Toils_PawnActions
+    public static class PawnActions
     {
-        public static Toil WalkToPet(PathableJobDriver jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
+        public static Toil WalkToPet(JobBase jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil walkToPet = new Toil()
+            Toil walkToPet = new()
             {
                 initAction = () =>
                 {
@@ -37,13 +39,13 @@ namespace AnimalsAreFunContinued
             return walkToPet;
         }
 
-        public static Toil TalkToPet(PathableJobDriver jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
+        public static Toil TalkToPet(JobBase jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil talkToPet = new Toil()
+            Toil talkToPet = new()
             {
                 initAction = () =>
                 {
@@ -62,13 +64,13 @@ namespace AnimalsAreFunContinued
             return talkToPet;
         }
 
-        public static Toil WalkToWaypoint(PathableJobDriver jobDriver, Func<LocalTargetInfo> getLocation)
+        public static Toil WalkToWaypoint(JobBase jobDriver, Func<LocalTargetInfo> getLocation)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil walkToWaypoint = new Toil()
+            Toil walkToWaypoint = new()
             {
                 initAction = () =>
                 {
@@ -96,7 +98,7 @@ namespace AnimalsAreFunContinued
             return walkToWaypoint;
         }
 
-        public static Toil WalkToNextWaypoint(PathableJobDriver jobDriver, Action nextToilAction) => new Toil()
+        public static Toil WalkToNextWaypoint(JobBase jobDriver, Action nextToilAction) => new()
         {
             initAction = () =>
             {
@@ -105,13 +107,13 @@ namespace AnimalsAreFunContinued
             defaultCompleteMode = ToilCompleteMode.Instant
         };
 
-        public static Toil ThrowBall(PathableJobDriver jobDriver, Func<LocalTargetInfo> getLocation, Action<LocalTargetInfo, LocalTargetInfo> queueAnimalJob)
+        public static Toil ThrowBall(JobBase jobDriver, Func<LocalTargetInfo> getLocation, Action<LocalTargetInfo, LocalTargetInfo> queueAnimalJob)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil throwBall = new Toil()
+            Toil throwBall = new()
             {
                 initAction = () =>
                 {
@@ -136,13 +138,13 @@ namespace AnimalsAreFunContinued
             return throwBall;
         }
 
-        public static Toil WaitForAnimalToReturn(PathableJobDriver jobDriver, Action nextToilAction, Func<Job, bool> validateMatchingJob)
+        public static Toil WaitForAnimalToReturn(JobBase jobDriver, Action nextToilAction, Func<Job, bool> validateMatchingJob)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil waitForAnimalToReturn = new Toil()
+            Toil waitForAnimalToReturn = new()
             {
                 tickAction = () =>
                 {
@@ -187,19 +189,21 @@ namespace AnimalsAreFunContinued
             animal.jobs.StopAll();
         }
 
-        private static bool PawnIsNoLongerAvailable(Pawn pawn) => EligibilityFlags.PawnOrAnimalIsGoneOrIncapable(pawn) || !JoyUtility.EnjoyableOutsideNow(pawn);
-
-        private static bool AnimalIsNoLongerAvailable(Pawn animal) => EligibilityFlags.PawnOrAnimalIsGoneOrIncapable(animal);
-
         private static Func<bool> ToilsFailOn(Pawn pawn, Pawn animal) => () =>
         {
-            if (PawnIsNoLongerAvailable(pawn))
+            if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(pawn))
             {
                 AnimalsAreFunContinued.Debug($"pawn no longer available: {pawn}");
                 return true;
             }
 
-            if (AnimalIsNoLongerAvailable(animal))
+            if (!JoyUtility.EnjoyableOutsideNow(pawn))
+            {
+                AnimalsAreFunContinued.Debug($"pawn no longer finds joy in being outside: {pawn}");
+                return true;
+            }
+
+            if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(animal))
             {
                 AnimalsAreFunContinued.Debug($"animal no longer available: {animal.Name}");
                 return true;

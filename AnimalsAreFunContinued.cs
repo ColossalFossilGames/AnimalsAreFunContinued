@@ -12,7 +12,7 @@ namespace AnimalsAreFunContinued
             GetSettings<Settings>();
         }
 
-        public static void Debug(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string caller = null)
+        public static void Debug(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null)
         {
             if (Settings.ShowDebugMessages) {
                 Log.Message($"[AnimalsAreFunContinued @ {caller}:{line}] {message}");
@@ -21,7 +21,7 @@ namespace AnimalsAreFunContinued
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            Listing_Standard listingStandard = new Listing_Standard();
+            Listing_Standard listingStandard = new();
             listingStandard.Begin(inRect);
 
             listingStandard.Label("RequirementsCategory".Translate());

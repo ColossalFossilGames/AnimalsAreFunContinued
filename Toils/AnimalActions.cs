@@ -1,14 +1,12 @@
-﻿using RimWorld;
-using System;
-using Unity.Jobs;
+﻿using AnimalsAreFunContinued.JobDrivers;
 using Verse;
 using Verse.AI;
 
-namespace AnimalsAreFunContinued
+namespace AnimalsAreFunContinued.Toils
 {
-    public static class Toils_AnimalActions
+    public static class AnimalActions
     {
-        public static Toil FaceLocation(PathableJobDriver jobDriver, LocalTargetInfo targetLocation) => new Toil()
+        public static Toil FaceLocation(JobBase jobDriver, LocalTargetInfo targetLocation) => new()
         {
             initAction = () =>
             {
@@ -18,7 +16,7 @@ namespace AnimalsAreFunContinued
             defaultCompleteMode = ToilCompleteMode.Instant
         };
 
-        public static Toil HoldPosition(int ticks) => new Toil()
+        public static Toil HoldPosition(int ticks) => new()
         {
             defaultCompleteMode = ToilCompleteMode.Delay,
             defaultDuration = ticks
