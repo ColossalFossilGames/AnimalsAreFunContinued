@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AnimalsAreFunContinued.Externals;
 using AnimalsAreFunContinued.Toils;
+using System;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
@@ -51,7 +52,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return PawnActions.ThrowBall(
                 this,
                 GetNextWaypointGenerator(true),
-                GetQueueAnimalJobGenerator(AnimalsAreFunContinuedDefOf.FetchItem)
+                GetQueueAnimalJobGenerator(Jobs.FetchItem)
             );
 
             // wait for animal to fetch and return ball and then walk with pet to next waypoint

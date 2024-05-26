@@ -2,20 +2,20 @@
 <Defs>
 
   <JoyGiverDef>
-    <defName>WalkPet</defName>
-    <giverClass>AnimalsAreFunContinued.JoyGivers.WalkPet</giverClass>
+    <defName>AAFC_WantToWalkPet</defName>
+    <giverClass>AnimalsAreFunContinued.JoyGivers.WantToWalkPet</giverClass>
     <baseChance>4</baseChance>
     <pctPawnsEverDo>0.67</pctPawnsEverDo>
-    <jobDef>WalkPet</jobDef>
+    <jobDef>AAFC_WalkPet</jobDef>
     <joyKind>Social</joyKind>
   </JoyGiverDef>
 
   <JoyGiverDef>
-    <defName>PlayFetch</defName>
-    <giverClass>AnimalsAreFunContinued.JoyGivers.PlayFetch</giverClass>
+    <defName>AAFC_WantToPlayFetch</defName>
+    <giverClass>AnimalsAreFunContinued.JoyGivers.WantToPlayFetch</giverClass>
     <baseChance>2</baseChance>
     <pctPawnsEverDo>0.67</pctPawnsEverDo>
-    <jobDef>PlayFetch</jobDef>
+    <jobDef>AAFC_PlayFetch</jobDef>
     <joyKind>Gaming_Dexterity</joyKind>
     <requiredCapacities>
       <li>Sight</li>

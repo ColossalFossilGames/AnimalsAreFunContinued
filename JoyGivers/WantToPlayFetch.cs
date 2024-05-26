@@ -6,7 +6,7 @@ using Verse.AI;
 
 namespace AnimalsAreFunContinued.JoyGivers
 {
-    public class WalkPet : JoyGiver
+    public class WantToPlayFetch : JoyGiver
     {
         public override Job? TryGiveJob(Pawn pawn)
         {
@@ -23,7 +23,7 @@ namespace AnimalsAreFunContinued.JoyGivers
             }
 
             var job = JobMaker.MakeJob(def.jobDef, null, animal);
-            AnimalsAreFunContinued.Debug($"found animal {animal.Name}, made WalkPet job {job}");
+            AnimalsAreFunContinued.Debug($"found animal {animal.Name}, made PlayFetch job {job}");
             return job;
         }
     }
