@@ -7,25 +7,12 @@ using Verse.AI;
 
 namespace AnimalsAreFunContinued.JobDrivers
 {
-    public class PlayFetch : PathableBase
+    public class PlayFetch : PathableJobBase
     {
         public int CurrentAnimalJobId = 0;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed) =>
             pawn.Reserve(job.GetTarget(TargetIndex.B), job, errorOnFailed: errorOnFailed);
-
-        public Action<LocalTargetInfo, LocalTargetInfo> GetQueueAnimalJobGenerator(JobDef jobDef)
-        {
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
-
-            return (targetA, targetB) =>
-            {
-                animal.jobs.StopAll();
-                Job job = JobMaker.MakeJob(jobDef, targetA, targetB);
-                CurrentAnimalJobId = job.loadID;
-                animal.jobs.StartJob(job);
-            };
-        }
 
         public override IEnumerable<Toil> MakeNewToils()
         {
@@ -45,26 +32,26 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return PawnActions.TalkToPet(this);
 
             // walk with pet
-            Toil walkToWaypoint = PawnActions.WalkToWaypoint(this, GetNextWaypointGenerator());
+            Toil walkToWaypoint = PawnActions.WalkToWaypoint(this, CreateNextWaypointDelegate());
             yield return walkToWaypoint;
 
             // throw ball
             yield return PawnActions.ThrowBall(
                 this,
-                GetNextWaypointGenerator(true),
-                GetQueueAnimalJobGenerator(Jobs.FetchItem)
+                CreateNextWaypointDelegate(true),
+                CreateQueueAnimalJobDelegate(Jobs.FetchItem)
             );
 
             // wait for animal to fetch and return ball and then walk with pet to next waypoint
             Toil goBackToAnimal = PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
             yield return PawnActions.WaitForAnimalToReturn(this,
-                GetNextToilActionGenerator(
+                CreateNextToilActionDelegate(
                     walkToWaypoint,
                     goBackToAnimal,
                     $"pawn is continuing to play fetch with animal: {pawn} => {animal.Name}",
                     $"pawn is ending play fetch with animal: {pawn} => {animal.Name}"
                 ),
-                GetValidateAnimalJobGenerator()
+                CreateValidateAnimalJobDelegate()
             );
 
             // go back to animal
@@ -74,16 +61,26 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
         }
 
-        public Func<Job, bool> GetValidateAnimalJobGenerator()
+        private Action<LocalTargetInfo, LocalTargetInfo> CreateQueueAnimalJobDelegate(JobDef jobDef)
         {
-            return (curJob) =>
+            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+
+            return (targetA, targetB) =>
             {
-                if (curJob.loadID != CurrentAnimalJobId)
-                {
-                    CurrentAnimalJobId = 0;
-                }
-                return curJob.loadID == CurrentAnimalJobId;
+                animal.jobs.StopAll();
+                Job job = JobMaker.MakeJob(jobDef, targetA, targetB);
+                CurrentAnimalJobId = job.loadID;
+                animal.jobs.StartJob(job);
             };
         }
+
+        private Func<Job, bool> CreateValidateAnimalJobDelegate() => delegate (Job curJob)
+        {
+            if (curJob.loadID != CurrentAnimalJobId)
+            {
+                CurrentAnimalJobId = 0;
+            }
+            return curJob.loadID == CurrentAnimalJobId;
+        };
     }
 }

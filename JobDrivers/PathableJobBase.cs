@@ -6,30 +6,13 @@ using Verse.AI;
 
 namespace AnimalsAreFunContinued.JobDrivers
 {
-    public abstract class PathableBase : JobDriver
+    public abstract class PathableJobBase : JobBase
     {
         public List<LocalTargetInfo>? Path = null;
 
-        public Func<LocalTargetInfo> GetNextWaypointGenerator(bool preserveStack = false) => () => PullNextWaypoint(preserveStack);
-
-        public Action GetNextToilActionGenerator(Toil toilToRepeat, Toil toilOnEnd, string? continueMessage = null, string? finishMessage = null) => () =>
+        public Func<LocalTargetInfo> CreateNextWaypointDelegate(bool preserveStack = false) => delegate ()
         {
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
-            if (Find.TickManager.TicksGame > startTick + job.def.joyDuration)
-            {
-                if (finishMessage != null)
-                {
-                    AnimalsAreFunContinued.Debug(finishMessage);
-                }
-                animal.jobs.EndCurrentJob(JobCondition.Succeeded);
-                JumpToToil(toilOnEnd);
-            }
-
-            if (continueMessage != null)
-            {
-                AnimalsAreFunContinued.Debug(continueMessage);
-            }
-            JumpToToil(toilToRepeat);
+            return PullNextWaypoint(preserveStack);
         };
 
         public bool FindOutsideWalkingPath()
@@ -58,21 +41,18 @@ namespace AnimalsAreFunContinued.JobDrivers
             bool CellGoodForWalking(IntVec3 cell)
             {
                 Map map = animal.MapHeld;
-                return 
-                    !PawnUtility.KnownDangerAt(cell, map, pawn) &&
-                    !cell.GetTerrain(map).avoidWander &&
-                    cell.Standable(map) &&
-                    !cell.Roofed(map)
-                ;
+                return !PawnUtility.KnownDangerAt(cell, map, pawn) &&
+                        !cell.GetTerrain(map).avoidWander &&
+                        cell.Standable(map) &&
+                        !cell.Roofed(map);
             };
 
-            bool RegionGoodForWalking(Region region) => 
-                region.Room.PsychologicallyOutdoors &&
-                !region.IsForbiddenEntirely(animal) &&
-                !region.IsForbiddenEntirely(pawn) &&
-                region.TryFindRandomCellInRegionUnforbidden(animal, CellGoodForWalking, out potentialDestination) &&
-                !potentialDestination.IsForbidden(pawn)
-            ;
+            bool RegionGoodForWalking(Region region) =>
+                 region.Room.PsychologicallyOutdoors &&
+                 !region.IsForbiddenEntirely(animal) &&
+                 !region.IsForbiddenEntirely(pawn) &&
+                 region.TryFindRandomCellInRegionUnforbidden(animal, CellGoodForWalking, out potentialDestination) &&
+                 !potentialDestination.IsForbidden(pawn);
 
             bool isValidDestination = CellFinder.TryFindClosestRegionWith(animal.GetRegion(), TraverseParms.For(animal), RegionGoodForWalking, 100, out _);
             walkingDestination = potentialDestination;

@@ -9,13 +9,13 @@ namespace AnimalsAreFunContinued.Toils
 {
     public static class PawnActions
     {
-        public static Toil WalkToPet(PathableBase jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
+        public static Toil WalkToPet(JobBase jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil walkToPet = new Toil()
+            Toil walkToPet = new()
             {
                 initAction = () =>
                 {
@@ -39,13 +39,13 @@ namespace AnimalsAreFunContinued.Toils
             return walkToPet;
         }
 
-        public static Toil TalkToPet(PathableBase jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
+        public static Toil TalkToPet(JobBase jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil talkToPet = new Toil()
+            Toil talkToPet = new()
             {
                 initAction = () =>
                 {
@@ -64,13 +64,13 @@ namespace AnimalsAreFunContinued.Toils
             return talkToPet;
         }
 
-        public static Toil WalkToWaypoint(PathableBase jobDriver, Func<LocalTargetInfo> getLocation)
+        public static Toil WalkToWaypoint(JobBase jobDriver, Func<LocalTargetInfo> getLocation)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil walkToWaypoint = new Toil()
+            Toil walkToWaypoint = new()
             {
                 initAction = () =>
                 {
@@ -98,7 +98,7 @@ namespace AnimalsAreFunContinued.Toils
             return walkToWaypoint;
         }
 
-        public static Toil WalkToNextWaypoint(PathableBase jobDriver, Action nextToilAction) => new Toil()
+        public static Toil WalkToNextWaypoint(JobBase jobDriver, Action nextToilAction) => new()
         {
             initAction = () =>
             {
@@ -107,13 +107,13 @@ namespace AnimalsAreFunContinued.Toils
             defaultCompleteMode = ToilCompleteMode.Instant
         };
 
-        public static Toil ThrowBall(PathableBase jobDriver, Func<LocalTargetInfo> getLocation, Action<LocalTargetInfo, LocalTargetInfo> queueAnimalJob)
+        public static Toil ThrowBall(JobBase jobDriver, Func<LocalTargetInfo> getLocation, Action<LocalTargetInfo, LocalTargetInfo> queueAnimalJob)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil throwBall = new Toil()
+            Toil throwBall = new()
             {
                 initAction = () =>
                 {
@@ -138,13 +138,13 @@ namespace AnimalsAreFunContinued.Toils
             return throwBall;
         }
 
-        public static Toil WaitForAnimalToReturn(PathableBase jobDriver, Action nextToilAction, Func<Job, bool> validateMatchingJob)
+        public static Toil WaitForAnimalToReturn(JobBase jobDriver, Action nextToilAction, Func<Job, bool> validateMatchingJob)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
-            Toil waitForAnimalToReturn = new Toil()
+            Toil waitForAnimalToReturn = new()
             {
                 tickAction = () =>
                 {

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AnimalsAreFunContinued.Toils;
 using Verse;
 using Verse.AI;
 
 namespace AnimalsAreFunContinued.JobDrivers
 {
-    public class FetchItem : PathableBase
+    public class FetchItem : PathableJobBase
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed) => true;
 

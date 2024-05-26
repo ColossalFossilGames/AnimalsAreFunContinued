@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using AnimalsAreFunContinued.Toils;
+﻿using AnimalsAreFunContinued.Toils;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace AnimalsAreFunContinued.JobDrivers
 {
-    public class WalkPet : PathableBase
+    public class WalkPet : PathableJobBase
     {
         public override bool TryMakePreToilReservations(bool errorOnFailed) =>
             pawn.Reserve(job.GetTarget(TargetIndex.B), job, errorOnFailed: errorOnFailed);
@@ -28,12 +28,12 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return PawnActions.TalkToPet(this);
 
             // walk with pet
-            Toil walkToWaypoint = PawnActions.WalkToWaypoint(this, GetNextWaypointGenerator());
+            Toil walkToWaypoint = PawnActions.WalkToWaypoint(this, CreateNextWaypointDelegate());
             yield return walkToWaypoint;
 
             // walk more with pet
             Toil goBackToAnimal = PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
-            yield return PawnActions.WalkToNextWaypoint(this, GetNextToilActionGenerator(
+            yield return PawnActions.WalkToNextWaypoint(this, CreateNextToilActionDelegate(
                 walkToWaypoint,
                 goBackToAnimal,
                 $"pawn is continuing walk with animal: {pawn} => {animal.Name}",
