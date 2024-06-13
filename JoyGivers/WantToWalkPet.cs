@@ -10,15 +10,15 @@ namespace AnimalsAreFunContinued.JoyGivers
     {
         public override Job? TryGiveJob(Pawn pawn)
         {
-            if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn))
-            {
-                return null;
-            }
-
             Pawn? animal = AnimalCache.GetAvailableAnimal(pawn);
             if (animal == null)
             {
                 AnimalsAreFunContinued.Debug($"no valid animal found");
+                return null;
+            }
+
+            if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn))
+            {
                 return null;
             }
 
