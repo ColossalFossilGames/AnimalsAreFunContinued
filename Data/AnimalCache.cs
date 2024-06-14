@@ -14,7 +14,7 @@ namespace AnimalsAreFunContinued.Data
     public static class AnimalCache
     {
         private const int ExpirationTimeout = 1800;
-        private static readonly Dictionary<int, AnimalCacheKey> _availableAnimals = new();
+        private static readonly Dictionary<int, AnimalCacheKey> _availableAnimals = [];
 
         public static IEnumerable<Thing> GetAvailableAnimals(Map map)
         {
@@ -27,7 +27,7 @@ namespace AnimalsAreFunContinued.Data
                 IEnumerable<Thing> animals = (from animal in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.Pawn))
                                               where (animal as Pawn)?.def?.race?.Animal == true &&
                                                     animal.Faction != null
-                                              select animal) ?? new List<Thing>();
+                                              select animal) ?? [];
                 int expirationTick = currentTick + ExpirationTimeout;
 
                 if (updateExistingAnimalList)
