@@ -1,4 +1,5 @@
-﻿using AnimalsAreFunContinued.Toils;
+using AnimalsAreFunContinued.Toils;
+using RimWorld;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -27,24 +28,24 @@ namespace AnimalsAreFunContinued.JobDrivers
             // say hello to animal
             yield return PawnActions.TalkToPet(this);
 
+            // pet should start to follow pawn
+            yield return StartJobForTarget(JobDefOf.Follow, LocomotionUrgency.Walk, $"animal is following pawn: {animal.Name} => {pawn}");
+
             // walk with pet
             Toil walkToWaypoint = PawnActions.WalkToWaypoint(this, CreateNextWaypointDelegate());
             yield return walkToWaypoint;
 
-            // walk more with pet
-            Toil goBackToAnimal = PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
-            yield return PawnActions.WalkToNextWaypoint(CreateNextToilActionDelegate(
-                walkToWaypoint,
-                goBackToAnimal,
-                $"pawn is continuing walk with animal: {pawn} => {animal.Name}",
-                $"pawn is ending walk with animal: {pawn} => {animal.Name}"
-            ));
+            // walk more with pet, until job has finished
+            yield return RepeatToilOnCondition(walkToWaypoint, [WaitForJobDuration, InteractiveTargetHasJob], $"pawn is continuing walk with animal: {pawn} => {animal.Name}");
 
             // go back to animal
-            yield return goBackToAnimal;
+            yield return PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+
+            // pet should no longer follow
+            yield return EndJobForTarget($"animal is no longer following pawn: {animal.Name} => {pawn}");
 
             // say goodbye to pet
-            yield return PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.TalkToPet(this);
         }
     }
 }

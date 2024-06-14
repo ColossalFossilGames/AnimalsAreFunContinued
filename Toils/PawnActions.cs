@@ -1,7 +1,6 @@
-﻿using AnimalsAreFunContinued.JobDrivers;
+using AnimalsAreFunContinued.JobDrivers;
 using AnimalsAreFunContinued.Validators;
 using RimWorld;
-using System;
 using Verse;
 using Verse.AI;
 
@@ -35,11 +34,11 @@ namespace AnimalsAreFunContinued.Toils
             {
                 job.locomotionUrgency = urgency;
             });
-            walkToPet.FailOn(ToilsFailOn(pawn, animal));
+            walkToPet.FailOn(HasToilFailed(jobDriver));
             return walkToPet;
         }
 
-        public static Toil TalkToPet(JobBase jobDriver, LocomotionUrgency urgency = LocomotionUrgency.Walk)
+        public static Toil TalkToPet(JobBase jobDriver)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
@@ -58,26 +57,24 @@ namespace AnimalsAreFunContinued.Toils
             };
             talkToPet.AddPreInitAction(() =>
             {
-                job.locomotionUrgency = urgency;
+                job.locomotionUrgency = LocomotionUrgency.Walk;
             });
-            talkToPet.FailOn(ToilsFailOn(pawn, animal));
+            talkToPet.FailOn(HasToilFailed(jobDriver));
             return talkToPet;
         }
 
-        public static Toil WalkToWaypoint(JobBase jobDriver, Func<LocalTargetInfo> getLocation)
+        public static Toil WalkToWaypoint(JobBase jobDriver, LocalTargetInfoDelegate getLocation)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
             Toil walkToWaypoint = new()
             {
                 initAction = () =>
                 {
-                    AnimalsAreFunContinued.Debug($"pawn is walking with animal: {pawn} => {animal.Name}");
-                    HaveAnimalFollowPawn(pawn, animal);
-                    LocalTargetInfo walkingTarget = getLocation();
-                    pawn.pather.StartPath(walkingTarget.cellInt, PathEndMode.OnCell);
+                    LocalTargetInfo waypoint = getLocation();
+                    AnimalsAreFunContinued.Debug($"pawn is walking to waypoint: {waypoint}");
+                    pawn.pather.StartPath(waypoint.cellInt, PathEndMode.OnCell);
                 },
                 tickAction = () =>
                 {
@@ -90,34 +87,19 @@ namespace AnimalsAreFunContinued.Toils
             {
                 job.locomotionUrgency = LocomotionUrgency.Walk;
             });
-            walkToWaypoint.AddFinishAction(() =>
-            {
-                HaveAnimalStopFollowingPawn(animal);
-            });
-            walkToWaypoint.FailOn(ToilsFailOn(pawn, animal));
+            walkToWaypoint.FailOn(HasToilFailed(jobDriver));
             return walkToWaypoint;
         }
 
-        public static Toil WalkToNextWaypoint(Action nextToilAction) => new()
-        {
-            initAction = () =>
-            {
-                nextToilAction();
-            },
-            defaultCompleteMode = ToilCompleteMode.Instant
-        };
-
-        public static Toil ThrowBall(JobBase jobDriver, Func<LocalTargetInfo> getLocation, Action<LocalTargetInfo, LocalTargetInfo> queueAnimalJob)
+        public static Toil ThrowBall(JobBase jobDriver, LocalTargetInfoDelegate getLocation)
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
 
             Toil throwBall = new()
             {
                 initAction = () =>
                 {
-                    HaveAnimalFollowPawn(pawn, animal);
                     LocalTargetInfo throwTarget = getLocation();
                     job.targetA = throwTarget;
                     pawn.rotationTracker.FaceTarget(throwTarget);
@@ -130,86 +112,53 @@ namespace AnimalsAreFunContinued.Toils
             {
                 job.locomotionUrgency = LocomotionUrgency.None;
             });
-            throwBall.AddFinishAction(() =>
-            {
-                queueAnimalJob(getLocation(), pawn);
-            });
-            throwBall.FailOn(ToilsFailOn(pawn, animal));
+            throwBall.FailOn(HasToilFailed(jobDriver));
             return throwBall;
         }
 
-        public static Toil WaitForAnimalToReturn(JobBase jobDriver, Action nextToilAction, Func<Job, bool> validateMatchingJob)
+        public static Toil HoldPosition(int ticks) => new()
+        {
+            defaultCompleteMode = ToilCompleteMode.Delay,
+            defaultDuration = ticks
+        };
+
+        public static ConditionDelegate HasToilFailed(JobBase jobDriver) => () =>
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            int? animalCurrentJobId = jobDriver.InteractiveTargetCurrentJobId;
 
-            Toil waitForAnimalToReturn = new()
-            {
-                tickAction = () =>
-                {
-                    JoyUtility.JoyTickCheckEnd(pawn);
-                    if (!validateMatchingJob(animal.CurJob))
-                    {
-                        nextToilAction();
-                    }
-                },
-                socialMode = RandomSocialMode.SuperActive,
-                defaultCompleteMode = ToilCompleteMode.Delay,
-                defaultDuration = job.def.joyDuration,
-            };
-            waitForAnimalToReturn.AddPreInitAction(() =>
-            {
-                job.locomotionUrgency = LocomotionUrgency.None;
-            });
-            waitForAnimalToReturn.FailOn(ToilsFailOn(pawn, animal));
-            return waitForAnimalToReturn;
-        }
-
-        private static void HaveAnimalFollowPawn(Pawn pawn, Pawn animal)
-        {
-            Job animalFollowJob = JobMaker.MakeJob(JobDefOf.Follow, pawn);
-            animalFollowJob.locomotionUrgency = LocomotionUrgency.Walk;
-            if (animal.jobs.curJob != null)
-            {
-                AnimalsAreFunContinued.Debug($"suspending current animal job: {animal.Name}");
-                animal.jobs.SuspendCurrentJob(JobCondition.QueuedNoLongerValid);
-            }
-            animal.jobs.StopAll();
-            animal.jobs.StartJob(animalFollowJob);
-            AnimalsAreFunContinued.Debug($"animal is now following pawn: {animal.Name} => {pawn}");
-        }
-
-        private static void HaveAnimalStopFollowingPawn(Pawn animal)
-        {
-            if (animal.jobs.curJob != null)
-            {
-                animal.jobs.SuspendCurrentJob(JobCondition.Succeeded);
-            }
-            animal.jobs.StopAll();
-        }
-
-        private static Func<bool> ToilsFailOn(Pawn pawn, Pawn animal) => () =>
-        {
             if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(pawn))
             {
                 AnimalsAreFunContinued.Debug($"pawn no longer available: {pawn}");
+                EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }
 
             if (!JoyUtility.EnjoyableOutsideNow(pawn))
             {
                 AnimalsAreFunContinued.Debug($"pawn no longer finds joy in being outside: {pawn}");
+                EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }
 
             if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(animal))
             {
                 AnimalsAreFunContinued.Debug($"animal no longer available: {animal.Name}");
+                EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }
 
             return false;
         };
+
+        private static void EndAnimalJobOnFail(Pawn animal, int? animalCurrentJobId)
+        {
+            if (animalCurrentJobId != null && animal.jobs.curJob.loadID == animalCurrentJobId)
+            {
+                animal.jobs.EndCurrentJob(JobCondition.Incompletable);
+            }
+        }
     };
 }
