@@ -98,7 +98,7 @@ namespace AnimalsAreFunContinued.Toils
             return walkToWaypoint;
         }
 
-        public static Toil WalkToNextWaypoint(JobBase jobDriver, Action nextToilAction) => new()
+        public static Toil WalkToNextWaypoint(Action nextToilAction) => new()
         {
             initAction = () =>
             {

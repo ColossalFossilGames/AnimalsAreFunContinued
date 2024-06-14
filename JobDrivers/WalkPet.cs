@@ -33,7 +33,7 @@ namespace AnimalsAreFunContinued.JobDrivers
 
             // walk more with pet
             Toil goBackToAnimal = PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
-            yield return PawnActions.WalkToNextWaypoint(this, CreateNextToilActionDelegate(
+            yield return PawnActions.WalkToNextWaypoint(CreateNextToilActionDelegate(
                 walkToWaypoint,
                 goBackToAnimal,
                 $"pawn is continuing walk with animal: {pawn} => {animal.Name}",
