@@ -43,7 +43,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return jogBackToPawn;
 
             // wait for a moment
-            yield return AnimalActions.HoldPosition(120);
+            yield return AnimalActions.HoldPosition(90);
         }
     }
 }

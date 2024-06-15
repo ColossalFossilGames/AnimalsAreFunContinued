@@ -10,7 +10,7 @@ namespace AnimalsAreFunContinued.JobDrivers
     {
         public List<LocalTargetInfo>? Path = null;
 
-        public Func<LocalTargetInfo> CreateNextWaypointDelegate(bool preserveStack = false) => delegate ()
+        public LocalTargetInfoDelegate CreateNextWaypointDelegate(bool preserveStack = false) => delegate ()
         {
             return PullNextWaypoint(preserveStack);
         };

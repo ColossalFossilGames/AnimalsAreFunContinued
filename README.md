@@ -4,12 +4,13 @@ Spend time and have fun with your pets! This mod lets your pawns play fetch or g
 will gain a little animal skill as well. This mod is a continuation of the
 [Animals are fun mod by Revolus](https://steamcommunity.com/sharedfiles/filedetails/?id=2108362126).
 
-This mod will only support versions 1.5 and forward of RimWorld. If you are running an older version of RimWorld, you 
+This mod currently only supports version 1.5 of RimWorld. If you are running an older version of RimWorld, you 
 can download the original mod this was derived from found [here](https://steamcommunity.com/sharedfiles/filedetails/?id=2108362126).
 
-This mod contains no dependencies and **can be added or removed at any time**. This mod does not use the game save file to
-store data. The source code is automatically bundled when compiling this project and should be included any copies that
-are distributed or modified to adhere to the GNU LGPL v2.1 license of the original mod.
+This mod contains no dependencies and **can be added or removed at any time**. If a save file contains a pawn or animal that
+is assigned a job from this mod, you may see an error when loading the save file. However, the error will automatically correct
+and will not be displayed on future saves. The source code is automatically bundled when compiling this project and should be
+included any copies that are distributed or modified to adhere to the GNU LGPL v2.1 license of the original mod.
 
 Translations are supported for this mod, but should be maintained and distributed in their own mod packages. Both DefInjected
 and Keyed translations are supported.
@@ -30,7 +31,7 @@ AnimalsAreFunContinued folder from ModPackageFolder into your local RimWorld mod
 Here are some high-level notes of the various files and classes:
 
 - Any user configurable settings should be added to the Settings class and set to be configured in the AnimalsAreFunContinued class
-- Logic for JobDriver or JoyGiver for pass/fail checks should be placed in the EligibilityFlags class
+- Logic for JobDriver or JoyGiver for pass/fail checks should be placed in the Validators folder
 - Try to keep JobDrivers, JoyGivers and Toils in separate classes
 
 ## Built With
