@@ -5,7 +5,7 @@
     <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
     <Title>Animals Are Fun! (Continued)</Title>
-    <Version>1.5.4</Version>
+    <Version>1.5.5</Version>
     <Authors>ColossalFossil</Authors>
     <Product>Animals Are Fun! (Continued)</Product>
     <Description>A RimWorld mod that allows your pawns to play fetch or go for a walk with your pets.</Description>
@@ -38,10 +38,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4104" />
-    <PackageReference Include="System.Buffers" Version="4.5.1" />
-    <PackageReference Include="System.Memory" Version="4.5.5" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
