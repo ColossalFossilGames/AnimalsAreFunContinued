@@ -64,5 +64,14 @@ namespace AnimalsAreFunContinued.Data
             IEnumerable<Thing> animals = GetAvailableAnimals(pawn.MapHeld);
             return GenClosest.ClosestThing_Global(pawn.Position, animals, 30f, animalValidator) as Pawn;
         }
+
+        public static void Clear()
+        {
+            if (_availableAnimals.Count > 0)
+            {
+                AnimalsAreFunContinued.Debug("clearing cached animal list for all maps");
+                _availableAnimals.Clear();
+            }
+        }
     }
 }
