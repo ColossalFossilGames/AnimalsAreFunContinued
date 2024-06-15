@@ -1,7 +1,4 @@
 ﻿using AnimalsAreFunContinued.Validators;
-using RimWorld;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -14,7 +11,7 @@ namespace AnimalsAreFunContinued.Data
     public static class AnimalCache
     {
         private const int ExpirationTimeout = 1800;
-        private static readonly Dictionary<int, AnimalCacheKey> _availableAnimals = new();
+        private static readonly Dictionary<int, AnimalCacheKey> _availableAnimals = [];
 
         public static IEnumerable<Thing> GetAvailableAnimals(Map map)
         {
@@ -27,7 +24,7 @@ namespace AnimalsAreFunContinued.Data
                 IEnumerable<Thing> animals = (from animal in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.Pawn))
                                               where (animal as Pawn)?.def?.race?.Animal == true &&
                                                     animal.Faction != null
-                                              select animal) ?? new List<Thing>();
+                                              select animal) ?? [];
                 int expirationTick = currentTick + ExpirationTimeout;
 
                 if (updateExistingAnimalList)
@@ -66,6 +63,15 @@ namespace AnimalsAreFunContinued.Data
 
             IEnumerable<Thing> animals = GetAvailableAnimals(pawn.MapHeld);
             return GenClosest.ClosestThing_Global(pawn.Position, animals, 30f, animalValidator) as Pawn;
+        }
+
+        public static void Clear()
+        {
+            if (_availableAnimals.Count > 0)
+            {
+                AnimalsAreFunContinued.Debug("clearing cached animal list for all maps");
+                _availableAnimals.Clear();
+            }
         }
     }
 }

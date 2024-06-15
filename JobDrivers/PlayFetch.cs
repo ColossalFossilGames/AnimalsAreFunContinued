@@ -1,6 +1,6 @@
 ﻿using AnimalsAreFunContinued.Externals;
 using AnimalsAreFunContinued.Toils;
-using System;
+using RimWorld;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -9,8 +9,6 @@ namespace AnimalsAreFunContinued.JobDrivers
 {
     public class PlayFetch : PathableJobBase
     {
-        public int CurrentAnimalJobId = 0;
-
         public override bool TryMakePreToilReservations(bool errorOnFailed) =>
             pawn.Reserve(job.GetTarget(TargetIndex.B), job, errorOnFailed: errorOnFailed);
 
@@ -31,56 +29,37 @@ namespace AnimalsAreFunContinued.JobDrivers
             // say hello to animal
             yield return PawnActions.TalkToPet(this);
 
+            // pet should start to follow pawn
+            Toil followPawn = StartJobForTarget(JobDefOf.Follow, LocomotionUrgency.Walk, $"animal is following pawn: {animal.Name} => {pawn}");
+            yield return followPawn;
+
             // walk with pet
-            Toil walkToWaypoint = PawnActions.WalkToWaypoint(this, CreateNextWaypointDelegate());
-            yield return walkToWaypoint;
+            yield return PawnActions.WalkToWaypoint(this, CreateNextWaypointDelegate());
 
             // throw ball
-            yield return PawnActions.ThrowBall(
-                this,
-                CreateNextWaypointDelegate(true),
-                CreateQueueAnimalJobDelegate(Jobs.FetchItem)
-            );
+            yield return PawnActions.ThrowBall(this, CreateNextWaypointDelegate(true));
 
-            // wait for animal to fetch and return ball and then walk with pet to next waypoint
-            Toil goBackToAnimal = PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
-            yield return PawnActions.WaitForAnimalToReturn(this,
-                CreateNextToilActionDelegate(
-                    walkToWaypoint,
-                    goBackToAnimal,
-                    $"pawn is continuing to play fetch with animal: {pawn} => {animal.Name}",
-                    $"pawn is ending play fetch with animal: {pawn} => {animal.Name}"
-                ),
-                CreateValidateAnimalJobDelegate()
-            );
+            // pet should fetch item
+            yield return StartJobForTarget(Jobs.FetchItem, CreateNextWaypointDelegate(true), LocomotionUrgency.Walk);
+
+            // wait for pet to finish fetching item
+            Toil waitForAnimal = AnimalActions.HoldPosition(90);
+            yield return waitForAnimal;
+
+            // continue waiting until pet has finished fetching item
+            yield return RepeatToilOnCondition(waitForAnimal, [WaitForJobDuration, InteractiveTargetHasJob]);
+
+            // play more with pet, until job has finished
+            yield return RepeatToilOnCondition(followPawn, WaitForJobDuration, $"pawn is continuing to play fetch with animal: {pawn} => {animal.Name}");
 
             // go back to animal
-            yield return goBackToAnimal;
+            yield return PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
+
+            // pet should no longer play fetch
+            yield return EndJobForTarget($"animal is no longer playing fetch: {animal.Name} => {pawn}");
 
             // say goodbye to pet
-            yield return PawnActions.TalkToPet(this, LocomotionUrgency.Jog);
+            yield return PawnActions.TalkToPet(this);
         }
-
-        private Action<LocalTargetInfo, LocalTargetInfo> CreateQueueAnimalJobDelegate(JobDef jobDef)
-        {
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
-
-            return (targetA, targetB) =>
-            {
-                animal.jobs.StopAll();
-                Job job = JobMaker.MakeJob(jobDef, targetA, targetB);
-                CurrentAnimalJobId = job.loadID;
-                animal.jobs.StartJob(job);
-            };
-        }
-
-        private Func<Job, bool> CreateValidateAnimalJobDelegate() => delegate (Job curJob)
-        {
-            if (curJob.loadID != CurrentAnimalJobId)
-            {
-                CurrentAnimalJobId = 0;
-            }
-            return curJob.loadID == CurrentAnimalJobId;
-        };
     }
 }
