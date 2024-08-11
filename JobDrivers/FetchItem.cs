@@ -26,7 +26,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             Toil sprintToItem = Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.OnCell);
             sprintToItem.AddPreInitAction(() =>
             {
-                AnimalsAreFunContinued.LogWarning($"{animalName} is now chasing the ball.");
+                AnimalsAreFunContinued.LogInfo($"{animalName} is now chasing the ball.");
                 job.locomotionUrgency = LocomotionUrgency.Sprint;
             });
             yield return sprintToItem;
@@ -41,7 +41,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             Toil jogBackToPawn = Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.Touch);
             jogBackToPawn.AddPreInitAction(() =>
             {
-                AnimalsAreFunContinued.LogWarning($"{animalName} is now returning the ball to {pawnName}.");
+                AnimalsAreFunContinued.LogInfo($"{animalName} is now returning the ball to {pawnName}.");
                 job.locomotionUrgency = LocomotionUrgency.Jog;
             });
             yield return jogBackToPawn;

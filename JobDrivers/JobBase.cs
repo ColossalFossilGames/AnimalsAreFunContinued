@@ -19,6 +19,7 @@ namespace AnimalsAreFunContinued.JobDrivers
         public Toil StartJobForTarget(JobDef jobDef, LocalTargetInfoDelegate? getTargetA, LocomotionUrgency locomotionUrgency, string? debugMessage = null)
         {
             Pawn target = job.GetTarget(TargetIndex.B).Pawn;
+            string targetName = FormatLog.PawnName(target);
 
             return new()
             {
@@ -26,12 +27,19 @@ namespace AnimalsAreFunContinued.JobDrivers
                 {
                     if (target.jobs.curJob != null)
                     {
-                        AnimalsAreFunContinued.LogInfo($"ending current job for target: {target}");
+                        AnimalsAreFunContinued.LogInfo($"{targetName} is now ending their previous job.");
                         target.jobs.EndCurrentJob(JobCondition.QueuedNoLongerValid);
                     }
 
                     target.jobs.StopAll();
-                    Job targetsNewJob = getTargetA != null ? JobMaker.MakeJob(jobDef, getTargetA(), pawn) : JobMaker.MakeJob(jobDef, pawn);
+                    LocalTargetInfo? targetA = getTargetA != null ? getTargetA() : null;
+                    if (getTargetA != null && targetA == null)
+                    {
+                        AnimalsAreFunContinued.LogInfo($"Unable to StartJobForTarget. getTargetA delegate has returned an unexpected null value. Ending the job prematurely.");
+                        this.EndJobWith(JobCondition.Errored);
+                        return;
+                    }
+                    Job targetsNewJob = getTargetA != null ? JobMaker.MakeJob(jobDef, (LocalTargetInfo)targetA!, pawn) : JobMaker.MakeJob(jobDef, pawn);
                     targetsNewJob.locomotionUrgency = (LocomotionUrgency)locomotionUrgency;
                     InteractiveTargetCurrentJobId = targetsNewJob.loadID;
                     target.jobs.StartJob(targetsNewJob);

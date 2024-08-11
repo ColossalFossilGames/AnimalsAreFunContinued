@@ -3,6 +3,7 @@ using AnimalsAreFunContinued.Validators;
 using RimWorld;
 using Verse;
 using Verse.AI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace AnimalsAreFunContinued.Toils
 {
@@ -21,12 +22,12 @@ namespace AnimalsAreFunContinued.Toils
                 initAction = () =>
                 {
                     AnimalsAreFunContinued.LogInfo($"{pawnName} is now approaching {animalName}.");
-                    if (pawn.Position == animal.Position)
+                    if (!pawn.CanReach(animal.Position, PathEndMode.Touch, Danger.None))
                     {
-                        AnimalsAreFunContinued.LogInfo($"{pawnName} has reached {animalName}.");
+                        AnimalsAreFunContinued.LogWarning($"{pawnName} is unable to reach {animalName} safely. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Incompletable);
                         return;
                     }
-
                     pawn.pather.StartPath(animal.Position, PathEndMode.OnCell);
                 },
                 defaultCompleteMode = ToilCompleteMode.PatherArrival,
@@ -79,6 +80,18 @@ namespace AnimalsAreFunContinued.Toils
                 {
                     AnimalsAreFunContinued.LogInfo($"{pawnName} is now walking to a waypoint on their path.");
                     LocalTargetInfo waypoint = getLocation();
+                    if (waypoint == null)
+                    {
+                        AnimalsAreFunContinued.LogInfo($"{pawnName} is unable to walk to the next waypoint. getLocation delegate has returned an unexpected null value. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Errored);
+                        return;
+                    }
+                    if (!pawn.CanReach(waypoint, PathEndMode.OnCell, Danger.None))
+                    {
+                        AnimalsAreFunContinued.LogWarning($"{pawnName} is unable to reach the next waypoint safely. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Incompletable);
+                        return;
+                    }
                     pawn.pather.StartPath(waypoint.cellInt, PathEndMode.OnCell);
                 },
                 tickAction = () =>
@@ -108,6 +121,18 @@ namespace AnimalsAreFunContinued.Toils
                 {
                     AnimalsAreFunContinued.LogInfo($"{pawnName} is now throwing a ball.");
                     LocalTargetInfo throwTarget = getLocation();
+                    if (throwTarget == null)
+                    {
+                        AnimalsAreFunContinued.LogInfo($"{pawnName} is unable to throw the ball to the next waypoint. getLocation delegate has returned an unexpected null value. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Errored);
+                        return;
+                    }
+                    if (!pawn.CanReach(throwTarget, PathEndMode.OnCell, Danger.None))
+                    {
+                        AnimalsAreFunContinued.LogWarning($"{pawnName} is unable to throw the ball to the next waypoint safely. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Incompletable);
+                        return;
+                    }
                     job.targetA = throwTarget;
                     pawn.rotationTracker.FaceTarget(throwTarget);
                     FleckMaker.ThrowStone(pawn, throwTarget.Cell);

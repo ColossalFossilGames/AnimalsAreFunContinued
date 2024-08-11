@@ -107,13 +107,13 @@ namespace AnimalsAreFunContinued.Validators
         {
             string animalName = FormatLog.PawnName(animal);
             string verbContext = isAlreadyPlaying ? "can no longer reserve" : "cannot reserve";
-            if (AvailabilityChecks.IsPawnOrAnimalGone(animal, out string? innerReason))
+            if (IsPawnOrAnimalGone(animal, out string? innerReason))
             {
                 reason = $"{pawnName} {verbContext} {animalName}, because {animalName} is {innerReason}.";
                 return false;
             }
 
-            if (AvailabilityChecks.IsPawnOrAnimalIncapable(animal, out innerReason))
+            if (IsPawnOrAnimalIncapable(animal, out innerReason))
             {
                 reason = $"{pawnName} {verbContext} {animalName}, because {animalName} has {innerReason}.";
                 return false;
@@ -127,7 +127,7 @@ namespace AnimalsAreFunContinued.Validators
 
             // These checks forward only apply when animal is not currently playing
 
-            if (!AvailabilityChecks.IsAnimalRaceAllowed(animal, out innerReason))
+            if (!IsAnimalRaceAllowed(animal, out innerReason))
             {
                 reason = $"{pawnName} {verbContext} {animalName}, because {animalName} is {innerReason}.";
                 return false;
