@@ -128,38 +128,18 @@ namespace AnimalsAreFunContinued.Toils
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             int? animalCurrentJobId = jobDriver.InteractiveTargetCurrentJobId;
+            string pawnName = FormatLog.PawnName(pawn);
 
-            if (AvailabilityChecks.IsPawnOrAnimalGone(pawn))
+            if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn, true, out string? reason))
             {
-                AnimalsAreFunContinued.LogInfo($"pawn no longer available: {pawn}");
+                if (reason != null) AnimalsAreFunContinued.LogInfo(reason);
                 EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }
 
-            if (AvailabilityChecks.IsPawnOrAnimalIncapable(pawn))
+            if (!AvailabilityChecks.WillAnimalEnjoyPlayingOutside(pawnName, animal, true, out reason))
             {
-                AnimalsAreFunContinued.LogInfo($"pawn no longer available: {pawn}");
-                EndAnimalJobOnFail(animal, animalCurrentJobId);
-                return true;
-            }
-
-            if (!JoyUtility.EnjoyableOutsideNow(pawn))
-            {
-                AnimalsAreFunContinued.LogInfo($"pawn no longer finds joy in being outside: {pawn}");
-                EndAnimalJobOnFail(animal, animalCurrentJobId);
-                return true;
-            }
-
-            if (AvailabilityChecks.IsPawnOrAnimalGone(animal))
-            {
-                AnimalsAreFunContinued.LogInfo($"animal no longer available: {animal.Name}");
-                EndAnimalJobOnFail(animal, animalCurrentJobId);
-                return true;
-            }
-
-            if (AvailabilityChecks.IsPawnOrAnimalIncapable(animal))
-            {
-                AnimalsAreFunContinued.LogInfo($"animal no longer available: {animal.Name}");
+                if (reason != null) AnimalsAreFunContinued.LogInfo(reason);
                 EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }

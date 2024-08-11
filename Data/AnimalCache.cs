@@ -53,8 +53,10 @@ namespace AnimalsAreFunContinued.Data
                 if (animalThing is not Pawn animal)
                 {
                     AnimalsAreFunContinued.LogInfo($"{pawnName} cannot reserve {{animal reference is not of type Pawn}}.");
+                    return false;
                 }
-                else if (!AvailabilityChecks.IsAnimalAvailable(pawnName, animal, out string? reason))
+                
+                if (!AvailabilityChecks.WillAnimalEnjoyPlayingOutside(pawnName, animal, false, out string? reason))
                 {
                     if (reason != null) AnimalsAreFunContinued.LogInfo(reason);
                     return false;

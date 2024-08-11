@@ -17,8 +17,9 @@ namespace AnimalsAreFunContinued.JoyGivers
                 return null;
             }
 
-            if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn))
+            if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn, false, out string? reason))
             {
+                if (reason != null) AnimalsAreFunContinued.LogInfo(reason);
                 return null;
             }
 
