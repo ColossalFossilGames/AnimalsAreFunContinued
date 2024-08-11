@@ -12,16 +12,18 @@ namespace AnimalsAreFunContinued.Toils
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
+            string pawnName = FormatLog.PawnName(pawn);
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            string animalName = FormatLog.PawnName(animal);
 
             Toil walkToPet = new()
             {
                 initAction = () =>
                 {
-                    AnimalsAreFunContinued.LogInfo($"approaching pet: {pawn} => {animal.Name}");
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} is now approaching {animalName}.");
                     if (pawn.Position == animal.Position)
                     {
-                        AnimalsAreFunContinued.LogInfo($"done approaching pet: {pawn} => {animal.Name}");
+                        AnimalsAreFunContinued.LogInfo($"{pawnName} has reached {animalName}.");
                         return;
                     }
 
@@ -42,13 +44,15 @@ namespace AnimalsAreFunContinued.Toils
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
+            string pawnName = FormatLog.PawnName(pawn);
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            string animalName = FormatLog.PawnName(animal);
 
             Toil talkToPet = new()
             {
                 initAction = () =>
                 {
-                    AnimalsAreFunContinued.LogInfo($"talking to pet: {pawn} => {animal.Name}");
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} is now saying nice things to {animalName}.");
                     pawn.interactions.TryInteractWith(animal, InteractionDefOf.AnimalChat);
                 },
                 defaultCompleteMode = ToilCompleteMode.Delay,
@@ -67,13 +71,14 @@ namespace AnimalsAreFunContinued.Toils
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
+            string pawnName = FormatLog.PawnName(pawn);
 
             Toil walkToWaypoint = new()
             {
                 initAction = () =>
                 {
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} is now walking to a waypoint on their path.");
                     LocalTargetInfo waypoint = getLocation();
-                    AnimalsAreFunContinued.LogInfo($"pawn is walking to waypoint: {waypoint}");
                     pawn.pather.StartPath(waypoint.cellInt, PathEndMode.OnCell);
                 },
                 tickAction = () =>
@@ -95,11 +100,13 @@ namespace AnimalsAreFunContinued.Toils
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
+            string pawnName = FormatLog.PawnName(pawn);
 
             Toil throwBall = new()
             {
                 initAction = () =>
                 {
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} is now throwing a ball.");
                     LocalTargetInfo throwTarget = getLocation();
                     job.targetA = throwTarget;
                     pawn.rotationTracker.FaceTarget(throwTarget);
