@@ -10,12 +10,8 @@ namespace AnimalsAreFunContinued.JoyGivers
     {
         public override Job? TryGiveJob(Pawn pawn)
         {
-            Pawn? animal = AnimalCache.GetAvailableAnimal(pawn);
-            if (animal == null)
-            {
-                AnimalsAreFunContinued.LogInfo($"no valid animal found");
-                return null;
-            }
+            string pawnName = FormatLog.PawnName(pawn);
+            AnimalsAreFunContinued.LogInfo($"{pawnName} wants to play fetch and is looking for an animal.");
 
             if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn, false, out string? reason))
             {
@@ -23,8 +19,16 @@ namespace AnimalsAreFunContinued.JoyGivers
                 return null;
             }
 
+            Pawn? animal = AnimalCache.GetAvailableAnimal(pawn);
+            string animalName = FormatLog.PawnName(animal);
+            if (animal == null)
+            {
+                AnimalsAreFunContinued.LogInfo($"{pawnName} wanted to play fetch, but could not find a valid animal.");
+                return null;
+            }
+
             var job = JobMaker.MakeJob(def.jobDef, null, animal);
-            AnimalsAreFunContinued.LogInfo($"found animal {animal.Name}, made PlayFetch job {job}");
+            AnimalsAreFunContinued.LogInfo($"{pawnName} is going to play fetch with {animalName}, made PlayFetch job {job}.");
             return job;
         }
     }
