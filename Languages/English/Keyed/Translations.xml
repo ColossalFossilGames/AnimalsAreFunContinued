@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <LanguageData>
+  <AllowExoticPets>Allow exotic pets</AllowExoticPets>
+  <AllowExoticPetsTooltip>Have a mod that allows you to have an insectoid, mechanoid or a fleshbeast monstrocity as a pet? Who am I to judge!? This setting allows these pets to be interacted with..</AllowExoticPetsTooltip>
+  <AllowHumanLike>Allow human like</AllowHumanLike>
+  <AllowHumanLikeTooltip>Have a mod that introduces human like pets? This allows mods whose animals are set as human like to be interacted with.</AllowHumanLikeTooltip>
   <Animals_are_fun_Continued>Animals are fun! (Continued)</Animals_are_fun_Continued>
   <DebuggingCategory>Debugging:</DebuggingCategory>
   <MaxBodySize>Max. body size ({0}cm)</MaxBodySize>

@@ -69,13 +69,13 @@ namespace AnimalsAreFunContinued.Validators
                 return false;
             }
 
-            if (race.Humanlike)
+            if (!Settings.AllowHumanLike && race.Humanlike)
             {
                 reason = "humanlike";
                 return false;
             }
 
-            if (race.FleshType != FleshTypeDefOf.Normal)
+            if (!Settings.AllowExoticPets && race.FleshType != FleshTypeDefOf.Normal)
             {
                 reason = "not flesh";
                 return false;

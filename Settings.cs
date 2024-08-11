@@ -12,6 +12,8 @@ namespace AnimalsAreFunContinued
         public static float MaxBodySize = 1.6f;
         public static float MaxWildness = 0.8f;
         public static bool MustBeCute = true;
+        public static bool AllowHumanLike = false;
+        public static bool AllowExoticPets = false;
 
         public override void ExposeData()
         {
@@ -22,6 +24,8 @@ namespace AnimalsAreFunContinued
             Scribe_Values.Look(ref MaxBodySize, "MaxBodySize", MaxBodySize, true);
             Scribe_Values.Look(ref MaxWildness, "MaxWildness", MaxWildness, true);
             Scribe_Values.Look(ref MustBeCute, "MustBeCute", MustBeCute, true);
+            Scribe_Values.Look(ref AllowHumanLike, "AllowHumanLike", AllowHumanLike, false);
+            Scribe_Values.Look(ref AllowExoticPets, "AllowExoticPets", AllowExoticPets, false);
 
             MinConsciousness = Mathf.Clamp(MinConsciousness, 0.1f, 1);
             MinMoving = Mathf.Clamp(MinMoving, 0.1f, 1);
