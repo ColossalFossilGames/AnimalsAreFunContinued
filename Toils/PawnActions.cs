@@ -18,10 +18,10 @@ namespace AnimalsAreFunContinued.Toils
             {
                 initAction = () =>
                 {
-                    AnimalsAreFunContinued.Debug($"approaching pet: {pawn} => {animal.Name}");
+                    AnimalsAreFunContinued.LogInfo($"approaching pet: {pawn} => {animal.Name}");
                     if (pawn.Position == animal.Position)
                     {
-                        AnimalsAreFunContinued.Debug($"done approaching pet: {pawn} => {animal.Name}");
+                        AnimalsAreFunContinued.LogInfo($"done approaching pet: {pawn} => {animal.Name}");
                         return;
                     }
 
@@ -48,7 +48,7 @@ namespace AnimalsAreFunContinued.Toils
             {
                 initAction = () =>
                 {
-                    AnimalsAreFunContinued.Debug($"talking to pet: {pawn} => {animal.Name}");
+                    AnimalsAreFunContinued.LogInfo($"talking to pet: {pawn} => {animal.Name}");
                     pawn.interactions.TryInteractWith(animal, InteractionDefOf.AnimalChat);
                 },
                 defaultCompleteMode = ToilCompleteMode.Delay,
@@ -73,7 +73,7 @@ namespace AnimalsAreFunContinued.Toils
                 initAction = () =>
                 {
                     LocalTargetInfo waypoint = getLocation();
-                    AnimalsAreFunContinued.Debug($"pawn is walking to waypoint: {waypoint}");
+                    AnimalsAreFunContinued.LogInfo($"pawn is walking to waypoint: {waypoint}");
                     pawn.pather.StartPath(waypoint.cellInt, PathEndMode.OnCell);
                 },
                 tickAction = () =>
@@ -131,21 +131,21 @@ namespace AnimalsAreFunContinued.Toils
 
             if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(pawn))
             {
-                AnimalsAreFunContinued.Debug($"pawn no longer available: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"pawn no longer available: {pawn}");
                 EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }
 
             if (!JoyUtility.EnjoyableOutsideNow(pawn))
             {
-                AnimalsAreFunContinued.Debug($"pawn no longer finds joy in being outside: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"pawn no longer finds joy in being outside: {pawn}");
                 EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }
 
             if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(animal))
             {
-                AnimalsAreFunContinued.Debug($"animal no longer available: {animal.Name}");
+                AnimalsAreFunContinued.LogInfo($"animal no longer available: {animal.Name}");
                 EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }

@@ -20,7 +20,7 @@ namespace AnimalsAreFunContinued.Data
             bool updateExistingAnimalList = _availableAnimals.ContainsKey(mapId);
             if (!updateExistingAnimalList || currentTick > _availableAnimals[mapId].Item1)
             {
-                AnimalsAreFunContinued.Debug($"{(updateExistingAnimalList ? "re" : "")}generating cached animal list for map {mapId}");
+                AnimalsAreFunContinued.LogInfo($"{(updateExistingAnimalList ? "re" : "")}generating cached animal list for map {mapId}");
                 IEnumerable<Thing> animals = (from animal in map.listerThings.ThingsMatching(ThingRequest.ForGroup(ThingRequestGroup.Pawn))
                                               where (animal as Pawn)?.def?.race?.Animal == true &&
                                                     animal.Faction != null
@@ -54,7 +54,7 @@ namespace AnimalsAreFunContinued.Data
 
                 if (!pawn.CanReserveAndReach(new LocalTargetInfo(animalThing), PathEndMode.ClosestTouch, Danger.None))
                 {
-                    AnimalsAreFunContinued.Debug($"cannot reserve and reach: {animalThing}");
+                    AnimalsAreFunContinued.LogInfo($"cannot reserve and reach: {animalThing}");
                     return false;
                 }
 
@@ -69,7 +69,7 @@ namespace AnimalsAreFunContinued.Data
         {
             if (_availableAnimals.Count > 0)
             {
-                AnimalsAreFunContinued.Debug("clearing cached animal list for all maps");
+                AnimalsAreFunContinued.LogInfo("clearing cached animal list for all maps");
                 _availableAnimals.Clear();
             }
         }

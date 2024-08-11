@@ -18,7 +18,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             // load the walking path
             if (!FindOutsideWalkingPath())
             {
-                AnimalsAreFunContinued.Debug($"could not find a valid walking path: {pawn} => {animal.Name}");
+                AnimalsAreFunContinued.LogInfo($"could not find a valid walking path: {pawn} => {animal.Name}");
                 yield break;
             }
 

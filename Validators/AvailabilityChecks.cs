@@ -9,19 +9,19 @@ namespace AnimalsAreFunContinued.Validators
         {
             if (pawn.DestroyedOrNull())
             {
-                AnimalsAreFunContinued.Debug($"destroyed or null: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"destroyed or null: {pawn}");
                 return true;
             }
 
             if (pawn.Dead)
             {
-                AnimalsAreFunContinued.Debug($"dead: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"dead: {pawn}");
                 return true;
             }
 
             if (!pawn.Spawned)
             {
-                AnimalsAreFunContinued.Debug($"not spawned: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"not spawned: {pawn}");
                 return true;
             }
 
@@ -33,19 +33,19 @@ namespace AnimalsAreFunContinued.Validators
             PawnCapacitiesHandler? capacities = pawn?.health?.capacities;
             if (capacities == null)
             {
-                AnimalsAreFunContinued.Debug($"no health capatibilities: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"no health capatibilities: {pawn}");
                 return true;
             }
 
             if (capacities.GetLevel(PawnCapacityDefOf.Consciousness) < Settings.MinConsciousness)
             {
-                AnimalsAreFunContinued.Debug($"not enough Consciousness: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"not enough Consciousness: {pawn}");
                 return true;
             }
 
             if (capacities.GetLevel(PawnCapacityDefOf.Moving) < Settings.MinMoving)
             {
-                AnimalsAreFunContinued.Debug($"not enough Moving: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"not enough Moving: {pawn}");
                 return true;
             }
 
@@ -63,25 +63,25 @@ namespace AnimalsAreFunContinued.Validators
 
             if (pawn.MapHeld == null)
             {
-                AnimalsAreFunContinued.Debug($"MapHeld is null: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"MapHeld is null: {pawn}");
                 return false;
             }
 
             if (!pawn.IsColonist)
             {
-                AnimalsAreFunContinued.Debug($"not a colonist: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"not a colonist: {pawn}");
                 return false;
             }
 
             if (!JoyUtility.EnjoyableOutsideNow(pawn))
             {
-                AnimalsAreFunContinued.Debug($"doesn't want to have fun outside: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"doesn't want to have fun outside: {pawn}");
                 return false;
             }
 
             if (PawnUtility.WillSoonHaveBasicNeed(pawn))
             {
-                AnimalsAreFunContinued.Debug($"will soon have basic need: {pawn}");
+                AnimalsAreFunContinued.LogInfo($"will soon have basic need: {pawn}");
                 return false;
             }
 
@@ -93,43 +93,43 @@ namespace AnimalsAreFunContinued.Validators
             RaceProperties? race = animal?.def?.race;
             if (race == null)
             {
-                AnimalsAreFunContinued.Debug($"no race: {animal}");
+                AnimalsAreFunContinued.LogInfo($"no race: {animal}");
                 return false;
             }
 
             if (!race.Animal)
             {
-                AnimalsAreFunContinued.Debug($"not an animal: {animal}");
+                AnimalsAreFunContinued.LogInfo($"not an animal: {animal}");
                 return false;
             }
 
             if (race.Humanlike)
             {
-                AnimalsAreFunContinued.Debug($"humanlike: {animal}");
+                AnimalsAreFunContinued.LogInfo($"humanlike: {animal}");
                 return false;
             }
 
             if (race.FleshType != FleshTypeDefOf.Normal)
             {
-                AnimalsAreFunContinued.Debug($"not flesh: {animal}");
+                AnimalsAreFunContinued.LogInfo($"not flesh: {animal}");
                 return false;
             }
 
             if (race.baseBodySize > Settings.MaxBodySize)
             {
-                AnimalsAreFunContinued.Debug($"too big: {animal}");
+                AnimalsAreFunContinued.LogInfo($"too big: {animal}");
                 return false;
             }
 
             if (race.wildness > Settings.MaxWildness)
             {
-                AnimalsAreFunContinued.Debug($"too wild: {animal}");
+                AnimalsAreFunContinued.LogInfo($"too wild: {animal}");
                 return false;
             }
 
             if (!Settings.MustBeCute && race.nuzzleMtbHours < 0f)
             {
-                AnimalsAreFunContinued.Debug($"not cute: {animal}");
+                AnimalsAreFunContinued.LogInfo($"not cute: {animal}");
                 return false;
             }
 
@@ -145,26 +145,26 @@ namespace AnimalsAreFunContinued.Validators
 
             if (PawnUtility.WillSoonHaveBasicNeed(animal))
             {
-                AnimalsAreFunContinued.Debug($"will soon have basic need: {animal}");
+                AnimalsAreFunContinued.LogInfo($"will soon have basic need: {animal}");
                 return false;
             }
 
             if (animal.GetTimeAssignment() != TimeAssignmentDefOf.Anything)
             {
-                AnimalsAreFunContinued.Debug($"it's time to sleep: {animal}");
+                AnimalsAreFunContinued.LogInfo($"it's time to sleep: {animal}");
                 return false;
             }
 
             if (animal.carryTracker?.CarriedThing != null)
             {
-                AnimalsAreFunContinued.Debug($"currently hauling something: {animal}");
+                AnimalsAreFunContinued.LogInfo($"currently hauling something: {animal}");
                 return false;
             }
 
             bool isIdle = animal.mindState?.IsIdle ?? false;
             if (!isIdle)
             {
-                AnimalsAreFunContinued.Debug($"not idle: {animal}");
+                AnimalsAreFunContinued.LogInfo($"not idle: {animal}");
                 return false;
             }
 

@@ -12,10 +12,10 @@ namespace AnimalsAreFunContinued
             GetSettings<Settings>();
         }
 
-        public static void Debug(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null)
+        public static void LogInfo(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null)
         {
             if (Settings.ShowDebugMessages) {
-                Log.Message($"[AnimalsAreFunContinued @ {caller}:{line}] {message}");
+                Log.Message($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");
             }
         }
 

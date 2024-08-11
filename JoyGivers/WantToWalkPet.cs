@@ -13,7 +13,7 @@ namespace AnimalsAreFunContinued.JoyGivers
             Pawn? animal = AnimalCache.GetAvailableAnimal(pawn);
             if (animal == null)
             {
-                AnimalsAreFunContinued.Debug($"no valid animal found");
+                AnimalsAreFunContinued.LogInfo($"no valid animal found");
                 return null;
             }
 
@@ -23,7 +23,7 @@ namespace AnimalsAreFunContinued.JoyGivers
             }
 
             var job = JobMaker.MakeJob(def.jobDef, null, animal);
-            AnimalsAreFunContinued.Debug($"found animal {animal.Name}, made WalkPet job {job}");
+            AnimalsAreFunContinued.LogInfo($"found animal {animal.Name}, made WalkPet job {job}");
             return job;
         }
     }

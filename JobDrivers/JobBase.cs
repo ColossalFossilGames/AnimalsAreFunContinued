@@ -26,7 +26,7 @@ namespace AnimalsAreFunContinued.JobDrivers
                 {
                     if (target.jobs.curJob != null)
                     {
-                        AnimalsAreFunContinued.Debug($"ending current job for target: {target}");
+                        AnimalsAreFunContinued.LogInfo($"ending current job for target: {target}");
                         target.jobs.EndCurrentJob(JobCondition.QueuedNoLongerValid);
                     }
 
@@ -38,7 +38,7 @@ namespace AnimalsAreFunContinued.JobDrivers
 
                     if (debugMessage != null)
                     {
-                        AnimalsAreFunContinued.Debug(debugMessage);
+                        AnimalsAreFunContinued.LogInfo(debugMessage);
                     }
                 },
                 defaultCompleteMode = ToilCompleteMode.Instant
@@ -60,7 +60,7 @@ namespace AnimalsAreFunContinued.JobDrivers
                     InteractiveTargetCurrentJobId = null;
                     if (debugMessage != null)
                     {
-                        AnimalsAreFunContinued.Debug(debugMessage);
+                        AnimalsAreFunContinued.LogInfo(debugMessage);
                     }
                 }
             },
@@ -117,7 +117,7 @@ namespace AnimalsAreFunContinued.JobDrivers
                 {
                     if (repeatMessage != null)
                     {
-                        AnimalsAreFunContinued.Debug(repeatMessage);
+                        AnimalsAreFunContinued.LogInfo(repeatMessage);
                     }
                     JumpToToil(toilToRepeat);
                 }
