@@ -18,6 +18,10 @@ namespace AnimalsAreFunContinued
                 Log.Message($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");
             }
         }
+        public static void LogWarning(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null) =>
+            Log.Warning($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");
+        public static void LogError(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null) =>
+            Log.Error($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
