@@ -129,7 +129,14 @@ namespace AnimalsAreFunContinued.Toils
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             int? animalCurrentJobId = jobDriver.InteractiveTargetCurrentJobId;
 
-            if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(pawn))
+            if (AvailabilityChecks.IsPawnOrAnimalGone(pawn))
+            {
+                AnimalsAreFunContinued.LogInfo($"pawn no longer available: {pawn}");
+                EndAnimalJobOnFail(animal, animalCurrentJobId);
+                return true;
+            }
+
+            if (AvailabilityChecks.IsPawnOrAnimalIncapable(pawn))
             {
                 AnimalsAreFunContinued.LogInfo($"pawn no longer available: {pawn}");
                 EndAnimalJobOnFail(animal, animalCurrentJobId);
@@ -143,7 +150,14 @@ namespace AnimalsAreFunContinued.Toils
                 return true;
             }
 
-            if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(animal))
+            if (AvailabilityChecks.IsPawnOrAnimalGone(animal))
+            {
+                AnimalsAreFunContinued.LogInfo($"animal no longer available: {animal.Name}");
+                EndAnimalJobOnFail(animal, animalCurrentJobId);
+                return true;
+            }
+
+            if (AvailabilityChecks.IsPawnOrAnimalIncapable(animal))
             {
                 AnimalsAreFunContinued.LogInfo($"animal no longer available: {animal.Name}");
                 EndAnimalJobOnFail(animal, animalCurrentJobId);

@@ -5,58 +5,65 @@ namespace AnimalsAreFunContinued.Validators
 {
     public static class AvailabilityChecks
     {
-        private static bool IsPawnOrAnimalGone(Pawn pawn)
+        public static bool IsPawnOrAnimalGone(Pawn pawn) => IsPawnOrAnimalGone(pawn, out _);
+        public static bool IsPawnOrAnimalGone(Pawn pawn, out string? reason)
         {
             if (pawn.DestroyedOrNull())
             {
-                AnimalsAreFunContinued.LogInfo($"destroyed or null: {pawn}");
+                reason = "destroyed or null";
                 return true;
             }
 
             if (pawn.Dead)
             {
-                AnimalsAreFunContinued.LogInfo($"dead: {pawn}");
+                reason = "dead";
                 return true;
             }
 
             if (!pawn.Spawned)
             {
-                AnimalsAreFunContinued.LogInfo($"not spawned: {pawn}");
+                reason = "not spawned";
                 return true;
             }
 
+            reason = null;
             return false;
         }
 
-        private static bool IsPawnOrAnimalIncapable(Pawn? pawn)
+        public static bool IsPawnOrAnimalIncapable(Pawn? pawn) => IsPawnOrAnimalIncapable(pawn, out _);
+        public static bool IsPawnOrAnimalIncapable(Pawn? pawn, out string? reason)
         {
             PawnCapacitiesHandler? capacities = pawn?.health?.capacities;
             if (capacities == null)
             {
-                AnimalsAreFunContinued.LogInfo($"no health capatibilities: {pawn}");
+                reason = $"no health capatibilities";
                 return true;
             }
 
             if (capacities.GetLevel(PawnCapacityDefOf.Consciousness) < Settings.MinConsciousness)
             {
-                AnimalsAreFunContinued.LogInfo($"not enough Consciousness: {pawn}");
+                reason = $"not met minimum required consciousness";
                 return true;
             }
 
             if (capacities.GetLevel(PawnCapacityDefOf.Moving) < Settings.MinMoving)
             {
-                AnimalsAreFunContinued.LogInfo($"not enough Moving: {pawn}");
+                reason = $"not met minimum required moving";
                 return true;
             }
 
+            reason = null;
             return false;
         }
 
-        public static bool IsPawnOrAnimalGoneOrIncapable(Pawn p) => IsPawnOrAnimalGone(p) || IsPawnOrAnimalIncapable(p);
-
         public static bool WillPawnEnjoyPlayingOutside(Pawn pawn)
         {
-            if (IsPawnOrAnimalGoneOrIncapable(pawn))
+            if (IsPawnOrAnimalGone(pawn))
+            {
+                return false;
+            }
+
+            if (IsPawnOrAnimalIncapable(pawn))
             {
                 return false;
             }
@@ -88,86 +95,102 @@ namespace AnimalsAreFunContinued.Validators
             return true;
         }
 
-        private static bool IsAnimalRaceAllowed(Pawn? animal)
+        public static bool IsAnimalRaceAllowed(Pawn? animal, out string? reason)
         {
             RaceProperties? race = animal?.def?.race;
             if (race == null)
             {
-                AnimalsAreFunContinued.LogInfo($"no race: {animal}");
+                reason = "not a race";
                 return false;
             }
 
             if (!race.Animal)
             {
-                AnimalsAreFunContinued.LogInfo($"not an animal: {animal}");
+                reason = "not an animal";
                 return false;
             }
 
             if (race.Humanlike)
             {
-                AnimalsAreFunContinued.LogInfo($"humanlike: {animal}");
+                reason = "humanlike";
                 return false;
             }
 
             if (race.FleshType != FleshTypeDefOf.Normal)
             {
-                AnimalsAreFunContinued.LogInfo($"not flesh: {animal}");
+                reason = "not flesh";
                 return false;
             }
 
             if (race.baseBodySize > Settings.MaxBodySize)
             {
-                AnimalsAreFunContinued.LogInfo($"too big: {animal}");
+                reason = "too big";
                 return false;
             }
 
             if (race.wildness > Settings.MaxWildness)
             {
-                AnimalsAreFunContinued.LogInfo($"too wild: {animal}");
+                reason = "too wild";
                 return false;
             }
 
             if (!Settings.MustBeCute && race.nuzzleMtbHours < 0f)
             {
-                AnimalsAreFunContinued.LogInfo($"not cute: {animal}");
+                reason = "not cute";
                 return false;
             }
 
+            reason = null;
             return true;
         }
 
-        public static bool IsAnimalAvailable(Pawn? animal)
+        public static bool IsAnimalAvailable(string pawnName, Pawn animal, out string? reason)
         {
-            if (animal == null || IsPawnOrAnimalGoneOrIncapable(animal) || !IsAnimalRaceAllowed(animal))
+            string animalName = FormatLog.PawnName(animal);
+            if (AvailabilityChecks.IsPawnOrAnimalGone(animal, out string? innerReason))
             {
+                reason = $"{pawnName} cannot reserve {animalName}, because {animalName} is {innerReason}.";
+                return false;
+            }
+
+            if (AvailabilityChecks.IsPawnOrAnimalIncapable(animal, out innerReason))
+            {
+                reason = $"{pawnName} cannot reserve {animalName}, because {animalName} has {innerReason}.";
+                return false;
+            }
+
+            if (!AvailabilityChecks.IsAnimalRaceAllowed(animal, out innerReason))
+            {
+                reason = $"{pawnName} cannot reserve {animalName}, because {animalName} is {innerReason}.";
                 return false;
             }
 
             if (PawnUtility.WillSoonHaveBasicNeed(animal))
             {
-                AnimalsAreFunContinued.LogInfo($"will soon have basic need: {animal}");
+                reason = $"{pawnName} cannot reserve {animalName}, because {animalName} will soon have a basic need.";
                 return false;
             }
 
             if (animal.GetTimeAssignment() != TimeAssignmentDefOf.Anything)
             {
-                AnimalsAreFunContinued.LogInfo($"it's time to sleep: {animal}");
+                reason = $"{pawnName} cannot reserve {animalName}, because {animalName} wants to sleep.";
                 return false;
             }
 
             if (animal.carryTracker?.CarriedThing != null)
             {
-                AnimalsAreFunContinued.LogInfo($"currently hauling something: {animal}");
+                reason = $"{pawnName} cannot reserve {animalName}, because {animalName} is hauling something.";
                 return false;
             }
 
             bool isIdle = animal.mindState?.IsIdle ?? false;
             if (!isIdle)
             {
-                AnimalsAreFunContinued.LogInfo($"not idle: {animal}");
+                reason = $"{pawnName} cannot reserve {animalName}, because {animalName} wants to do something else.";
                 return false;
             }
 
+            reason = null;
             return true;
         }
     }
