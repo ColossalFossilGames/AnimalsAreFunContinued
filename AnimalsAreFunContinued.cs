@@ -63,6 +63,10 @@ namespace AnimalsAreFunContinued
             listingStandard.Gap(Text.LineHeight * 0.8f);
 
             listingStandard.CheckboxLabeled("ShowDebugMessages".Translate(), ref Settings.ShowDebugMessages);
+            if (listingStandard.ButtonTextLabeled(string.Empty, "ResetToDefaults".Translate()))
+            {
+                Settings.ResetToDefaults();
+            }
 
             listingStandard.End();
         }

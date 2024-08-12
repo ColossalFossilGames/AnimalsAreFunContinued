@@ -18,5 +18,6 @@
   <MustBeCute>Must be cute</MustBeCute>
   <MustBeCuteTooltip>Only play with or walk nuzzling animals</MustBeCuteTooltip>
   <RequirementsCategory>Requirements:</RequirementsCategory>
+  <ResetToDefaults>Reset To Defaults</ResetToDefaults>
   <ShowDebugMessages>Show debug messages</ShowDebugMessages>
 </LanguageData>

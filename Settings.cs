@@ -5,18 +5,18 @@ namespace AnimalsAreFunContinued
 {
     public class Settings : ModSettings
     {
-        private static float defaultMinConsciousness = 0.6f;
-        private static float defaultMinMoving = 0.7f;
-        private static float defaultMaxBodySize = 1.6f;
-        private static float defaultMaxWildness = 0.8f;
-        private static bool defaultMustBeCute = true;
+        private const float defaultMinConsciousness = 0.6f;
+        private const float defaultMinMoving = 0.7f;
+        private const float defaultMaxBodySize = 1.6f;
+        private const float defaultMaxWildness = 0.8f;
+        private const bool defaultMustBeCute = true;
 
-        private static bool defaultAllowHumanLike = false;
-        private static bool defaultAllowExoticPets = false;
-        private static bool defaultAllowCrossFaction = false;
-        private static bool defaultAllowNonColonist = false;
+        private const bool defaultAllowHumanLike = false;
+        private const bool defaultAllowExoticPets = false;
+        private const bool defaultAllowCrossFaction = false;
+        private const bool defaultAllowNonColonist = false;
 
-        private static bool defaultShowDebugMessages = false;
+        private const bool defaultShowDebugMessages = false;
 
         public static float MinConsciousness = defaultMinConsciousness;
         public static float MinMoving = defaultMinMoving;
@@ -52,6 +52,22 @@ namespace AnimalsAreFunContinued
             MinMoving = Mathf.Clamp(MinMoving, 0.1f, 1);
             MaxBodySize = Mathf.Clamp(MaxBodySize, 0.01f, 5);
             MaxWildness = Mathf.Clamp(MaxWildness, 0.1f, 1);
+        }
+
+        public static void ResetToDefaults()
+        {
+            MinConsciousness = defaultMinConsciousness;
+            MinMoving = defaultMinMoving;
+            MaxBodySize = defaultMaxBodySize;
+            MaxWildness = defaultMaxWildness;
+            MustBeCute = defaultMustBeCute;
+
+            AllowHumanLike = defaultAllowHumanLike;
+            AllowExoticPets = defaultAllowExoticPets;
+            AllowCrossFaction = defaultAllowCrossFaction;
+            AllowNonColonist = defaultAllowNonColonist;
+
+            ShowDebugMessages = defaultShowDebugMessages;
         }
     }
 }
