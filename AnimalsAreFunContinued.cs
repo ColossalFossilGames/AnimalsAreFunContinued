@@ -12,6 +12,11 @@ namespace AnimalsAreFunContinued
             GetSettings<Settings>();
         }
 
+        public void Save()
+        {
+            LoadedModManager.GetMod<AnimalsAreFunContinued>().GetSettings<Settings>().Write();
+        }
+
         public static void LogInfo(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null)
         {
             if (Settings.ShowDebugMessages) {
@@ -60,7 +65,6 @@ namespace AnimalsAreFunContinued
             listingStandard.CheckboxLabeled("ShowDebugMessages".Translate(), ref Settings.ShowDebugMessages);
 
             listingStandard.End();
-            base.DoSettingsWindowContents(inRect);
         }
 
         private static string FormatPercent(float value) => $"{(value * 100):0.00}";
