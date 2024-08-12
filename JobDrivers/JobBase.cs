@@ -40,7 +40,7 @@ namespace AnimalsAreFunContinued.JobDrivers
                         return;
                     }
                     Job targetsNewJob = getTargetA != null ? JobMaker.MakeJob(jobDef, (LocalTargetInfo)targetA!, pawn) : JobMaker.MakeJob(jobDef, pawn);
-                    targetsNewJob.locomotionUrgency = (LocomotionUrgency)locomotionUrgency;
+                    targetsNewJob.locomotionUrgency = locomotionUrgency;
                     InteractiveTargetCurrentJobId = targetsNewJob.loadID;
                     target.jobs.StartJob(targetsNewJob);
 
