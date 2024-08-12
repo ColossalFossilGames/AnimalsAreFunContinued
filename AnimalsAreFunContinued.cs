@@ -28,6 +28,7 @@ namespace AnimalsAreFunContinued
             Listing_Standard listingStandard = new();
             listingStandard.Begin(inRect);
 
+            /* Requirements */
             listingStandard.Label("RequirementsCategory".Translate());
             listingStandard.Gap(Text.LineHeight * 0.8f);
 
@@ -40,12 +41,22 @@ namespace AnimalsAreFunContinued
             listingStandard.Label("MaxWildness".Translate(FormatPercent(Settings.MaxWildness)));
             Settings.MaxWildness = listingStandard.Slider(Settings.MaxWildness, 0.1f, 1);
             listingStandard.CheckboxLabeled("MustBeCute".Translate() , ref Settings.MustBeCute, "MustBeCuteTooltip".Translate());
-            listingStandard.CheckboxLabeled("AllowHumanLike".Translate(), ref Settings.AllowHumanLike, "AllowHumanLikeTooltip".Translate());
-            listingStandard.CheckboxLabeled("AllowExoticPets".Translate(), ref Settings.AllowExoticPets, "AllowExoticPetsTooltip".Translate());
             listingStandard.Gap(Text.LineHeight * 1.6f);
 
+            /* Experimental */
+            listingStandard.Label("ExperimentalCategory".Translate());
+            listingStandard.Gap(Text.LineHeight * 0.8f);
+
+            listingStandard.CheckboxLabeled("AllowHumanLike".Translate(), ref Settings.AllowHumanLike, "AllowHumanLikeTooltip".Translate());
+            listingStandard.CheckboxLabeled("AllowExoticPets".Translate(), ref Settings.AllowExoticPets, "AllowExoticPetsTooltip".Translate());
+            listingStandard.CheckboxLabeled("AllowCrossFaction".Translate(), ref Settings.AllowCrossFaction, "AllowCrossFactionTooltip".Translate());
+            listingStandard.CheckboxLabeled("AllowNonColonist".Translate(), ref Settings.AllowNonColonist, "AllowNonColonistTooltip".Translate()); 
+            listingStandard.Gap(Text.LineHeight * 1.6f);
+
+            /* Debugging */
             listingStandard.Label("DebuggingCategory".Translate());
             listingStandard.Gap(Text.LineHeight * 0.8f);
+
             listingStandard.CheckboxLabeled("ShowDebugMessages".Translate(), ref Settings.ShowDebugMessages);
 
             listingStandard.End();

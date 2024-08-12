@@ -46,8 +46,16 @@ namespace AnimalsAreFunContinued.Data
                 string animalName = FormatLog.PawnName(animalThing);
                 if (animalThing.Faction.loadID != pawn.Faction?.loadID)
                 {
-                    AnimalsAreFunContinued.LogInfo($"{pawnName} cannot reserve {animalName}, because {animalName} is not of the same faction.");
-                    return false;
+                    if (!Settings.AllowNonColonist && !pawn.IsColonist)
+                    {
+                        AnimalsAreFunContinued.LogInfo($"{pawnName} cannot reserve {animalName}, because {pawnName} is not from the player colony.");
+                        return false;
+                    }
+                    else if (!Settings.AllowCrossFaction)
+                    {
+                        AnimalsAreFunContinued.LogInfo($"{pawnName} cannot reserve {animalName}, because {animalName} is not of the same faction.");
+                        return false;
+                    }
                 }
 
                 if (animalThing is not Pawn animal)

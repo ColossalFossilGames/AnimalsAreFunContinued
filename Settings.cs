@@ -14,6 +14,8 @@ namespace AnimalsAreFunContinued
         public static bool MustBeCute = true;
         public static bool AllowHumanLike = false;
         public static bool AllowExoticPets = false;
+        public static bool AllowCrossFaction = false;
+        public static bool AllowNonColonist = false;
 
         public override void ExposeData()
         {
@@ -26,6 +28,8 @@ namespace AnimalsAreFunContinued
             Scribe_Values.Look(ref MustBeCute, "MustBeCute", MustBeCute, true);
             Scribe_Values.Look(ref AllowHumanLike, "AllowHumanLike", AllowHumanLike, false);
             Scribe_Values.Look(ref AllowExoticPets, "AllowExoticPets", AllowExoticPets, false);
+            Scribe_Values.Look(ref AllowCrossFaction, "AllowCrossFaction", AllowCrossFaction, false);
+            Scribe_Values.Look(ref AllowNonColonist, "AllowNonColonist", AllowNonColonist, false);
 
             MinConsciousness = Mathf.Clamp(MinConsciousness, 0.1f, 1);
             MinMoving = Mathf.Clamp(MinMoving, 0.1f, 1);
