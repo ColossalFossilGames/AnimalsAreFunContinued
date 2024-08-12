@@ -41,6 +41,7 @@ namespace AnimalsAreFunContinued.JobDrivers
                     }
                     Job targetsNewJob = getTargetA != null ? JobMaker.MakeJob(jobDef, (LocalTargetInfo)targetA!, pawn) : JobMaker.MakeJob(jobDef, pawn);
                     targetsNewJob.locomotionUrgency = locomotionUrgency;
+                    targetsNewJob.expiryInterval = jobDef.joyDuration; // prevents a pets job from getting stuck when a job is abnormally interrupted (such as save scumming or real-time dev mode changes)
                     InteractiveTargetCurrentJobId = targetsNewJob.loadID;
                     target.jobs.StartJob(targetsNewJob);
 
