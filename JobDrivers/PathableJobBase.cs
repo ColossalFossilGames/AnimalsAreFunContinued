@@ -17,25 +17,34 @@ namespace AnimalsAreFunContinued.JobDrivers
 
         public bool FindOutsideWalkingPath()
         {
-            Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
-            if (
-                FindWalkingDestination(pawn, animal, out IntVec3 walkingDestination) &&
-                WalkPathFinder.TryFindWalkPath(pawn, walkingDestination, out List<IntVec3> path)
-            )
+            try
             {
-                Path = new List<LocalTargetInfo>(path.Count);
-                for (int pathIndex = 0; pathIndex < path.Count; pathIndex++)
+                Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+                if (
+                    FindWalkingDestination(pawn, animal, out IntVec3 walkingDestination) &&
+                    WalkPathFinder.TryFindWalkPath(pawn, walkingDestination, out List<IntVec3> path)
+                )
                 {
-                    Path.Add(path[pathIndex]);
+                    Path = new List<LocalTargetInfo>(path.Count);
+                    for (int pathIndex = 0; pathIndex < path.Count; pathIndex++)
+                    {
+                        Path.Add(path[pathIndex]);
+                    }
+                    return true;
                 }
-                return true;
-            }
 
-            Path = null;
-            return false;
+                Path = null;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                AnimalsAreFunContinued.LogError($"An error occurred in FindOutsideWalkingPath(). {ex.Message}");
+                Path = null;
+                return false;
+            }
         }
 
-        public static bool FindWalkingDestination(Pawn pawn, Pawn animal, out IntVec3 walkingDestination)
+        private static bool FindWalkingDestination(Pawn pawn, Pawn animal, out IntVec3 walkingDestination)
         {
             IntVec3 potentialDestination = new();
             bool CellGoodForWalking(IntVec3 cell)
@@ -63,6 +72,7 @@ namespace AnimalsAreFunContinued.JobDrivers
         {
             if (Path == null || Path.Count <= 0)
             {
+                AnimalsAreFunContinued.LogWarning($"Attempted to pull a waypoint, but the path is currently empty.");
                 return null;
             }
 

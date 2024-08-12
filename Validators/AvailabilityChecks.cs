@@ -5,169 +5,212 @@ namespace AnimalsAreFunContinued.Validators
 {
     public static class AvailabilityChecks
     {
-        private static bool IsPawnOrAnimalGone(Pawn pawn)
+        public static bool IsPawnOrAnimalGone(Pawn pawn, out string? reason)
         {
             if (pawn.DestroyedOrNull())
             {
-                AnimalsAreFunContinued.Debug($"destroyed or null: {pawn}");
+                reason = "destroyed or null";
                 return true;
             }
 
             if (pawn.Dead)
             {
-                AnimalsAreFunContinued.Debug($"dead: {pawn}");
+                reason = "dead";
                 return true;
             }
 
             if (!pawn.Spawned)
             {
-                AnimalsAreFunContinued.Debug($"not spawned: {pawn}");
+                reason = "not spawned";
                 return true;
             }
 
+            reason = null;
             return false;
         }
 
-        private static bool IsPawnOrAnimalIncapable(Pawn? pawn)
+        public static bool IsPawnOrAnimalIncapable(Pawn? pawn, out string? reason)
         {
             PawnCapacitiesHandler? capacities = pawn?.health?.capacities;
             if (capacities == null)
             {
-                AnimalsAreFunContinued.Debug($"no health capatibilities: {pawn}");
+                reason = $"no health capatibilities";
                 return true;
             }
 
             if (capacities.GetLevel(PawnCapacityDefOf.Consciousness) < Settings.MinConsciousness)
             {
-                AnimalsAreFunContinued.Debug($"not enough Consciousness: {pawn}");
+                reason = $"not met minimum required consciousness";
                 return true;
             }
 
             if (capacities.GetLevel(PawnCapacityDefOf.Moving) < Settings.MinMoving)
             {
-                AnimalsAreFunContinued.Debug($"not enough Moving: {pawn}");
+                reason = $"not met minimum required moving";
                 return true;
             }
 
+            reason = null;
             return false;
         }
 
-        public static bool IsPawnOrAnimalGoneOrIncapable(Pawn p) => IsPawnOrAnimalGone(p) || IsPawnOrAnimalIncapable(p);
-
-        public static bool WillPawnEnjoyPlayingOutside(Pawn pawn)
-        {
-            if (IsPawnOrAnimalGoneOrIncapable(pawn))
-            {
-                return false;
-            }
-
-            if (pawn.MapHeld == null)
-            {
-                AnimalsAreFunContinued.Debug($"MapHeld is null: {pawn}");
-                return false;
-            }
-
-            if (!pawn.IsColonist)
-            {
-                AnimalsAreFunContinued.Debug($"not a colonist: {pawn}");
-                return false;
-            }
-
-            if (!JoyUtility.EnjoyableOutsideNow(pawn))
-            {
-                AnimalsAreFunContinued.Debug($"doesn't want to have fun outside: {pawn}");
-                return false;
-            }
-
-            if (PawnUtility.WillSoonHaveBasicNeed(pawn))
-            {
-                AnimalsAreFunContinued.Debug($"will soon have basic need: {pawn}");
-                return false;
-            }
-
-            return true;
-        }
-
-        private static bool IsAnimalRaceAllowed(Pawn? animal)
+        public static bool IsAnimalRaceAllowed(Pawn? animal, out string? reason)
         {
             RaceProperties? race = animal?.def?.race;
             if (race == null)
             {
-                AnimalsAreFunContinued.Debug($"no race: {animal}");
+                reason = "not a race";
                 return false;
             }
 
             if (!race.Animal)
             {
-                AnimalsAreFunContinued.Debug($"not an animal: {animal}");
+                reason = "not an animal";
                 return false;
             }
 
-            if (race.Humanlike)
+            if (!Settings.AllowHumanLike && race.Humanlike)
             {
-                AnimalsAreFunContinued.Debug($"humanlike: {animal}");
+                reason = "humanlike";
                 return false;
             }
 
-            if (race.FleshType != FleshTypeDefOf.Normal)
+            if (!Settings.AllowExoticPets && race.FleshType != FleshTypeDefOf.Normal)
             {
-                AnimalsAreFunContinued.Debug($"not flesh: {animal}");
+                reason = "not flesh";
                 return false;
             }
 
             if (race.baseBodySize > Settings.MaxBodySize)
             {
-                AnimalsAreFunContinued.Debug($"too big: {animal}");
+                reason = "too big";
                 return false;
             }
 
             if (race.wildness > Settings.MaxWildness)
             {
-                AnimalsAreFunContinued.Debug($"too wild: {animal}");
+                reason = "too wild";
                 return false;
             }
 
             if (!Settings.MustBeCute && race.nuzzleMtbHours < 0f)
             {
-                AnimalsAreFunContinued.Debug($"not cute: {animal}");
+                reason = "not cute";
                 return false;
             }
 
+            reason = null;
             return true;
         }
 
-        public static bool IsAnimalAvailable(Pawn? animal)
+        public static bool WillAnimalEnjoyPlayingOutside(string pawnName, Pawn animal, bool isAlreadyPlaying, out string? reason)
         {
-            if (animal == null || IsPawnOrAnimalGoneOrIncapable(animal) || !IsAnimalRaceAllowed(animal))
+            string animalName = FormatLog.PawnName(animal);
+            string verbContext = isAlreadyPlaying ? "can no longer reserve" : "cannot reserve";
+            if (IsPawnOrAnimalGone(animal, out string? innerReason))
             {
+                reason = $"{pawnName} {verbContext} {animalName}, because {animalName} is {innerReason}.";
+                return false;
+            }
+
+            if (IsPawnOrAnimalIncapable(animal, out innerReason))
+            {
+                reason = $"{pawnName} {verbContext} {animalName}, because {animalName} has {innerReason}.";
+                return false;
+            }
+
+            if (isAlreadyPlaying)
+            {
+                reason = null;
+                return true;
+            }
+
+            // These checks forward only apply when animal is not currently playing
+
+            if (!IsAnimalRaceAllowed(animal, out innerReason))
+            {
+                reason = $"{pawnName} {verbContext} {animalName}, because {animalName} is {innerReason}.";
                 return false;
             }
 
             if (PawnUtility.WillSoonHaveBasicNeed(animal))
             {
-                AnimalsAreFunContinued.Debug($"will soon have basic need: {animal}");
+                reason = $"{pawnName} {verbContext} {animalName}, because {animalName} will soon have a basic need.";
                 return false;
             }
 
             if (animal.GetTimeAssignment() != TimeAssignmentDefOf.Anything)
             {
-                AnimalsAreFunContinued.Debug($"it's time to sleep: {animal}");
+                reason = $"{pawnName} {verbContext} {animalName}, because {animalName} wants to sleep.";
                 return false;
             }
 
             if (animal.carryTracker?.CarriedThing != null)
             {
-                AnimalsAreFunContinued.Debug($"currently hauling something: {animal}");
+                reason = $"{pawnName} {verbContext} {animalName}, because {animalName} is hauling something.";
                 return false;
             }
 
             bool isIdle = animal.mindState?.IsIdle ?? false;
             if (!isIdle)
             {
-                AnimalsAreFunContinued.Debug($"not idle: {animal}");
+                reason = $"{pawnName} {verbContext} {animalName}, because {animalName} wants to do something else.";
                 return false;
             }
 
+            reason = null;
+            return true;
+        }
+
+        public static bool WillPawnEnjoyPlayingOutside(Pawn pawn, bool isAlreadyPlaying, out string? reason)
+        {
+            string pawnName = FormatLog.PawnName(pawn);
+            string verbContext = isAlreadyPlaying ? "no longer wants" : "is not available";
+            if (IsPawnOrAnimalGone(pawn, out string? innerReason))
+            {
+                reason = $"{pawnName} {verbContext} to play outside, because {pawnName} is {innerReason}.";
+                return false;
+            }
+
+            if (IsPawnOrAnimalIncapable(pawn, out innerReason))
+            {
+                reason = $"{pawnName} {verbContext} to play outside, because {pawnName} is {innerReason}.";
+                return false;
+            }
+
+            if (pawn.MapHeld == null)
+            {
+                reason = $"{pawnName} {verbContext} to play outside, because {pawnName} is not currently on a map.";
+                return false;
+            }
+
+            if (!pawn.IsColonist)
+            {
+                reason = $"{pawnName} {verbContext} to play outside, because {pawnName} is not a colonist.";
+                return false;
+            }
+
+            if (!JoyUtility.EnjoyableOutsideNow(pawn))
+            {
+                reason = $"{pawnName} {verbContext} to play outside, because {pawnName} will not have fun outside right now.";
+                return false;
+            }
+
+            if (isAlreadyPlaying)
+            {
+                reason = null;
+                return true;
+            }
+
+            // These checks forward only apply when pawn is not currently playing
+
+            if (PawnUtility.WillSoonHaveBasicNeed(pawn))
+            {
+                reason = $"{pawnName} {verbContext} to play outside, because {pawnName} will soon have a basic need.";
+                return false;
+            }
+
+            reason = null;
             return true;
         }
     }

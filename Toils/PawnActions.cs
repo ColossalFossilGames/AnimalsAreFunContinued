@@ -3,6 +3,7 @@ using AnimalsAreFunContinued.Validators;
 using RimWorld;
 using Verse;
 using Verse.AI;
+using static UnityEngine.GraphicsBuffer;
 
 namespace AnimalsAreFunContinued.Toils
 {
@@ -12,19 +13,21 @@ namespace AnimalsAreFunContinued.Toils
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
+            string pawnName = FormatLog.PawnName(pawn);
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            string animalName = FormatLog.PawnName(animal);
 
             Toil walkToPet = new()
             {
                 initAction = () =>
                 {
-                    AnimalsAreFunContinued.Debug($"approaching pet: {pawn} => {animal.Name}");
-                    if (pawn.Position == animal.Position)
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} is now approaching {animalName}.");
+                    if (!pawn.CanReach(animal.Position, PathEndMode.Touch, Danger.None))
                     {
-                        AnimalsAreFunContinued.Debug($"done approaching pet: {pawn} => {animal.Name}");
+                        AnimalsAreFunContinued.LogWarning($"{pawnName} is unable to reach {animalName} safely. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Incompletable);
                         return;
                     }
-
                     pawn.pather.StartPath(animal.Position, PathEndMode.OnCell);
                 },
                 defaultCompleteMode = ToilCompleteMode.PatherArrival,
@@ -42,13 +45,15 @@ namespace AnimalsAreFunContinued.Toils
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
+            string pawnName = FormatLog.PawnName(pawn);
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            string animalName = FormatLog.PawnName(animal);
 
             Toil talkToPet = new()
             {
                 initAction = () =>
                 {
-                    AnimalsAreFunContinued.Debug($"talking to pet: {pawn} => {animal.Name}");
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} is now saying nice things to {animalName}.");
                     pawn.interactions.TryInteractWith(animal, InteractionDefOf.AnimalChat);
                 },
                 defaultCompleteMode = ToilCompleteMode.Delay,
@@ -67,13 +72,26 @@ namespace AnimalsAreFunContinued.Toils
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
+            string pawnName = FormatLog.PawnName(pawn);
 
             Toil walkToWaypoint = new()
             {
                 initAction = () =>
                 {
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} is now walking to a waypoint on their path.");
                     LocalTargetInfo waypoint = getLocation();
-                    AnimalsAreFunContinued.Debug($"pawn is walking to waypoint: {waypoint}");
+                    if (waypoint == null)
+                    {
+                        AnimalsAreFunContinued.LogInfo($"{pawnName} is unable to walk to the next waypoint. getLocation delegate has returned an unexpected null value. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Errored);
+                        return;
+                    }
+                    if (!pawn.CanReach(waypoint, PathEndMode.OnCell, Danger.None))
+                    {
+                        AnimalsAreFunContinued.LogWarning($"{pawnName} is unable to reach the next waypoint safely. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Incompletable);
+                        return;
+                    }
                     pawn.pather.StartPath(waypoint.cellInt, PathEndMode.OnCell);
                 },
                 tickAction = () =>
@@ -95,12 +113,26 @@ namespace AnimalsAreFunContinued.Toils
         {
             Job job = jobDriver.job;
             Pawn pawn = jobDriver.pawn;
+            string pawnName = FormatLog.PawnName(pawn);
 
             Toil throwBall = new()
             {
                 initAction = () =>
                 {
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} is now throwing a ball.");
                     LocalTargetInfo throwTarget = getLocation();
+                    if (throwTarget == null)
+                    {
+                        AnimalsAreFunContinued.LogInfo($"{pawnName} is unable to throw the ball to the next waypoint. getLocation delegate has returned an unexpected null value. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Errored);
+                        return;
+                    }
+                    if (!pawn.CanReach(throwTarget, PathEndMode.OnCell, Danger.None))
+                    {
+                        AnimalsAreFunContinued.LogWarning($"{pawnName} is unable to throw the ball to the next waypoint safely. Ending the job prematurely.");
+                        jobDriver.EndJobWith(JobCondition.Incompletable);
+                        return;
+                    }
                     job.targetA = throwTarget;
                     pawn.rotationTracker.FaceTarget(throwTarget);
                     FleckMaker.ThrowStone(pawn, throwTarget.Cell);
@@ -128,24 +160,18 @@ namespace AnimalsAreFunContinued.Toils
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             int? animalCurrentJobId = jobDriver.InteractiveTargetCurrentJobId;
+            string pawnName = FormatLog.PawnName(pawn);
 
-            if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(pawn))
+            if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn, true, out string? reason))
             {
-                AnimalsAreFunContinued.Debug($"pawn no longer available: {pawn}");
+                if (reason != null) AnimalsAreFunContinued.LogInfo(reason);
                 EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }
 
-            if (!JoyUtility.EnjoyableOutsideNow(pawn))
+            if (!AvailabilityChecks.WillAnimalEnjoyPlayingOutside(pawnName, animal, true, out reason))
             {
-                AnimalsAreFunContinued.Debug($"pawn no longer finds joy in being outside: {pawn}");
-                EndAnimalJobOnFail(animal, animalCurrentJobId);
-                return true;
-            }
-
-            if (AvailabilityChecks.IsPawnOrAnimalGoneOrIncapable(animal))
-            {
-                AnimalsAreFunContinued.Debug($"animal no longer available: {animal.Name}");
+                if (reason != null) AnimalsAreFunContinued.LogInfo(reason);
                 EndAnimalJobOnFail(animal, animalCurrentJobId);
                 return true;
             }
