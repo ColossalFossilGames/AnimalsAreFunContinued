@@ -12,18 +12,28 @@ namespace AnimalsAreFunContinued
             GetSettings<Settings>();
         }
 
-        public static void Debug(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null)
+        public void Save()
+        {
+            LoadedModManager.GetMod<AnimalsAreFunContinued>().GetSettings<Settings>().Write();
+        }
+
+        public static void LogInfo(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null)
         {
             if (Settings.ShowDebugMessages) {
-                Log.Message($"[AnimalsAreFunContinued @ {caller}:{line}] {message}");
+                Log.Message($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");
             }
         }
+        public static void LogWarning(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null) =>
+            Log.Warning($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");
+        public static void LogError(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null) =>
+            Log.Error($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
             Listing_Standard listingStandard = new();
             listingStandard.Begin(inRect);
 
+            /* Requirements */
             listingStandard.Label("RequirementsCategory".Translate());
             listingStandard.Gap(Text.LineHeight * 0.8f);
 
@@ -38,12 +48,27 @@ namespace AnimalsAreFunContinued
             listingStandard.CheckboxLabeled("MustBeCute".Translate() , ref Settings.MustBeCute, "MustBeCuteTooltip".Translate());
             listingStandard.Gap(Text.LineHeight * 1.6f);
 
+            /* Experimental */
+            listingStandard.Label("ExperimentalCategory".Translate());
+            listingStandard.Gap(Text.LineHeight * 0.8f);
+
+            listingStandard.CheckboxLabeled("AllowHumanLike".Translate(), ref Settings.AllowHumanLike, "AllowHumanLikeTooltip".Translate());
+            listingStandard.CheckboxLabeled("AllowExoticPets".Translate(), ref Settings.AllowExoticPets, "AllowExoticPetsTooltip".Translate());
+            listingStandard.CheckboxLabeled("AllowCrossFaction".Translate(), ref Settings.AllowCrossFaction, "AllowCrossFactionTooltip".Translate());
+            listingStandard.CheckboxLabeled("AllowNonColonist".Translate(), ref Settings.AllowNonColonist, "AllowNonColonistTooltip".Translate()); 
+            listingStandard.Gap(Text.LineHeight * 1.6f);
+
+            /* Debugging */
             listingStandard.Label("DebuggingCategory".Translate());
             listingStandard.Gap(Text.LineHeight * 0.8f);
+
             listingStandard.CheckboxLabeled("ShowDebugMessages".Translate(), ref Settings.ShowDebugMessages);
+            if (listingStandard.ButtonTextLabeled(string.Empty, "ResetToDefaults".Translate()))
+            {
+                Settings.ResetToDefaults();
+            }
 
             listingStandard.End();
-            base.DoSettingsWindowContents(inRect);
         }
 
         private static string FormatPercent(float value) => $"{(value * 100):0.00}";

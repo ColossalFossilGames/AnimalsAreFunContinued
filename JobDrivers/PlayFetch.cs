@@ -14,12 +14,14 @@ namespace AnimalsAreFunContinued.JobDrivers
 
         public override IEnumerable<Toil> MakeNewToils()
         {
+            string pawnName = FormatLog.PawnName(pawn);
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
+            string animalName = FormatLog.PawnName(animal);
 
             // load the walking path
             if (!FindOutsideWalkingPath())
             {
-                AnimalsAreFunContinued.Debug($"could not find a valid walking path: {pawn} => {animal.Name}");
+                AnimalsAreFunContinued.LogWarning($"{pawnName} wanted to play fetch with {animalName}, but could not find a valid walking path.");
                 yield break;
             }
 
@@ -30,7 +32,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return PawnActions.TalkToPet(this);
 
             // pet should start to follow pawn
-            Toil followPawn = StartJobForTarget(JobDefOf.Follow, LocomotionUrgency.Walk, $"animal is following pawn: {animal.Name} => {pawn}");
+            Toil followPawn = StartJobForTarget(JobDefOf.Follow, LocomotionUrgency.Walk, $"{animalName} is now folling {pawnName}.");
             yield return followPawn;
 
             // walk with pet
@@ -50,13 +52,13 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return RepeatToilOnCondition(waitForAnimal, [WaitForJobDuration, InteractiveTargetHasJob]);
 
             // play more with pet, until job has finished
-            yield return RepeatToilOnCondition(followPawn, WaitForJobDuration, $"pawn is continuing to play fetch with animal: {pawn} => {animal.Name}");
+            yield return RepeatToilOnCondition(followPawn, WaitForJobDuration, $"{pawnName} is continuing to play fetch with {animalName}.");
 
             // go back to animal
             yield return PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
 
             // pet should no longer play fetch
-            yield return EndJobForTarget($"animal is no longer playing fetch: {animal.Name} => {pawn}");
+            yield return EndJobForTarget($"{pawnName} is no longer playing fetch with {animalName}.");
 
             // say goodbye to pet
             yield return PawnActions.TalkToPet(this);

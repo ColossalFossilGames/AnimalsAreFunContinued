@@ -1,4 +1,3 @@
-using System;
 using Verse;
 using Verse.AI;
 
@@ -20,6 +19,7 @@ namespace AnimalsAreFunContinued.JobDrivers
         public Toil StartJobForTarget(JobDef jobDef, LocalTargetInfoDelegate? getTargetA, LocomotionUrgency locomotionUrgency, string? debugMessage = null)
         {
             Pawn target = job.GetTarget(TargetIndex.B).Pawn;
+            string targetName = FormatLog.PawnName(target);
 
             return new()
             {
@@ -27,19 +27,27 @@ namespace AnimalsAreFunContinued.JobDrivers
                 {
                     if (target.jobs.curJob != null)
                     {
-                        AnimalsAreFunContinued.Debug($"ending current job for target: {target}");
+                        AnimalsAreFunContinued.LogInfo($"{targetName} is now ending their previous job.");
                         target.jobs.EndCurrentJob(JobCondition.QueuedNoLongerValid);
                     }
 
                     target.jobs.StopAll();
-                    Job targetsNewJob = getTargetA != null ? JobMaker.MakeJob(jobDef, getTargetA(), pawn) : JobMaker.MakeJob(jobDef, pawn);
-                    targetsNewJob.locomotionUrgency = (LocomotionUrgency)locomotionUrgency;
+                    LocalTargetInfo? targetA = getTargetA != null ? getTargetA() : null;
+                    if (getTargetA != null && targetA == null)
+                    {
+                        AnimalsAreFunContinued.LogInfo($"Unable to StartJobForTarget. getTargetA delegate has returned an unexpected null value. Ending the job prematurely.");
+                        this.EndJobWith(JobCondition.Errored);
+                        return;
+                    }
+                    Job targetsNewJob = getTargetA != null ? JobMaker.MakeJob(jobDef, (LocalTargetInfo)targetA!, pawn) : JobMaker.MakeJob(jobDef, pawn);
+                    targetsNewJob.locomotionUrgency = locomotionUrgency;
+                    targetsNewJob.expiryInterval = jobDef.joyDuration; // prevents a pets job from getting stuck when a job is abnormally interrupted (such as save scumming or real-time dev mode changes)
                     InteractiveTargetCurrentJobId = targetsNewJob.loadID;
                     target.jobs.StartJob(targetsNewJob);
 
                     if (debugMessage != null)
                     {
-                        AnimalsAreFunContinued.Debug(debugMessage);
+                        AnimalsAreFunContinued.LogInfo(debugMessage);
                     }
                 },
                 defaultCompleteMode = ToilCompleteMode.Instant
@@ -61,7 +69,7 @@ namespace AnimalsAreFunContinued.JobDrivers
                     InteractiveTargetCurrentJobId = null;
                     if (debugMessage != null)
                     {
-                        AnimalsAreFunContinued.Debug(debugMessage);
+                        AnimalsAreFunContinued.LogInfo(debugMessage);
                     }
                 }
             },
@@ -118,7 +126,7 @@ namespace AnimalsAreFunContinued.JobDrivers
                 {
                     if (repeatMessage != null)
                     {
-                        AnimalsAreFunContinued.Debug(repeatMessage);
+                        AnimalsAreFunContinued.LogInfo(repeatMessage);
                     }
                     JumpToToil(toilToRepeat);
                 }
