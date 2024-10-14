@@ -7,6 +7,9 @@ namespace AnimalsAreFunContinued
 {
     public class AnimalsAreFunContinued : Mod
     {
+        private Rect _scrollRegion = new(0f, 0f, 500f, 9001f);
+        private Vector2 _scrollPosition;
+
         public AnimalsAreFunContinued(ModContentPack content) : base(content)
         {
             GetSettings<Settings>();
@@ -30,48 +33,70 @@ namespace AnimalsAreFunContinued
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
-            Listing_Standard listingStandard = new();
-            listingStandard.Begin(inRect);
+            Widgets.BeginScrollView(inRect, ref _scrollPosition, _scrollRegion);
+            Listing_Standard listingStandard = new() { maxOneColumn = true };
+            listingStandard.Begin(_scrollRegion);
+            
+            float gapSizeSmall = 0.6f;
+            float gapSizeLarge = 1.4f;
 
             /* Requirements */
-            listingStandard.Label("RequirementsCategory".Translate());
-            listingStandard.Gap(Text.LineHeight * 0.8f);
+            ShowLabel(listingStandard, "RequirementsCategory");
+            ShowGapLine(listingStandard, gapSizeSmall);
 
-            listingStandard.Label("MinConsciousness".Translate(FormatPercent(Settings.MinConsciousness)));
-            Settings.MinConsciousness = listingStandard.Slider(Settings.MinConsciousness, 0.1f, 1);
-            listingStandard.Label("MinMoving".Translate(FormatPercent(Settings.MinMoving)));
-            Settings.MinMoving = listingStandard.Slider(Settings.MinMoving, 0.1f, 1);
-            listingStandard.Label("MaxBodySize".Translate(FormatPercent(Settings.MaxBodySize)));
-            Settings.MaxBodySize = listingStandard.Slider(Settings.MaxBodySize, 0.01f, 5);
-            listingStandard.Label("MaxWildness".Translate(FormatPercent(Settings.MaxWildness)));
-            Settings.MaxWildness = listingStandard.Slider(Settings.MaxWildness, 0.1f, 1);
-            listingStandard.Gap(Text.LineHeight * 1.6f);
+            Settings.MinConsciousness = ShowSlider(listingStandard, "MinConsciousness", Settings.MinConsciousness, 0.1f, 1);
+            Settings.MinMoving = ShowSlider(listingStandard, "MinMoving", Settings.MinMoving, 0.1f, 1);
+            Settings.MaxBodySize = ShowSlider(listingStandard, "MaxBodySize", Settings.MaxBodySize, 0.1f, 1);
+            Settings.MaxWildness = ShowSlider(listingStandard, "MaxWildness", Settings.MaxWildness, 0.1f, 1);
+            ShowGap(listingStandard, gapSizeLarge);
 
             /* Experimental */
-            listingStandard.Label("ExperimentalCategory".Translate());
-            listingStandard.Gap(Text.LineHeight * 0.8f);
+            ShowLabel(listingStandard, "ExperimentalCategory");
+            ShowGapLine(listingStandard, gapSizeSmall);
 
-            listingStandard.CheckboxLabeled("MustBeCute".Translate(), ref Settings.MustBeCute, "MustBeCuteTooltip".Translate());
-            listingStandard.CheckboxLabeled("AllowHumanLike".Translate(), ref Settings.AllowHumanLike, "AllowHumanLikeTooltip".Translate());
-            listingStandard.CheckboxLabeled("AllowExoticPets".Translate(), ref Settings.AllowExoticPets, "AllowExoticPetsTooltip".Translate());
-            listingStandard.CheckboxLabeled("AllowCrossFaction".Translate(), ref Settings.AllowCrossFaction, "AllowCrossFactionTooltip".Translate());
-            listingStandard.CheckboxLabeled("AllowNonColonist".Translate(), ref Settings.AllowNonColonist, "AllowNonColonistTooltip".Translate()); 
-            listingStandard.Gap(Text.LineHeight * 1.6f);
+            ShowCheckbox(listingStandard, "MustBeCute", ref Settings.MustBeCute, "MustBeCuteTooltip");
+            ShowCheckbox(listingStandard, "AllowHumanLike", ref Settings.AllowHumanLike, "AllowHumanLikeTooltip");
+            ShowCheckbox(listingStandard, "AllowExoticPets", ref Settings.AllowExoticPets, "AllowExoticPetsTooltip");
+            ShowCheckbox(listingStandard, "AllowCrossFaction", ref Settings.AllowCrossFaction, "AllowCrossFactionTooltip");
+            ShowCheckbox(listingStandard, "AllowNonColonist", ref Settings.AllowNonColonist, "AllowNonColonistTooltip");
+            ShowGap(listingStandard, gapSizeLarge);
 
             /* Debugging */
-            listingStandard.Label("DebuggingCategory".Translate());
-            listingStandard.Gap(Text.LineHeight * 0.8f);
+            ShowLabel(listingStandard, "DebuggingCategory");
+            ShowGapLine(listingStandard, gapSizeSmall);
 
-            listingStandard.CheckboxLabeled("ShowDebugMessages".Translate(), ref Settings.ShowDebugMessages);
-            if (listingStandard.ButtonTextLabeled(string.Empty, "ResetToDefaults".Translate()))
+            ShowCheckbox(listingStandard, "ShowDebugMessages", ref Settings.ShowDebugMessages);
+            if (ShowButton(listingStandard, "Reset", "ResetToDefaults"))
             {
                 Settings.ResetToDefaults();
             }
 
             listingStandard.End();
+            Widgets.EndScrollView();
+            _scrollRegion = _scrollRegion with
+            {
+                height = listingStandard.curY + 50f,
+                width = inRect.width - GUI.skin.verticalScrollbar.fixedWidth - 10f
+            };
         }
 
         private static string FormatPercent(float value) => $"{(value * 100):0.00}";
+
+        private static bool ShowButton(Listing_Standard listingStandard, string buttonText, string labelName) => listingStandard.ButtonTextLabeled(labelName.Translate(), buttonText.Translate());
+        private static void ShowCheckbox(Listing_Standard listingStandard, string labelName, ref bool value) => listingStandard.CheckboxLabeled(labelName.Translate(), ref value, null);
+        private static void ShowCheckbox(Listing_Standard listingStandard, string labelName, ref bool value, string tooltipName) => listingStandard.CheckboxLabeled(labelName.Translate(), ref value, tooltipName.Translate());
+        private static void ShowGap(Listing_Standard listingStandard, float gapSize) => listingStandard.Gap(Text.LineHeight * gapSize);
+        private static void ShowGapLine(Listing_Standard listingStandard, float gapSize)
+        {
+            listingStandard.GapLine(2.0f);
+            ShowGap(listingStandard, gapSize);
+        }
+        private static Rect ShowLabel(Listing_Standard listingStandard, string labelName) => listingStandard.Label(labelName.Translate());
+        private static float ShowSlider(Listing_Standard listingStandard, string labelName, float value, float min, float max)
+        {
+            listingStandard.Label(labelName.Translate(FormatPercent(value)));
+            return listingStandard.Slider(value, min, max);
+        }
 
         public override string SettingsCategory() => "Animals_are_fun_Continued".Translate();
     }
