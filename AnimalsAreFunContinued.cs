@@ -45,13 +45,13 @@ namespace AnimalsAreFunContinued
             Settings.MaxBodySize = listingStandard.Slider(Settings.MaxBodySize, 0.01f, 5);
             listingStandard.Label("MaxWildness".Translate(FormatPercent(Settings.MaxWildness)));
             Settings.MaxWildness = listingStandard.Slider(Settings.MaxWildness, 0.1f, 1);
-            listingStandard.CheckboxLabeled("MustBeCute".Translate() , ref Settings.MustBeCute, "MustBeCuteTooltip".Translate());
             listingStandard.Gap(Text.LineHeight * 1.6f);
 
             /* Experimental */
             listingStandard.Label("ExperimentalCategory".Translate());
             listingStandard.Gap(Text.LineHeight * 0.8f);
 
+            listingStandard.CheckboxLabeled("MustBeCute".Translate(), ref Settings.MustBeCute, "MustBeCuteTooltip".Translate());
             listingStandard.CheckboxLabeled("AllowHumanLike".Translate(), ref Settings.AllowHumanLike, "AllowHumanLikeTooltip".Translate());
             listingStandard.CheckboxLabeled("AllowExoticPets".Translate(), ref Settings.AllowExoticPets, "AllowExoticPetsTooltip".Translate());
             listingStandard.CheckboxLabeled("AllowCrossFaction".Translate(), ref Settings.AllowCrossFaction, "AllowCrossFactionTooltip".Translate());

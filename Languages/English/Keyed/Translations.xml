@@ -16,7 +16,7 @@
   <MinConsciousness>Min. consciousness ({0}%)</MinConsciousness>
   <MinMoving>Min. moving ({0}%)</MinMoving>
   <MustBeCute>Must be cute</MustBeCute>
-  <MustBeCuteTooltip>Only play with or walk nuzzling animals</MustBeCuteTooltip>
+  <MustBeCuteTooltip>Only play with or walk nuzzling animals. WARNING: Do not turn this off unless your have a very large penned in area or you have a mod that allows you teach zoning rules to any animal.</MustBeCuteTooltip>
   <RequirementsCategory>Requirements:</RequirementsCategory>
   <ResetToDefaults>Reset To Defaults</ResetToDefaults>
   <ShowDebugMessages>Show debug messages</ShowDebugMessages>
