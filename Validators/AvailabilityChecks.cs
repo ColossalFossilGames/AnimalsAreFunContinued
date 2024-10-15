@@ -93,7 +93,7 @@ namespace AnimalsAreFunContinued.Validators
                 return false;
             }
 
-            if (!Settings.MustBeCute && race.nuzzleMtbHours < 0f)
+            if (Settings.MustBeCute && race.nuzzleMtbHours < 0f)
             {
                 reason = "not cute";
                 return false;
