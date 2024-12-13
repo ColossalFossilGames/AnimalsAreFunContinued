@@ -8,21 +8,17 @@ namespace AnimalsAreFunContinued.JobDrivers
 {
     public class WalkPet : PathableJobBase
     {
-        public override bool TryMakePreToilReservations(bool errorOnFailed) =>
-            pawn.Reserve(job.GetTarget(TargetIndex.B), job, errorOnFailed: errorOnFailed);
+        public override bool TryMakePreToilReservations(bool errorOnFailed)
+        {
+            Path = job.targetQueueA;
+            return pawn.Reserve(job.GetTarget(TargetIndex.B), job, errorOnFailed: errorOnFailed);
+        }
 
         public override IEnumerable<Toil> MakeNewToils()
         {
             string pawnName = FormatLog.PawnName(pawn);
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             string animalName = FormatLog.PawnName(animal);
-
-            // load the walking path
-            if (!FindOutsideWalkingPath())
-            {
-                AnimalsAreFunContinued.LogWarning($"{pawnName} wanted to for a walk with {animalName}, but could not find a valid walking path.");
-                yield break;
-            }
 
             // initial go to animal
             yield return PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
