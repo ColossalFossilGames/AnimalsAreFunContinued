@@ -15,16 +15,11 @@ namespace AnimalsAreFunContinued
             GetSettings<Settings>();
         }
 
-        public void Save()
-        {
-            LoadedModManager.GetMod<AnimalsAreFunContinued>().GetSettings<Settings>().Write();
-        }
+        public void Save() => LoadedModManager.GetMod<AnimalsAreFunContinued>().GetSettings<Settings>().Write();
 
         public static void LogInfo(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null)
         {
-            if (Settings.ShowDebugMessages) {
-                Log.Message($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");
-            }
+            if (Settings.ShowDebugMessages) Log.Message($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");
         }
         public static void LogWarning(string message, [CallerLineNumberAttribute] int line = 0, [CallerMemberName] string? caller = null) =>
             Log.Warning($"[AnimalsAreFunContinued: {caller} Line: {line}] {message}");

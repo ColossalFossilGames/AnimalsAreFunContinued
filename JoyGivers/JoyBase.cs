@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using Verse;
-using Verse.AI;
 
 namespace AnimalsAreFunContinued.JoyGivers
 {
@@ -17,7 +16,7 @@ namespace AnimalsAreFunContinued.JoyGivers
                     WalkPathFinder.TryFindWalkPath(pawn, walkingDestination, out List<IntVec3> path)
                 )
                 {
-                    List<LocalTargetInfo> retPath = new List<LocalTargetInfo>(path.Count);
+                    List<LocalTargetInfo> retPath = new(path.Count);
                     for (int pathIndex = 0; pathIndex < path.Count; pathIndex++)
                     {
                         retPath.Add(path[pathIndex]);
@@ -30,7 +29,7 @@ namespace AnimalsAreFunContinued.JoyGivers
                 AnimalsAreFunContinued.LogError($"An error occurred in FindOutsideWalkingPath(). {ex.Message}");
                 
             }
-            return new List<LocalTargetInfo>();
+            return [];
         }
 
         private static bool FindWalkingDestination(Pawn pawn, Pawn animal, out IntVec3 walkingDestination)

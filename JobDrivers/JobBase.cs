@@ -8,7 +8,7 @@ namespace AnimalsAreFunContinued.JobDrivers
         public int? InteractiveTargetCurrentJobId = null;
         public JobBase()
         {
-            this.AddFinishAction((JobCondition _) =>
+            this.AddFinishAction((_) =>
             {
                 StopJobForTarget();
             });
