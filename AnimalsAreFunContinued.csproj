@@ -38,11 +38,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Krafs.Publicizer" Version="2.2.1">
+    <PackageReference Include="Krafs.Publicizer" Version="2.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4104" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'ReleaseV1.6'">
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4409" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'ReleaseV1.5'">
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4409" />
   </ItemGroup>
 
   <ItemGroup>
