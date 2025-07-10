@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'ReleaseV1.6'">
-    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4409" />
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.4516-beta" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Configuration)' == 'ReleaseV1.5'">
