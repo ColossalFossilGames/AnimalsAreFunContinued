@@ -24,9 +24,11 @@ in the repository.
 
 ## Getting Started
 
-The project uses NuGet for package management. Simply open the solution in Visual Studio 2022 and build the project to
-create a usable package. The package will be generated in the ModPackageFolder after a successful build. To use, copy the
-AnimalsAreFunContinued folder from ModPackageFolder into your local RimWorld mods folder.
+The project uses NuGet for package management. Open the solution in Visual Studio 2022, select the latest game version as your
+solution configuration, and build the solution. This will restore the required NuGet packages and create a usable package. The
+package will be generated in the ModPackageFolder after a successful build. To use, copy the AnimalsAreFunContinued folder
+from ModPackageFolder into your local RimWorld mods folder. Previously supported versions of RimWorld can be built by
+selecting the appropriate solution configuration in Visual Studio.
 
 Here are some high-level notes of the various files and classes:
 
