@@ -24,7 +24,7 @@ namespace AnimalsAreFunContinued.Validators
             PawnCapacitiesHandler? capacities = pawn?.health?.capacities;
 
             if (capacities == null)
-                return Result("no health capatibilities", out reason, true);
+                return Result("no health capabilities", out reason, true);
 
             if (capacities.GetLevel(PawnCapacityDefOf.Consciousness) < Settings.MinConsciousness)
                 return Result("not met minimum required consciousness", out reason, true);
