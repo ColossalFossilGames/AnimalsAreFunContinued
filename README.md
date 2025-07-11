@@ -4,8 +4,9 @@ Spend time and have fun with your pets! This mod lets your pawns play fetch or g
 will gain a little animal skill as well. This mod is a continuation of the
 [Animals are fun mod by Revolus](https://steamcommunity.com/sharedfiles/filedetails/?id=2108362126).
 
-The mod was entirely rewritten and currently only supports version 1.5 of RimWorld. If you are running an older version of RimWorld, you 
-can download the original mod this was derived from found [here](https://steamcommunity.com/sharedfiles/filedetails/?id=2108362126).
+The mod was entirely rewritten and currently only supports versions 1.5 of RimWorld and above. If you are running an older
+version of RimWorld, you can download the original mod this was derived from found
+[here](https://steamcommunity.com/sharedfiles/filedetails/?id=2108362126).
 
 This mod contains no dependencies and **can be added or removed at any time**. If a save file contains a pawn or animal that
 is assigned a job from this mod, you may see an error when loading the save file. However, the error will automatically correct
@@ -24,9 +25,11 @@ in the repository.
 
 ## Getting Started
 
-The project uses NuGet for package management. Simply open the solution in Visual Studio 2022 and build the project to
-create a usable package. The package will be generated in the ModPackageFolder after a successful build. To use, copy the
-AnimalsAreFunContinued folder from ModPackageFolder into your local RimWorld mods folder.
+The project uses NuGet for package management. Open the solution in Visual Studio 2022, select the latest game version as your
+solution configuration, and build the solution. This will restore the required NuGet packages and create a usable package. The
+package will be generated in the ModPackageFolder after a successful build. To use, copy the AnimalsAreFunContinued folder
+from ModPackageFolder into your local RimWorld mods folder. Previously supported versions of RimWorld can be built by
+selecting the appropriate solution configuration in Visual Studio.
 
 Here are some high-level notes of the various files and classes:
 

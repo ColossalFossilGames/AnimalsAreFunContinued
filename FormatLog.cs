@@ -4,33 +4,18 @@ namespace AnimalsAreFunContinued
 {
     public static class FormatLog
     {
-        public static string PawnName(Thing? thing)
+        public static string PawnName(Thing? thing) => thing switch
         {
-            if (thing == null)
-            {
-                return "{pawn reference of type Thing is missing}";
-            }
+            null => "{pawn reference of type Thing is missing}",
+            Pawn pawn => PawnName(pawn),
+            _ => "{pawn reference is not of type Pawn}"
+        };
 
-            if (thing is Pawn pawn)
-            {
-                return PawnName(pawn);
-            }
-
-            return "{pawn reference is not of type Pawn}";
-        }
-        public static string PawnName(Pawn? pawn)
+        public static string PawnName(Pawn? pawn) => pawn switch
         {
-            if (pawn == null)
-            {
-                return "{pawn missing reference}";
-            }
-
-            if (pawn.Name == null)
-            {
-                return $"{{pawn without name (ThingID {pawn.ThingID})}}";
-            }
-            
-            return pawn.Name.ToStringFull;
-        }
+            null => "{pawn missing reference}",
+            { Name: null, ThingID: var id } => $"{{pawn without name (ThingID {id})}}",
+            _ => pawn.Name.ToStringFull
+        };
     }
 }

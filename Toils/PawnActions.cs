@@ -3,7 +3,6 @@ using AnimalsAreFunContinued.Validators;
 using RimWorld;
 using Verse;
 using Verse.AI;
-using static UnityEngine.GraphicsBuffer;
 
 namespace AnimalsAreFunContinued.Toils
 {
@@ -94,10 +93,17 @@ namespace AnimalsAreFunContinued.Toils
                     }
                     pawn.pather.StartPath(waypoint.cellInt, PathEndMode.OnCell);
                 },
+#if RELEASEV1_6
+                tickIntervalAction = (delta) =>
+                {
+                    JoyUtility.JoyTickCheckEnd(pawn, delta);
+                },
+#else
                 tickAction = () =>
                 {
                     JoyUtility.JoyTickCheckEnd(pawn);
                 },
+#endif
                 defaultCompleteMode = ToilCompleteMode.PatherArrival,
                 socialMode = RandomSocialMode.SuperActive
             };
