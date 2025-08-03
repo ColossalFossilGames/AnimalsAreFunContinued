@@ -8,12 +8,24 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		resources|Any CPU = resources|Any CPU
+		v1.1bin|Any CPU = v1.1bin|Any CPU
+		v1.2bin|Any CPU = v1.2bin|Any CPU
+		v1.3bin|Any CPU = v1.3bin|Any CPU
+		v1.4bin|Any CPU = v1.4bin|Any CPU
 		v1.5bin|Any CPU = v1.5bin|Any CPU
 		v1.6bin|Any CPU = v1.6bin|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B0B324B8-C034-48C5-8948-3016423B99D0}.resources|Any CPU.ActiveCfg = resources|Any CPU
 		{B0B324B8-C034-48C5-8948-3016423B99D0}.resources|Any CPU.Build.0 = resources|Any CPU
+		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.1bin|Any CPU.ActiveCfg = v1.1bin|Any CPU
+		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.1bin|Any CPU.Build.0 = v1.1bin|Any CPU
+		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.2bin|Any CPU.ActiveCfg = v1.2bin|Any CPU
+		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.2bin|Any CPU.Build.0 = v1.2bin|Any CPU
+		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.3bin|Any CPU.ActiveCfg = v1.3bin|Any CPU
+		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.3bin|Any CPU.Build.0 = v1.3bin|Any CPU
+		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.4bin|Any CPU.ActiveCfg = v1.4bin|Any CPU
+		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.4bin|Any CPU.Build.0 = v1.4bin|Any CPU
 		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.5bin|Any CPU.ActiveCfg = v1.5bin|Any CPU
 		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.5bin|Any CPU.Build.0 = v1.5bin|Any CPU
 		{B0B324B8-C034-48C5-8948-3016423B99D0}.v1.6bin|Any CPU.ActiveCfg = v1.6bin|Any CPU

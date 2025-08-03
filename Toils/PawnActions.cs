@@ -91,14 +91,20 @@ namespace AnimalsAreFunContinued.Toils
                         jobDriver.EndJobWith(JobCondition.Incompletable);
                         return;
                     }
+#if V1_6BIN || V1_5BIN || V1_4BIN || V1_3BIN || V1_2BIN || RESOURCES
                     pawn.pather.StartPath(waypoint.cellInt, PathEndMode.OnCell);
+#elif V1_1BIN
+                    pawn.pather.StartPath(waypoint.Cell, PathEndMode.OnCell);
+#else
+    #error "Unsupported build configuration."
+#endif
                 },
 #if V1_6BIN || RESOURCES
                 tickIntervalAction = (delta) =>
                 {
                     JoyUtility.JoyTickCheckEnd(pawn, delta);
                 },
-#elif V1_5BIN
+#elif V1_5BIN || V1_4BIN || V1_3BIN || V1_2BIN || V1_1BIN
                 tickAction = () =>
                 {
                     JoyUtility.JoyTickCheckEnd(pawn);
@@ -143,7 +149,13 @@ namespace AnimalsAreFunContinued.Toils
                     }
                     job.targetA = throwTarget;
                     pawn.rotationTracker.FaceTarget(throwTarget);
+#if V1_6BIN || V1_5BIN || V1_4BIN || V1_3BIN || RESOURCES
                     FleckMaker.ThrowStone(pawn, throwTarget.Cell);
+#elif V1_2BIN || V1_1BIN
+                    MoteMaker.ThrowStone(pawn, throwTarget.Cell);
+#else
+    #error "Unsupported build configuration."
+#endif
                 },
                 socialMode = RandomSocialMode.SuperActive,
                 defaultCompleteMode = ToilCompleteMode.Instant

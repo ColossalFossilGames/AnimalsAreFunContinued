@@ -57,7 +57,7 @@ namespace AnimalsAreFunContinued.Validators
 #if V1_6BIN || RESOURCES
             if (animal.GetStatValue(StatDefOf.Wildness) > Settings.MaxWildness)
                 return Result("too wild", out reason);
-#elif V1_5BIN
+#elif V1_5BIN || V1_4BIN || V1_3BIN || V1_2BIN || V1_1BIN
             if (race.wildness > Settings.MaxWildness)
                 return Result("too wild", out reason);
 #else
