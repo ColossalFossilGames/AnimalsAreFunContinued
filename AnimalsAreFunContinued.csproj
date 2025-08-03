@@ -13,20 +13,26 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <BaseOutputPath></BaseOutputPath>
     <SignAssembly>False</SignAssembly>
-    <Configurations>ReleaseV1.5;ReleaseV1.6</Configurations>
+    <Configurations>v1.5bin;v1.6bin;resources</Configurations>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <PackageProjectUrl>https://github.com/ColossalFossilGames/AnimalsAreFunContinued</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/ColossalFossilGames/AnimalsAreFunContinued</RepositoryUrl>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseV1.5|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='resources|AnyCPU'">
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseV1.6|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='v1.5bin|AnyCPU'">
+    <DebugType>none</DebugType>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='v1.6bin|AnyCPU'">
     <DebugType>none</DebugType>
     <Optimize>True</Optimize>
   </PropertyGroup>
@@ -44,12 +50,16 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'ReleaseV1.6'">
+  <ItemGroup Condition="'$(Configuration)'=='resources'">
     <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.4516-beta" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'ReleaseV1.5'">
+  <ItemGroup Condition="'$(Configuration)'=='v1.5bin'">
     <PackageReference Include="Krafs.Rimworld.Ref" Version="1.5.4409" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='v1.6bin'">
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.4516-beta" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,7 +74,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="::latest build gets run first&#xD;&#xA;IF &quot;$(Configuration)&quot;==&quot;ReleaseV1.6&quot; (&#xD;&#xA;    XCOPY &quot;$(SolutionDir)About&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\About\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Defs&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Defs\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Languages&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Languages\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)bin\ReleaseV1.6&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\v1.6\Assemblies\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)*.xml&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.sln&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.csproj&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)*.*&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Data&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Data\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Externals&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Externals\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)JobDrivers&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\JobDrivers\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)JoyGivers&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\JoyGivers\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Toils&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Toils\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Validators&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Validators\&quot; /S /Y&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;::alternative versions get added after latest version is compiled&#xD;&#xA;IF &quot;$(Configuration)&quot;==&quot;ReleaseV1.5&quot; (&#xD;&#xA;    XCOPY &quot;$(SolutionDir)bin\ReleaseV1.5&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\v1.5\Assemblies\&quot; /S /Y&#xD;&#xA;)" />
+    <Exec Command="::copy mod resources&#xD;&#xA;IF &quot;$(Configuration)&quot;==&quot;resources&quot; (&#xD;&#xA;    XCOPY &quot;$(SolutionDir)About&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\About\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Defs&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Defs\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Languages&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Languages\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)*.xml&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.sln&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)AnimalsAreFunContinued.csproj&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)*.*&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\&quot; /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Data&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Data\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Externals&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Externals\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)JobDrivers&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\JobDrivers\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)JoyGivers&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\JoyGivers\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Toils&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Toils\&quot; /S /Y&#xD;&#xA;    XCOPY &quot;$(SolutionDir)Validators&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\Validators\&quot; /S /Y&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;::version 1.5 assemblies&#xD;&#xA;IF &quot;$(Configuration)&quot;==&quot;v1.5bin&quot; (&#xD;&#xA;    XCOPY &quot;$(SolutionDir)bin\v1.5bin&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\v1.5\Assemblies\&quot; /S /Y&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;::version 1.6 assemblies&#xD;&#xA;IF &quot;$(Configuration)&quot;==&quot;v1.6bin&quot; (&#xD;&#xA;    XCOPY &quot;$(SolutionDir)bin\v1.6bin&quot; &quot;$(SolutionDir)ModPackageFolder\AnimalsAreFunContinued\v1.6\Assemblies\&quot; /S /Y&#xD;&#xA;)" />
   </Target>
 
 </Project>

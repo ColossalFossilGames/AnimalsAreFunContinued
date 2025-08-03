@@ -93,16 +93,18 @@ namespace AnimalsAreFunContinued.Toils
                     }
                     pawn.pather.StartPath(waypoint.cellInt, PathEndMode.OnCell);
                 },
-#if RELEASEV1_6
+#if V1_6BIN || RESOURCES
                 tickIntervalAction = (delta) =>
                 {
                     JoyUtility.JoyTickCheckEnd(pawn, delta);
                 },
-#else
+#elif V1_5BIN
                 tickAction = () =>
                 {
                     JoyUtility.JoyTickCheckEnd(pawn);
                 },
+#else
+    #error "Unsupported build configuration."
 #endif
                 defaultCompleteMode = ToilCompleteMode.PatherArrival,
                 socialMode = RandomSocialMode.SuperActive
