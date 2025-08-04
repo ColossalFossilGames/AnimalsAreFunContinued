@@ -147,7 +147,7 @@ namespace AnimalsAreFunContinued.Toils
 #if V1_6BIN || V1_5BIN || V1_4BIN || V1_3BIN || RESOURCES
                     FleckMaker.ThrowStone(pawn, throwTarget.Cell);
 #elif V1_2BIN || V1_1BIN
-            MoteMaker.ThrowStone(pawn, throwTarget.Cell);
+                    MoteMaker.ThrowStone(pawn, throwTarget.Cell);
 #else
     #error "Unsupported build configuration."
 #endif
