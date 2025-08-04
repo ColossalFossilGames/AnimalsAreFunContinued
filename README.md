@@ -2,22 +2,22 @@
 
 Spend time and have fun with your pets! This mod lets your pawns play fetch or go for a walk for recreation. Your pawns
 will gain a little animal skill as well. This mod is a continuation of the
-[Animals are fun mod by Revolus](https://steamcommunity.com/sharedfiles/filedetails/?id=2108362126).
+[Animals are fun mod by Revolus](https://steamcommunity.com/workshop/filedetails/?id=2108362126) and supports RimWorld
+versions 1.1 through 1.6. Support requests for this mod will be prioritized for the latest version of RimWorld first.
 
-The mod was entirely rewritten and currently only supports versions 1.5 of RimWorld and above. If you are running an older
-version of RimWorld, you can download the original mod this was derived from found
-[here](https://steamcommunity.com/sharedfiles/filedetails/?id=2108362126).
+This mod contains no dependencies and **should be able to be added or removed at any time**. If a save file contains a pawn or
+animal that is assigned a job from this mod, you may see an error when loading the save file. However, the error will
+automatically correct and will not be displayed on future saves. **Create a backup of your save file before adding or removing
+this mod.**.
 
-This mod contains no dependencies and **can be added or removed at any time**. If a save file contains a pawn or animal that
-is assigned a job from this mod, you may see an error when loading the save file. However, the error will automatically correct
-and will not be displayed on future saves. The source code is automatically bundled when compiling this project and should be
-included any copies that are distributed or modified to adhere to the GNU LGPL v2.1 license of the original mod.
+The source code is automatically bundled when compiling this project and should be included any copies that are distributed or
+modified to adhere to the GNU LGPL v2.1 license of the original mod.
 
 Translations are supported for this mod, but should be maintained and distributed in their own mod packages. Both DefInjected
 and Keyed translations are supported.
 
 This repository does not include a functioning version of the mod. Instead, you may download it from
-[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3245454244) or follow the Getting Started
+[Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=3245454244) or follow the Getting Started
 instructions below and build your own functioning version of the mod yourself.
 
 If you find any problems, feel free to [file an issue](https://github.com/ColossalFossilGames/AnimalsAreFunContinued/issues)
@@ -44,6 +44,9 @@ Here are some high-level notes of the various files and classes:
 - Any user configurable settings should be added to the Settings class and set to be configured in the AnimalsAreFunContinued class
 - Logic for JobDriver or JoyGiver for pass/fail checks should be placed in the Validators folder
 - Try to keep JobDrivers, JoyGivers and Toils in separate classes
+- Use #if statements to conditionally compile code for different RimWorld versions
+- If conditional code is not an override of a base class member, then create a static interpreter method to handle conversion
+- Do not create interpreter methods for actions inside of toils that are included in the render pipeline
 
 ## Built With
 
