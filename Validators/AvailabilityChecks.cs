@@ -54,15 +54,8 @@ namespace AnimalsAreFunContinued.Validators
             if (race.baseBodySize > Settings.MaxBodySize)
                 return Result("too big", out reason);
 
-#if V1_6BIN || RESOURCES
-            if (animal.GetStatValue(StatDefOf.Wildness) > Settings.MaxWildness)
+            if (Interpreters.Pawn.GetWildness(animal) > Settings.MaxWildness)
                 return Result("too wild", out reason);
-#elif V1_5BIN || V1_4BIN || V1_3BIN || V1_2BIN || V1_1BIN
-            if (race.wildness > Settings.MaxWildness)
-                return Result("too wild", out reason);
-#else
-    #error "Unsupported build configuration."
-#endif
 
             if (Settings.MustBeCute && race.nuzzleMtbHours < 0f)
                 return Result("not cute", out reason);
