@@ -54,13 +54,8 @@ namespace AnimalsAreFunContinued.Validators
             if (race.baseBodySize > Settings.MaxBodySize)
                 return Result("too big", out reason);
 
-#if RELEASEV1_6
-            if (animal.GetStatValue(StatDefOf.Wildness) > Settings.MaxWildness)
+            if (Interpreters.Pawn.GetWildness(animal) > Settings.MaxWildness)
                 return Result("too wild", out reason);
-#else
-            if (race.wildness > Settings.MaxWildness)
-                return Result("too wild", out reason);
-#endif
 
             if (Settings.MustBeCute && race.nuzzleMtbHours < 0f)
                 return Result("not cute", out reason);

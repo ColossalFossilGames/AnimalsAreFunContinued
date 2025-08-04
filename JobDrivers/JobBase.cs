@@ -8,10 +8,19 @@ namespace AnimalsAreFunContinued.JobDrivers
         public int? InteractiveTargetCurrentJobId = null;
         public JobBase()
         {
+#if V1_6BIN || V1_5BIN || RESOURCES
             this.AddFinishAction((_) =>
             {
                 StopJobForTarget();
             });
+#elif V1_4BIN || V1_3BIN || V1_2BIN || V1_1BIN
+            this.AddFinishAction(() =>
+            {
+                StopJobForTarget();
+            });
+#else
+    #error "Unsupported build configuration."
+#endif
         }
 
         public Toil StartJobForTarget(JobDef jobDef, LocomotionUrgency locomotionUrgency, string? debugMessage = null) => 
