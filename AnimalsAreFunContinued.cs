@@ -39,6 +39,8 @@ namespace AnimalsAreFunContinued
             ShowLabel(listingStandard, "RequirementsCategory");
             ShowGapLine(listingStandard, gapSizeSmall);
 
+            ShowCheckbox(listingStandard, "MustBeCute", ref Settings.MustBeCute, "MustBeCuteTooltip");
+            ShowCheckbox(listingStandard, "AllowExoticPets", ref Settings.AllowExoticPets, "AllowExoticPetsTooltip");
             Settings.MinConsciousness = ShowSlider(listingStandard, "MinConsciousness", Settings.MinConsciousness, 0.1f, 1);
             Settings.MinMoving = ShowSlider(listingStandard, "MinMoving", Settings.MinMoving, 0.1f, 1);
             Settings.MaxBodySize = ShowSlider(listingStandard, "MaxBodySize", Settings.MaxBodySize, 0.1f, 1);
@@ -49,9 +51,7 @@ namespace AnimalsAreFunContinued
             ShowLabel(listingStandard, "ExperimentalCategory");
             ShowGapLine(listingStandard, gapSizeSmall);
 
-            ShowCheckbox(listingStandard, "MustBeCute", ref Settings.MustBeCute, "MustBeCuteTooltip");
             ShowCheckbox(listingStandard, "AllowHumanLike", ref Settings.AllowHumanLike, "AllowHumanLikeTooltip");
-            ShowCheckbox(listingStandard, "AllowExoticPets", ref Settings.AllowExoticPets, "AllowExoticPetsTooltip");
             ShowCheckbox(listingStandard, "AllowCrossFaction", ref Settings.AllowCrossFaction, "AllowCrossFactionTooltip");
             ShowCheckbox(listingStandard, "AllowNonColonist", ref Settings.AllowNonColonist, "AllowNonColonistTooltip");
             ShowGap(listingStandard, gapSizeLarge);
