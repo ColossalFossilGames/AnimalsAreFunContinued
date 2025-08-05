@@ -9,6 +9,7 @@
   <AllowNonColonist>Allow non-colonist</AllowNonColonist>
   <AllowNonColonistTooltip>Allows visitors from other factions to interact with your animals.</AllowNonColonistTooltip>
   <Animals_are_fun_Continued>Animals are fun! (Continued)</Animals_are_fun_Continued>
+  <CacheExpirationTimeout>Cache Expiration Timeout ({0} ticks)</CacheExpirationTimeout>
   <DebuggingCategory>Debugging:</DebuggingCategory>
   <ExperimentalCategory>Experimental:</ExperimentalCategory>
   <MaxBodySize>Max. body size ({0}cm)</MaxBodySize>

@@ -18,6 +18,9 @@ namespace AnimalsAreFunContinued
         private const bool defaultAllowNonColonist = false;
 
         private const bool defaultShowDebugMessages = false;
+        private const int defaultCacheExpirationTimeout = 1800;
+        public static readonly int CacheExpirationTimeoutMinRange = 60;
+        public static readonly int CacheExpirationTimeoutMaxRange = 5400;
 
         public static float MinConsciousness = defaultMinConsciousness;
         public static float MinMoving = defaultMinMoving;
@@ -31,6 +34,7 @@ namespace AnimalsAreFunContinued
         public static bool AllowNonColonist = defaultAllowNonColonist;
 
         public static bool ShowDebugMessages = defaultShowDebugMessages;
+        public static int CacheExpirationTimeout = defaultCacheExpirationTimeout;
 
         public override void ExposeData()
         {
@@ -48,11 +52,13 @@ namespace AnimalsAreFunContinued
             Scribe_Values.Look(ref AllowNonColonist, "AllowNonColonist", defaultAllowNonColonist);
 
             Scribe_Values.Look(ref ShowDebugMessages, "ShowDebugMessages", defaultShowDebugMessages);
+            Scribe_Values.Look(ref CacheExpirationTimeout, "CacheExpirationTimeout", defaultCacheExpirationTimeout);
 
             MinConsciousness = Mathf.Clamp(MinConsciousness, 0.1f, 1);
             MinMoving = Mathf.Clamp(MinMoving, 0.1f, 1);
             MaxBodySize = Mathf.Clamp(MaxBodySize, 0.01f, MaxBodySizeRange);
             MaxWildness = Mathf.Clamp(MaxWildness, 0.1f, 1);
+            CacheExpirationTimeout = Mathf.Clamp(CacheExpirationTimeout, CacheExpirationTimeoutMinRange, CacheExpirationTimeoutMaxRange);
         }
 
         public static void ResetToDefaults()
@@ -69,6 +75,7 @@ namespace AnimalsAreFunContinued
             AllowNonColonist = defaultAllowNonColonist;
 
             ShowDebugMessages = defaultShowDebugMessages;
+            CacheExpirationTimeout = defaultCacheExpirationTimeout;
         }
     }
 }

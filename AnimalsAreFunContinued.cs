@@ -61,6 +61,7 @@ namespace AnimalsAreFunContinued
             ShowGapLine(listingStandard, gapSizeSmall);
 
             ShowCheckbox(listingStandard, "ShowDebugMessages", ref Settings.ShowDebugMessages);
+            Settings.CacheExpirationTimeout = ShowSlider(listingStandard, "CacheExpirationTimeout", Settings.CacheExpirationTimeout, Settings.CacheExpirationTimeoutMinRange, Settings.CacheExpirationTimeoutMaxRange);
             if (ShowButton(listingStandard, "Reset", "ResetToDefaults"))
             {
                 Settings.ResetToDefaults();
@@ -91,6 +92,11 @@ namespace AnimalsAreFunContinued
         {
             listingStandard.Label(labelName.Translate(FormatPercent(value)));
             return listingStandard.Slider(value, min, max);
+        }
+        private static int ShowSlider(Listing_Standard listingStandard, string labelName, int value, int min, int max)
+        {
+            listingStandard.Label(labelName.Translate(value));
+            return (int)listingStandard.Slider(value, min, max);
         }
 
         public override string SettingsCategory() => "Animals_are_fun_Continued".Translate();
