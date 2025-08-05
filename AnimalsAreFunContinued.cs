@@ -43,7 +43,7 @@ namespace AnimalsAreFunContinued
             ShowCheckbox(listingStandard, "AllowExoticPets", ref Settings.AllowExoticPets, "AllowExoticPetsTooltip");
             Settings.MinConsciousness = ShowSlider(listingStandard, "MinConsciousness", Settings.MinConsciousness, 0.1f, 1);
             Settings.MinMoving = ShowSlider(listingStandard, "MinMoving", Settings.MinMoving, 0.1f, 1);
-            Settings.MaxBodySize = ShowSlider(listingStandard, "MaxBodySize", Settings.MaxBodySize, 0.1f, 1);
+            Settings.MaxBodySize = ShowSlider(listingStandard, "MaxBodySize", Settings.MaxBodySize, 0.1f, Settings.MaxBodySizeRange);
             Settings.MaxWildness = ShowSlider(listingStandard, "MaxWildness", Settings.MaxWildness, 0.1f, 1);
             ShowGap(listingStandard, gapSizeLarge);
 

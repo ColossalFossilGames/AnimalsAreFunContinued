@@ -8,6 +8,7 @@ namespace AnimalsAreFunContinued
         private const float defaultMinConsciousness = 0.6f;
         private const float defaultMinMoving = 0.7f;
         private const float defaultMaxBodySize = 1.6f;
+        public static readonly float MaxBodySizeRange = 5.0f;
         private const float defaultMaxWildness = 0.8f;
         private const bool defaultMustBeCute = true;
 
@@ -50,7 +51,7 @@ namespace AnimalsAreFunContinued
 
             MinConsciousness = Mathf.Clamp(MinConsciousness, 0.1f, 1);
             MinMoving = Mathf.Clamp(MinMoving, 0.1f, 1);
-            MaxBodySize = Mathf.Clamp(MaxBodySize, 0.01f, 5);
+            MaxBodySize = Mathf.Clamp(MaxBodySize, 0.01f, MaxBodySizeRange);
             MaxWildness = Mathf.Clamp(MaxWildness, 0.1f, 1);
         }
 
