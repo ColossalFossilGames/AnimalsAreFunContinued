@@ -10,6 +10,7 @@
   <AllowNonColonistTooltip>Allows visitors from other factions to interact with your animals.</AllowNonColonistTooltip>
   <Animals_are_fun_Continued>Animals are fun! (Continued)</Animals_are_fun_Continued>
   <CacheExpirationTimeout>Cache Expiration Timeout ({0} ticks)</CacheExpirationTimeout>
+  <CacheExpirationTimeoutTooltip>How long before the cache expires and is recalculated. Too low of a value may cause performance problems on slower computers. Higher values will cause a delay before pawns are able to play with animals that have recently entered the map.</CacheExpirationTimeoutTooltip>
   <DebuggingCategory>Debugging:</DebuggingCategory>
   <ExperimentalCategory>Experimental:</ExperimentalCategory>
   <MaxBodySize>Max. body size ({0}cm)</MaxBodySize>

@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
@@ -8,6 +8,7 @@ namespace AnimalsAreFunContinued
     public class AnimalsAreFunContinued : Mod
     {
         private Rect _scrollRegion = new(0f, 0f, 500f, 9001f);
+        private const float _sliderLabelWidth = 0.4f;
         private Vector2 _scrollPosition;
 
         public AnimalsAreFunContinued(ModContentPack content) : base(content)
@@ -61,7 +62,8 @@ namespace AnimalsAreFunContinued
             ShowGapLine(listingStandard, gapSizeSmall);
 
             ShowCheckbox(listingStandard, "ShowDebugMessages", ref Settings.ShowDebugMessages);
-            Settings.CacheExpirationTimeout = ShowSlider(listingStandard, "CacheExpirationTimeout", Settings.CacheExpirationTimeout, Settings.CacheExpirationTimeoutMinRange, Settings.CacheExpirationTimeoutMaxRange);
+            Settings.CacheExpirationTimeout = ShowSlider(listingStandard, "CacheExpirationTimeout", Settings.CacheExpirationTimeout, Settings.CacheExpirationTimeoutMinRange, Settings.CacheExpirationTimeoutMaxRange, "CacheExpirationTimeoutTooltip");
+            ShowGap(listingStandard, gapSizeSmall);
             if (ShowButton(listingStandard, "Reset", "ResetToDefaults"))
             {
                 Settings.ResetToDefaults();
@@ -88,15 +90,27 @@ namespace AnimalsAreFunContinued
             ShowGap(listingStandard, gapSize);
         }
         private static Rect ShowLabel(Listing_Standard listingStandard, string labelName) => listingStandard.Label(labelName.Translate());
-        private static float ShowSlider(Listing_Standard listingStandard, string labelName, float value, float min, float max)
+        private static float ShowSlider(Listing_Standard listingStandard, string labelName, float value, float min, float max, string? tooltipName = null)
         {
+#if V1_6BIN || V1_5BIN || V1_4BIN || RESOURCES
+            return listingStandard.SliderLabeled(labelName.Translate(FormatPercent(value)), value, min, max, _sliderLabelWidth, tooltipName?.Translate());
+#elif V1_3BIN || V1_2BIN || V1_1BIN
             listingStandard.Label(labelName.Translate(FormatPercent(value)));
             return listingStandard.Slider(value, min, max);
+#else
+    #error "Unsupported build configuration."
+#endif
         }
-        private static int ShowSlider(Listing_Standard listingStandard, string labelName, int value, int min, int max)
+        private static int ShowSlider(Listing_Standard listingStandard, string labelName, int value, int min, int max, string? tooltipName = null)
         {
+#if V1_6BIN || V1_5BIN || V1_4BIN || RESOURCES
+            return (int)listingStandard.SliderLabeled(labelName.Translate(value), value, min, max, _sliderLabelWidth, tooltipName?.Translate());
+#elif V1_3BIN || V1_2BIN || V1_1BIN
             listingStandard.Label(labelName.Translate(value));
             return (int)listingStandard.Slider(value, min, max);
+#else
+    #error "Unsupported build configuration."
+#endif
         }
 
         public override string SettingsCategory() => "Animals_are_fun_Continued".Translate();
