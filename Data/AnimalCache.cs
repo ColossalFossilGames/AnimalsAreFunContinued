@@ -97,7 +97,7 @@ namespace AnimalsAreFunContinued.Data
                     return animal.relations?.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond)?.Equals(pawn) ?? false;
                 }) ?? [];
                 
-                availableAnimal = GenClosest.ClosestThing_Global(pawn.Position, animals, 30f, animalValidator) as Pawn;
+                availableAnimal = GenClosest.ClosestThing_Global(pawn.Position, animals, Settings.MaximumAnimalDistance, animalValidator) as Pawn;
                 AnimalsAreFunContinued.LogInfo($"{pawnName} {(availableAnimal != null ? "has found" : "was unable to find")} an available bonded animal.");
                 if (availableAnimal != null)
                 {
@@ -113,7 +113,7 @@ namespace AnimalsAreFunContinued.Data
             }
 
             AnimalsAreFunContinued.LogInfo($"{pawnName} is now trying to find an available non-bonded animal.");
-            availableAnimal = GenClosest.ClosestThing_Global(pawn.Position, animals, 30f, animalValidator) as Pawn;
+            availableAnimal = GenClosest.ClosestThing_Global(pawn.Position, animals, Settings.MaximumAnimalDistance, animalValidator) as Pawn;
             AnimalsAreFunContinued.LogInfo($"{pawnName} {(availableAnimal != null ? "has found" : "was unable to find")} an available non-bonded animal.");
             return availableAnimal;
         }
