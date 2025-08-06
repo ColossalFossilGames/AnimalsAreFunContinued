@@ -66,7 +66,7 @@ namespace AnimalsAreFunContinued.Data
                     return false;
                 }
                 
-                if (!AvailabilityChecks.WillAnimalEnjoyPlayingOutside(pawnName, animal, false, out string? reason))
+                if (!AvailabilityChecks.WillAnimalEnjoyPlayingOutside(pawn, animal, false, out string? reason))
                 {
                     if (reason != null) AnimalsAreFunContinued.LogInfo(reason);
                     return false;

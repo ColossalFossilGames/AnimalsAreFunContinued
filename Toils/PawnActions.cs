@@ -175,7 +175,6 @@ namespace AnimalsAreFunContinued.Toils
             Pawn pawn = jobDriver.pawn;
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             int? animalCurrentJobId = jobDriver.InteractiveTargetCurrentJobId;
-            string pawnName = FormatLog.PawnName(pawn);
 
             if (!AvailabilityChecks.WillPawnEnjoyPlayingOutside(pawn, true, out string? reason))
             {
@@ -184,7 +183,7 @@ namespace AnimalsAreFunContinued.Toils
                 return true;
             }
 
-            if (!AvailabilityChecks.WillAnimalEnjoyPlayingOutside(pawnName, animal, true, out reason))
+            if (!AvailabilityChecks.WillAnimalEnjoyPlayingOutside(pawn, animal, true, out reason))
             {
                 if (reason != null) AnimalsAreFunContinued.LogInfo(reason);
                 EndAnimalJobOnFail(animal, animalCurrentJobId);

@@ -35,9 +35,9 @@ namespace AnimalsAreFunContinued.Validators
             return Result(null, out reason, false);
         }
 
-        public static bool IsAnimalRaceAllowed(Pawn? animal, out string? reason)
+        public static bool IsAnimalRaceAllowed(Pawn pawn, Pawn animal, out string? reason)
         {
-            RaceProperties? race = animal?.def?.race;
+            RaceProperties? race = animal.def?.race;
 
             if (race == null)
                 return Result("not a race", out reason);
@@ -57,14 +57,18 @@ namespace AnimalsAreFunContinued.Validators
             if (Interpreters.Pawn.GetWildness(animal) > Settings.MaxWildness)
                 return Result("too wild", out reason);
 
-            if (Settings.MustBeCute && race.nuzzleMtbHours < 0f)
+            bool isCute = race.nuzzleMtbHours >= 0f;
+            bool isBonded = animal.relations?.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond)?.Equals(pawn) ?? false;
+            if ((!isBonded && Settings.MustBeCute && !isCute) ||
+                (isBonded && Settings.BondedAnimalsMustBeCute && !isCute))
                 return Result("not cute", out reason);
 
             return Result(null, out reason, true);
         }
 
-        public static bool WillAnimalEnjoyPlayingOutside(string pawnName, Pawn animal, bool isAlreadyPlaying, out string? reason)
+        public static bool WillAnimalEnjoyPlayingOutside(Pawn pawn, Pawn animal, bool isAlreadyPlaying, out string? reason)
         {
+            string pawnName = FormatLog.PawnName(pawn);
             string animalName = FormatLog.PawnName(animal);
             string verbContext = isAlreadyPlaying ? "can no longer reserve" : "cannot reserve";
 
@@ -79,7 +83,7 @@ namespace AnimalsAreFunContinued.Validators
 
             // These checks forward only apply when animal is not currently playing
 
-            if (!IsAnimalRaceAllowed(animal, out innerReason))
+            if (!IsAnimalRaceAllowed(pawn, animal, out innerReason))
                 return Result($"{pawnName} {verbContext} {animalName}, because {animalName} is {innerReason}.", out reason);
 
             if (PawnUtility.WillSoonHaveBasicNeed(animal))
