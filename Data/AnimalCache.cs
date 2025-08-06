@@ -105,7 +105,7 @@ namespace AnimalsAreFunContinued.Data
                 }
                 else if (Settings.BondedAnimalsPreference >= 1.0f)
                 {
-                    AnimalsAreFunContinued.LogInfo($"{pawnName} only wants to play with non-bonded animals and is no longer interested.");
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} only wants to play with bonded animals and is no longer interested.");
                     return null;
                 }
 

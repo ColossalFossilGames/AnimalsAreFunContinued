@@ -107,9 +107,7 @@ namespace AnimalsAreFunContinued
         private static int ShowSlider(Listing_Standard listingStandard, string labelName, int value, int min, int max, string? tooltipName = null)
         {
 #if V1_6BIN || V1_5BIN || V1_4BIN || RESOURCES
-            //return (int)listingStandard.SliderLabeled(labelName.Translate(value), value, min, max, _sliderLabelWidth, tooltipName?.Translate());
-            listingStandard.Label(labelName.Translate(value));
-            return (int)listingStandard.Slider(value, min, max);
+            return (int)listingStandard.SliderLabeled(labelName.Translate(value), value, min, max, _sliderLabelWidth, tooltipName?.Translate());
 #elif V1_3BIN || V1_2BIN || V1_1BIN
             listingStandard.Label(labelName.Translate(value));
             return (int)listingStandard.Slider(value, min, max);
