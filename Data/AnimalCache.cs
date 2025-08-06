@@ -1,4 +1,6 @@
 ﻿using AnimalsAreFunContinued.Validators;
+using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -11,6 +13,7 @@ namespace AnimalsAreFunContinued.Data
     public static class AnimalCache
     {
         private static readonly Dictionary<int, AnimalCacheKey> _availableAnimals = [];
+        private static readonly Random _random = new();
 
         public static IEnumerable<Thing> GetAvailableAnimals(Map map)
         {
@@ -78,10 +81,40 @@ namespace AnimalsAreFunContinued.Data
                 return true;
             }
 
-            AnimalsAreFunContinued.LogInfo($"{pawnName} is now trying to find an available animal.");
+            bool preferBondedAnimals = Settings.BondedAnimalsPreference >= 1.0f || _random.Next(0, 100) > 100 - (int)(Settings.BondedAnimalsPreference * 100);
             IEnumerable<Thing> animals = GetAvailableAnimals(pawn.MapHeld);
-            Pawn? availableAnimal = GenClosest.ClosestThing_Global(pawn.Position, animals, 30f, animalValidator) as Pawn;
-            AnimalsAreFunContinued.LogInfo($"{pawnName} {(availableAnimal != null ? "has found" : "was unable to find")} an available animal.");
+            Pawn? availableAnimal;
+            if (preferBondedAnimals)
+            {
+                AnimalsAreFunContinued.LogInfo($"{pawnName} is now trying to find an available bonded animal.");
+                animals = animals.Where(animalThing =>
+                {
+                    if (animalThing is not Pawn animal)
+                    {
+                        return false;
+                    }
+
+                    return animal.relations?.GetFirstDirectRelationPawn(PawnRelationDefOf.Bond)?.Equals(pawn) ?? false;
+                }) ?? [];
+                
+                availableAnimal = GenClosest.ClosestThing_Global(pawn.Position, animals, 30f, animalValidator) as Pawn;
+                AnimalsAreFunContinued.LogInfo($"{pawnName} {(availableAnimal != null ? "has found" : "was unable to find")} an available bonded animal.");
+                if (availableAnimal != null)
+                {
+                    return availableAnimal;
+                }
+                else if (Settings.BondedAnimalsPreference >= 1.0f)
+                {
+                    AnimalsAreFunContinued.LogInfo($"{pawnName} only wants to play with non-bonded animals and is no longer interested.");
+                    return null;
+                }
+
+                animals = GetAvailableAnimals(pawn.MapHeld);
+            }
+
+            AnimalsAreFunContinued.LogInfo($"{pawnName} is now trying to find an available non-bonded animal.");
+            availableAnimal = GenClosest.ClosestThing_Global(pawn.Position, animals, 30f, animalValidator) as Pawn;
+            AnimalsAreFunContinued.LogInfo($"{pawnName} {(availableAnimal != null ? "has found" : "was unable to find")} an available non-bonded animal.");
             return availableAnimal;
         }
 
