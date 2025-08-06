@@ -1,4 +1,4 @@
-﻿using AnimalsAreFunContinued.Externals;
+using AnimalsAreFunContinued.Externals;
 using AnimalsAreFunContinued.Toils;
 using RimWorld;
 using System.Collections.Generic;
@@ -41,7 +41,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return StartJobForTarget(Jobs.FetchItem, CreateNextWaypointDelegate(true), LocomotionUrgency.Walk);
 
             // wait for pet to finish fetching item
-            Toil waitForAnimal = AnimalActions.HoldPosition(90);
+            Toil waitForAnimal = PawnActions.HoldPosition(90);
             yield return waitForAnimal;
 
             // continue waiting until pet has finished fetching item
