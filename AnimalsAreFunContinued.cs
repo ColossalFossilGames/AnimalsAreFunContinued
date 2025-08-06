@@ -42,11 +42,14 @@ namespace AnimalsAreFunContinued
 
             ShowCheckbox(listingStandard, "MustBeCute", ref Settings.MustBeCute, "MustBeCuteTooltip");
             ShowCheckbox(listingStandard, "AllowExoticPets", ref Settings.AllowExoticPets, "AllowExoticPetsTooltip");
-            Settings.MinConsciousness = ShowSlider(listingStandard, "MinConsciousness", Settings.MinConsciousness, 0.1f, 1);
-            Settings.MinMoving = ShowSlider(listingStandard, "MinMoving", Settings.MinMoving, 0.1f, 1);
+            Settings.MinConsciousness = ShowSlider(listingStandard, "MinConsciousness", Settings.MinConsciousness, 0.1f, 1.0f);
+            Settings.MinMoving = ShowSlider(listingStandard, "MinMoving", Settings.MinMoving, 0.1f, 1.0f);
             Settings.MaxBodySize = ShowSlider(listingStandard, "MaxBodySize", Settings.MaxBodySize, 0.1f, Settings.MaxBodySizeRange);
-            Settings.MaxWildness = ShowSlider(listingStandard, "MaxWildness", Settings.MaxWildness, 0.1f, 1);
-            ShowGap(listingStandard, gapSizeLarge);
+            Settings.MaxWildness = ShowSlider(listingStandard, "MaxWildness", Settings.MaxWildness, 0.1f, 1.0f);
+            Settings.BondedAnimalsPreference = ShowSlider(listingStandard, "BondedAnimalsPreference", Settings.BondedAnimalsPreference, 0.0f, 1.0f, "BondedAnimalsPreferenceTooltip");
+            ShowSliderLabels(listingStandard, "DontCare", "OnlyBonded");
+            ShowSliderCheckbox(listingStandard, "BondedAnimalsMustBeCute", ref Settings.BondedAnimalsMustBeCute, "BondedAnimalsMustBeCuteTooltip");
+            ShowGap(listingStandard, gapSizeSmall);
 
             /* Experimental */
             ShowLabel(listingStandard, "ExperimentalCategory");
@@ -104,13 +107,55 @@ namespace AnimalsAreFunContinued
         private static int ShowSlider(Listing_Standard listingStandard, string labelName, int value, int min, int max, string? tooltipName = null)
         {
 #if V1_6BIN || V1_5BIN || V1_4BIN || RESOURCES
-            return (int)listingStandard.SliderLabeled(labelName.Translate(value), value, min, max, _sliderLabelWidth, tooltipName?.Translate());
+            //return (int)listingStandard.SliderLabeled(labelName.Translate(value), value, min, max, _sliderLabelWidth, tooltipName?.Translate());
+            listingStandard.Label(labelName.Translate(value));
+            return (int)listingStandard.Slider(value, min, max);
 #elif V1_3BIN || V1_2BIN || V1_1BIN
             listingStandard.Label(labelName.Translate(value));
             return (int)listingStandard.Slider(value, min, max);
 #else
     #error "Unsupported build configuration."
 #endif
+        }
+        private static void ShowSliderLabels(Listing_Standard listingStandard, string minRangeLabel, string maxRangeLabel)
+        {
+            const float labelLeftMargin = 10.0f;
+            const float labelRightMargin = 11.0f;
+            float labelStartX = listingStandard.listingRect.width * _sliderLabelWidth;
+            float labelWidth = (listingStandard.listingRect.width - labelStartX) / 2;
+            const float labelHeight = 30.0f;
+
+            Listing_Standard labelListingStandardLeft = new() { maxOneColumn = true };
+            Rect labelRegionLeft = new(labelStartX + labelLeftMargin, listingStandard.curY, labelWidth, labelHeight);
+            labelListingStandardLeft.Begin(labelRegionLeft);
+            GenUI.SetLabelAlign(TextAnchor.MiddleLeft);
+            labelListingStandardLeft.Label(minRangeLabel.Translate());
+            GenUI.ResetLabelAlign();
+            labelListingStandardLeft.End();
+
+            Listing_Standard labelListingStandardRight = new() { maxOneColumn = true };
+            Rect labelRegionRight = new(labelStartX + labelWidth - labelRightMargin, listingStandard.curY, labelWidth, labelHeight);
+            labelListingStandardRight.Begin(labelRegionRight);
+            GenUI.SetLabelAlign(TextAnchor.MiddleRight);
+            labelListingStandardRight.Label(maxRangeLabel.Translate());
+            GenUI.ResetLabelAlign();
+            listingStandard.curY += labelListingStandardRight.CurHeight;
+            labelListingStandardRight.End();
+        }
+        private static void ShowSliderCheckbox(Listing_Standard listingStandard, string labelName, ref bool value, string? tooltipName = null)
+        {
+            const float checkboxMarginLeft = 110.0f;
+            const float checkboxMarginRight = 14.0f;
+            float checkboxStartX = listingStandard.listingRect.width * _sliderLabelWidth + checkboxMarginLeft;
+            float checkboxWidth = listingStandard.listingRect.width - checkboxStartX - checkboxMarginRight;
+            const float checkboxHeight = 30.0f;
+
+            Listing_Standard checkboxListingStandard = new() { maxOneColumn = true };
+            Rect checkboxRegion = new(checkboxStartX, listingStandard.curY, checkboxWidth, checkboxHeight);
+            checkboxListingStandard.Begin(checkboxRegion);
+            checkboxListingStandard.CheckboxLabeled(labelName.Translate(), ref value, tooltipName?.Translate());
+            listingStandard.curY += checkboxListingStandard.CurHeight;
+            checkboxListingStandard.End();
         }
 
         public override string SettingsCategory() => "Animals_are_fun_Continued".Translate();

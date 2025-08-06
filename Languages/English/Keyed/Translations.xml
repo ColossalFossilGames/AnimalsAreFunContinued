@@ -9,9 +9,14 @@
   <AllowNonColonist>Allow non-colonist</AllowNonColonist>
   <AllowNonColonistTooltip>Allows visitors from other factions to interact with your animals.</AllowNonColonistTooltip>
   <Animals_are_fun_Continued>Animals are fun! (Continued)</Animals_are_fun_Continued>
+  <BondedAnimalsMustBeCute>Bonded Animals Must Be Cute</BondedAnimalsMustBeCute>
+  <BondedAnimalsMustBeCuteTooltip>When enabled and a pawn prefers to play with a bonded animal, only cute animals will be considered.</BondedAnimalsMustBeCuteTooltip>
+  <BondedAnimalsPreference>Bonded Animals Preference</BondedAnimalsPreference>
+  <BondedAnimalsPreferenceTooltip>This is the chance that a pawn will prefer to play with a bonded animal before choosing a non-bonded animal.</BondedAnimalsPreferenceTooltip>
   <CacheExpirationTimeout>Cache Expiration Timeout ({0} ticks)</CacheExpirationTimeout>
   <CacheExpirationTimeoutTooltip>How long before the cache expires and is recalculated. Too low of a value may cause performance problems on slower computers. Higher values will cause a delay before pawns are able to play with animals that have recently entered the map.</CacheExpirationTimeoutTooltip>
   <DebuggingCategory>Debugging:</DebuggingCategory>
+  <DontCare>Don't Care</DontCare>
   <ExperimentalCategory>Experimental:</ExperimentalCategory>
   <MaxBodySize>Max. body size ({0}cm)</MaxBodySize>
   <MaxWildness>Max. wildness ({0}%)</MaxWildness>
@@ -19,6 +24,7 @@
   <MinMoving>Min. moving ({0}%)</MinMoving>
   <MustBeCute>Must be cute</MustBeCute>
   <MustBeCuteTooltip>Only play with or walk nuzzling animals. WARNING: Do not turn this off unless your have a very large penned in area or you have a mod that allows you teach zoning rules to any animal.</MustBeCuteTooltip>
+  <OnlyBonded>Only Bonded</OnlyBonded>
   <RequirementsCategory>Requirements:</RequirementsCategory>
   <ResetToDefaults>Reset all settings to defaults</ResetToDefaults>
   <Reset>Reset</Reset>
