@@ -19,7 +19,7 @@ namespace AnimalsAreFunContinued.JobDrivers
         {
             if (Path == null || Path.Count <= 0)
             {
-                AnimalsAreFunContinued.LogWarning($"Attempted to pull a waypoint, but the path is currently empty.");
+                AnimalsAreFunContinued.LogInfo($"Attempted to pull a waypoint, but the path is currently empty.");
                 return null;
             }
 

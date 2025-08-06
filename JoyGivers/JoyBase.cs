@@ -27,7 +27,6 @@ namespace AnimalsAreFunContinued.JoyGivers
             catch (Exception ex)
             {
                 AnimalsAreFunContinued.LogError($"An error occurred in FindOutsideWalkingPath(). {ex.Message}");
-                
             }
             return [];
         }
