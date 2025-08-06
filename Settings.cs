@@ -8,28 +8,33 @@ namespace AnimalsAreFunContinued
         private const float defaultMinConsciousness = 0.6f;
         private const float defaultMinMoving = 0.7f;
         private const float defaultMaxBodySize = 1.6f;
+        public static readonly float MaxBodySizeRange = 5.0f;
         private const float defaultMaxWildness = 0.8f;
         private const bool defaultMustBeCute = true;
-
         private const bool defaultAllowHumanLike = false;
         private const bool defaultAllowExoticPets = false;
         private const bool defaultAllowCrossFaction = false;
         private const bool defaultAllowNonColonist = false;
-
         private const bool defaultShowDebugMessages = false;
+        private const int defaultCacheExpirationTimeout = 1800;
+        private const float defaultBondedAnimalsPreference = 0.5f;
+        private const bool defaultBondedAnimalsMustBeCute = false;
 
+        public static readonly int CacheExpirationTimeoutMinRange = 60;
+        public static readonly int CacheExpirationTimeoutMaxRange = 5400;
         public static float MinConsciousness = defaultMinConsciousness;
         public static float MinMoving = defaultMinMoving;
         public static float MaxBodySize = defaultMaxBodySize;
         public static float MaxWildness = defaultMaxWildness;
         public static bool MustBeCute = defaultMustBeCute;
-
         public static bool AllowHumanLike = defaultAllowHumanLike;
         public static bool AllowExoticPets = defaultAllowExoticPets;
         public static bool AllowCrossFaction = defaultAllowCrossFaction;
         public static bool AllowNonColonist = defaultAllowNonColonist;
-
         public static bool ShowDebugMessages = defaultShowDebugMessages;
+        public static int CacheExpirationTimeout = defaultCacheExpirationTimeout;
+        public static float BondedAnimalsPreference = defaultBondedAnimalsPreference;
+        public static bool BondedAnimalsMustBeCute = defaultBondedAnimalsMustBeCute;
 
         public override void ExposeData()
         {
@@ -40,18 +45,21 @@ namespace AnimalsAreFunContinued
             Scribe_Values.Look(ref MaxBodySize, "MaxBodySize", defaultMaxBodySize);
             Scribe_Values.Look(ref MaxWildness, "MaxWildness", defaultMaxWildness);
             Scribe_Values.Look(ref MustBeCute, "MustBeCute", defaultMustBeCute);
-
             Scribe_Values.Look(ref AllowHumanLike, "AllowHumanLike", defaultAllowHumanLike);
             Scribe_Values.Look(ref AllowExoticPets, "AllowExoticPets", defaultAllowExoticPets);
             Scribe_Values.Look(ref AllowCrossFaction, "AllowCrossFaction", defaultAllowCrossFaction);
             Scribe_Values.Look(ref AllowNonColonist, "AllowNonColonist", defaultAllowNonColonist);
-
             Scribe_Values.Look(ref ShowDebugMessages, "ShowDebugMessages", defaultShowDebugMessages);
+            Scribe_Values.Look(ref CacheExpirationTimeout, "CacheExpirationTimeout", defaultCacheExpirationTimeout);
+            Scribe_Values.Look(ref BondedAnimalsPreference, "BondedAnimalsPreference", defaultBondedAnimalsPreference);
+            Scribe_Values.Look(ref BondedAnimalsMustBeCute, "BondedAnimalsMustBeCute", defaultBondedAnimalsMustBeCute);
 
-            MinConsciousness = Mathf.Clamp(MinConsciousness, 0.1f, 1);
-            MinMoving = Mathf.Clamp(MinMoving, 0.1f, 1);
-            MaxBodySize = Mathf.Clamp(MaxBodySize, 0.01f, 5);
-            MaxWildness = Mathf.Clamp(MaxWildness, 0.1f, 1);
+            MinConsciousness = Mathf.Clamp(MinConsciousness, 0.1f, 1.0f);
+            MinMoving = Mathf.Clamp(MinMoving, 0.1f, 1.0f);
+            MaxBodySize = Mathf.Clamp(MaxBodySize, 0.01f, MaxBodySizeRange);
+            MaxWildness = Mathf.Clamp(MaxWildness, 0.1f, 1.0f);
+            CacheExpirationTimeout = Mathf.Clamp(CacheExpirationTimeout, CacheExpirationTimeoutMinRange, CacheExpirationTimeoutMaxRange);
+            BondedAnimalsPreference = Mathf.Clamp(BondedAnimalsPreference, 0.0f, 1.0f);
         }
 
         public static void ResetToDefaults()
@@ -61,13 +69,14 @@ namespace AnimalsAreFunContinued
             MaxBodySize = defaultMaxBodySize;
             MaxWildness = defaultMaxWildness;
             MustBeCute = defaultMustBeCute;
-
             AllowHumanLike = defaultAllowHumanLike;
             AllowExoticPets = defaultAllowExoticPets;
             AllowCrossFaction = defaultAllowCrossFaction;
             AllowNonColonist = defaultAllowNonColonist;
-
             ShowDebugMessages = defaultShowDebugMessages;
+            CacheExpirationTimeout = defaultCacheExpirationTimeout;
+            BondedAnimalsPreference = defaultBondedAnimalsPreference;
+            BondedAnimalsMustBeCute = defaultBondedAnimalsMustBeCute;
         }
     }
 }
