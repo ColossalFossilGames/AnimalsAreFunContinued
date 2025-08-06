@@ -18,6 +18,8 @@
   <DebuggingCategory>Debugging:</DebuggingCategory>
   <DontCare>Don't Care</DontCare>
   <ExperimentalCategory>Experimental:</ExperimentalCategory>
+  <MaximumAnimalDistance>Maximum Animal Distance ({0} tiles)</MaximumAnimalDistance>
+  <MaximumAnimalDistanceTooltip>This is the maximum radius that a pawn will use while searching for an animal.</MaximumAnimalDistanceTooltip>
   <MaxBodySize>Max. body size ({0}cm)</MaxBodySize>
   <MaxWildness>Max. wildness ({0}%)</MaxWildness>
   <MinConsciousness>Min. consciousness ({0}%)</MinConsciousness>

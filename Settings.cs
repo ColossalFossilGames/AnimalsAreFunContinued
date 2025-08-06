@@ -5,10 +5,15 @@ namespace AnimalsAreFunContinued
 {
     public class Settings : ModSettings
     {
+        public static readonly float MaxBodySizeRange = 5.0f;
+        public static readonly int CacheExpirationTimeoutMinRange = 60;
+        public static readonly int CacheExpirationTimeoutMaxRange = 5400;
+        public static readonly float MaximumAnimalDistanceMinRange = 15.0f;
+        public static readonly float MaximumAnimalDistanceMaxRange = 60.0f;
+
         private const float defaultMinConsciousness = 0.6f;
         private const float defaultMinMoving = 0.7f;
         private const float defaultMaxBodySize = 1.6f;
-        public static readonly float MaxBodySizeRange = 5.0f;
         private const float defaultMaxWildness = 0.8f;
         private const bool defaultMustBeCute = true;
         private const bool defaultAllowHumanLike = false;
@@ -19,9 +24,8 @@ namespace AnimalsAreFunContinued
         private const int defaultCacheExpirationTimeout = 1800;
         private const float defaultBondedAnimalsPreference = 0.5f;
         private const bool defaultBondedAnimalsMustBeCute = false;
+        public static float defaultMaximumAnimalDistance = 30.0f;
 
-        public static readonly int CacheExpirationTimeoutMinRange = 60;
-        public static readonly int CacheExpirationTimeoutMaxRange = 5400;
         public static float MinConsciousness = defaultMinConsciousness;
         public static float MinMoving = defaultMinMoving;
         public static float MaxBodySize = defaultMaxBodySize;
@@ -35,6 +39,7 @@ namespace AnimalsAreFunContinued
         public static int CacheExpirationTimeout = defaultCacheExpirationTimeout;
         public static float BondedAnimalsPreference = defaultBondedAnimalsPreference;
         public static bool BondedAnimalsMustBeCute = defaultBondedAnimalsMustBeCute;
+        public static float MaximumAnimalDistance = defaultMaximumAnimalDistance;
 
         public override void ExposeData()
         {
@@ -53,6 +58,7 @@ namespace AnimalsAreFunContinued
             Scribe_Values.Look(ref CacheExpirationTimeout, "CacheExpirationTimeout", defaultCacheExpirationTimeout);
             Scribe_Values.Look(ref BondedAnimalsPreference, "BondedAnimalsPreference", defaultBondedAnimalsPreference);
             Scribe_Values.Look(ref BondedAnimalsMustBeCute, "BondedAnimalsMustBeCute", defaultBondedAnimalsMustBeCute);
+            Scribe_Values.Look(ref MaximumAnimalDistance, "MaximumAnimalDistance", defaultMaximumAnimalDistance);
 
             MinConsciousness = Mathf.Clamp(MinConsciousness, 0.1f, 1.0f);
             MinMoving = Mathf.Clamp(MinMoving, 0.1f, 1.0f);
@@ -60,6 +66,7 @@ namespace AnimalsAreFunContinued
             MaxWildness = Mathf.Clamp(MaxWildness, 0.1f, 1.0f);
             CacheExpirationTimeout = Mathf.Clamp(CacheExpirationTimeout, CacheExpirationTimeoutMinRange, CacheExpirationTimeoutMaxRange);
             BondedAnimalsPreference = Mathf.Clamp(BondedAnimalsPreference, 0.0f, 1.0f);
+            MaximumAnimalDistance = Mathf.Clamp(MaximumAnimalDistance, MaximumAnimalDistanceMinRange, MaximumAnimalDistanceMaxRange);
         }
 
         public static void ResetToDefaults()
@@ -77,6 +84,7 @@ namespace AnimalsAreFunContinued
             CacheExpirationTimeout = defaultCacheExpirationTimeout;
             BondedAnimalsPreference = defaultBondedAnimalsPreference;
             BondedAnimalsMustBeCute = defaultBondedAnimalsMustBeCute;
+            MaximumAnimalDistance = defaultMaximumAnimalDistance;
         }
     }
 }

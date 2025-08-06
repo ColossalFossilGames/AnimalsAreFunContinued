@@ -66,6 +66,7 @@ namespace AnimalsAreFunContinued
 
             ShowCheckbox(listingStandard, "ShowDebugMessages", ref Settings.ShowDebugMessages);
             Settings.CacheExpirationTimeout = ShowSlider(listingStandard, "CacheExpirationTimeout", Settings.CacheExpirationTimeout, Settings.CacheExpirationTimeoutMinRange, Settings.CacheExpirationTimeoutMaxRange, "CacheExpirationTimeoutTooltip");
+            Settings.MaximumAnimalDistance = ShowSlider(listingStandard, "MaximumAnimalDistance", Settings.MaximumAnimalDistance, Settings.MaximumAnimalDistanceMinRange, Settings.MaximumAnimalDistanceMaxRange, "MaximumAnimalDistanceTooltip", false);
             ShowGap(listingStandard, gapSizeSmall);
             if (ShowButton(listingStandard, "Reset", "ResetToDefaults"))
             {
@@ -93,12 +94,12 @@ namespace AnimalsAreFunContinued
             ShowGap(listingStandard, gapSize);
         }
         private static Rect ShowLabel(Listing_Standard listingStandard, string labelName) => listingStandard.Label(labelName.Translate());
-        private static float ShowSlider(Listing_Standard listingStandard, string labelName, float value, float min, float max, string? tooltipName = null)
+        private static float ShowSlider(Listing_Standard listingStandard, string labelName, float value, float min, float max, string? tooltipName = null, bool formatAsPercent = true)
         {
 #if V1_6BIN || V1_5BIN || V1_4BIN || RESOURCES
-            return listingStandard.SliderLabeled(labelName.Translate(FormatPercent(value)), value, min, max, _sliderLabelWidth, tooltipName?.Translate());
+            return listingStandard.SliderLabeled(labelName.Translate(formatAsPercent ? FormatPercent(value) : value), value, min, max, _sliderLabelWidth, tooltipName?.Translate());
 #elif V1_3BIN || V1_2BIN || V1_1BIN
-            listingStandard.Label(labelName.Translate(FormatPercent(value)));
+            listingStandard.Label(labelName.Translate(formatAsPercent ? FormatPercent(value) : value));
             return listingStandard.Slider(value, min, max);
 #else
     #error "Unsupported build configuration."

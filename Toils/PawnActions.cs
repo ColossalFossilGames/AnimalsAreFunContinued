@@ -81,8 +81,8 @@ namespace AnimalsAreFunContinued.Toils
                     LocalTargetInfo waypoint = getLocation();
                     if (waypoint == null)
                     {
-                        AnimalsAreFunContinued.LogInfo($"{pawnName} is unable to walk to the next waypoint. getLocation delegate has returned an unexpected null value. Ending the job prematurely.");
-                        jobDriver.EndJobWith(JobCondition.Errored);
+                        AnimalsAreFunContinued.LogInfo($"{pawnName} has reached the last available waypoint before the job duration has expired. Ending the job prematurely, but successfully.");
+                        jobDriver.EndJobWith(JobCondition.Succeeded);
                         return;
                     }
                     if (!pawn.CanReach(waypoint, PathEndMode.OnCell, Danger.None))
