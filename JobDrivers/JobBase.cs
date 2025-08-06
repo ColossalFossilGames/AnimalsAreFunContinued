@@ -104,7 +104,7 @@ namespace AnimalsAreFunContinued.JobDrivers
         {
             if (InteractiveTargetCurrentJobId == null)
             {
-                return true;
+                return false;
             }
 
             Pawn target = job.GetTarget(TargetIndex.B).Pawn;
