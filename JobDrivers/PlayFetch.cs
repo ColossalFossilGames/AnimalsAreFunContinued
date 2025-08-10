@@ -44,7 +44,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return StartJobForTarget(Jobs.FetchItem, CreateNextWaypointDelegate(true), LocomotionUrgency.Walk);
 
             // wait for pet to finish fetching item
-            Toil waitForAnimal = PawnActions.HoldPosition(30);
+            Toil waitForAnimal = PawnActions.HoldPosition(this, 30);
             yield return waitForAnimal;
 
             // continue waiting until pet has finished fetching item
