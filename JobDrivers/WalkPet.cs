@@ -1,3 +1,4 @@
+using AnimalsAreFunContinued.Externals;
 using AnimalsAreFunContinued.Toils;
 using RimWorld;
 using System.Collections.Generic;
@@ -20,11 +21,11 @@ namespace AnimalsAreFunContinued.JobDrivers
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             string animalName = FormatLog.PawnName(animal);
 
+            // pet should wait for pawn interaction
+            yield return StartJobForTarget(Jobs.WaitForPawn, LocomotionUrgency.None, $"{animalName} is now waiting for {pawnName}.");
+
             // initial go to animal
             yield return PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
-
-            // pet should wait for pawn interaction
-            yield return StartJobForTarget(JobDefOf.Wait, LocomotionUrgency.None, $"{animalName} is now waiting for {pawnName}.");
 
             // say hello to animal
             yield return PawnActions.TalkToPet(this);

@@ -29,9 +29,9 @@ namespace AnimalsAreFunContinued.Toils
                     }
                     pawn.pather.StartPath(animal.Position, PathEndMode.OnCell);
                 },
-                defaultCompleteMode = ToilCompleteMode.PatherArrival,
-                socialMode = RandomSocialMode.Quiet
+                defaultCompleteMode = ToilCompleteMode.PatherArrival
             };
+            walkToPet = MakeToilRecreational(jobDriver, walkToPet, RandomSocialMode.Quiet);
             walkToPet.AddPreInitAction(() =>
             {
                 job.locomotionUrgency = urgency;
@@ -56,9 +56,9 @@ namespace AnimalsAreFunContinued.Toils
                     pawn.interactions.TryInteractWith(animal, InteractionDefOf.AnimalChat);
                 },
                 defaultCompleteMode = ToilCompleteMode.Delay,
-                defaultDuration = 90,
-                socialMode = RandomSocialMode.SuperActive
+                defaultDuration = 90
             };
+            talkToPet = MakeToilRecreational(jobDriver, talkToPet);
             talkToPet.AddPreInitAction(() =>
             {
                 job.locomotionUrgency = LocomotionUrgency.Walk;
@@ -94,22 +94,9 @@ namespace AnimalsAreFunContinued.Toils
                     
                     pawn.pather.StartPath(Interpreters.LocalTargetInfo.GetCellInt(waypoint), PathEndMode.OnCell);
                 },
-#if V1_6BIN || RESOURCES
-                tickIntervalAction = (delta) =>
-                {
-                    JoyUtility.JoyTickCheckEnd(pawn, delta);
-                },
-#elif V1_5BIN || V1_4BIN || V1_3BIN || V1_2BIN || V1_1BIN
-                tickAction = () =>
-                {
-                    JoyUtility.JoyTickCheckEnd(pawn);
-                },
-#else
-    #error "Unsupported build configuration."
-#endif
-                defaultCompleteMode = ToilCompleteMode.PatherArrival,
-                socialMode = RandomSocialMode.SuperActive
+                defaultCompleteMode = ToilCompleteMode.PatherArrival
             };
+            walkToWaypoint = MakeToilRecreational(jobDriver, walkToWaypoint);
             walkToWaypoint.AddPreInitAction(() =>
             {
                 job.locomotionUrgency = LocomotionUrgency.Walk;
@@ -152,9 +139,9 @@ namespace AnimalsAreFunContinued.Toils
     #error "Unsupported build configuration."
 #endif
                 },
-                socialMode = RandomSocialMode.SuperActive,
                 defaultCompleteMode = ToilCompleteMode.Instant
             };
+            throwBall = MakeToilRecreational(jobDriver, throwBall);
             throwBall.AddPreInitAction(() =>
             {
                 job.locomotionUrgency = LocomotionUrgency.None;
@@ -163,11 +150,17 @@ namespace AnimalsAreFunContinued.Toils
             return throwBall;
         }
 
-        public static Toil HoldPosition(int ticks) => new()
+        public static Toil HoldPosition(JobBase jobDriver, int ticks)
         {
-            defaultCompleteMode = ToilCompleteMode.Delay,
-            defaultDuration = ticks
-        };
+            Toil holdPosition = new()
+            {
+                defaultCompleteMode = ToilCompleteMode.Delay,
+                defaultDuration = ticks
+            };
+            holdPosition = MakeToilRecreational(jobDriver, holdPosition);
+            holdPosition.FailOn(HasToilFailed(jobDriver));
+            return holdPosition;
+        }
 
         public static ConditionDelegate HasToilFailed(JobBase jobDriver) => () =>
         {
@@ -199,6 +192,28 @@ namespace AnimalsAreFunContinued.Toils
             {
                 animal.jobs.EndCurrentJob(JobCondition.Incompletable);
             }
+        }
+
+        private static Toil MakeToilRecreational(JobBase jobDriver, Toil toil, RandomSocialMode socialMode = RandomSocialMode.SuperActive)
+        {
+            Pawn pawn = jobDriver.pawn;
+
+#if V1_6BIN || RESOURCES
+            toil.tickIntervalAction = (delta) =>
+            {
+                JoyUtility.JoyTickCheckEnd(pawn, delta);
+            };
+#elif V1_5BIN || V1_4BIN || V1_3BIN || V1_2BIN || V1_1BIN
+            toil.tickAction = () =>
+            {
+                JoyUtility.JoyTickCheckEnd(pawn);
+            };
+#else
+    #error "Unsupported build configuration."
+#endif
+            toil.socialMode = socialMode;
+
+            return toil;
         }
     };
 }

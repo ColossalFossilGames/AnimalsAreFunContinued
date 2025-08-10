@@ -21,11 +21,11 @@ namespace AnimalsAreFunContinued.JobDrivers
             Pawn animal = job.GetTarget(TargetIndex.B).Pawn;
             string animalName = FormatLog.PawnName(animal);
 
+            // pet should wait for pawn interaction
+            yield return StartJobForTarget(Jobs.WaitForPawn, LocomotionUrgency.None, $"{animalName} is now waiting for {pawnName}.");
+
             // initial go to animal
             yield return PawnActions.WalkToPet(this, LocomotionUrgency.Jog);
-
-            // pet should wait for pawn interaction
-            yield return StartJobForTarget(JobDefOf.Wait, LocomotionUrgency.None, $"{animalName} is now waiting for {pawnName}.");
 
             // say hello to animal
             yield return PawnActions.TalkToPet(this);
@@ -44,7 +44,7 @@ namespace AnimalsAreFunContinued.JobDrivers
             yield return StartJobForTarget(Jobs.FetchItem, CreateNextWaypointDelegate(true), LocomotionUrgency.Walk);
 
             // wait for pet to finish fetching item
-            Toil waitForAnimal = PawnActions.HoldPosition(30);
+            Toil waitForAnimal = PawnActions.HoldPosition(this, 30);
             yield return waitForAnimal;
 
             // continue waiting until pet has finished fetching item

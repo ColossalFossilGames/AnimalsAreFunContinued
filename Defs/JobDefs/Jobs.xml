@@ -26,5 +26,11 @@
     <driverClass>AnimalsAreFunContinued.JobDrivers.FetchItem</driverClass>
     <reportString>playing fetch.</reportString>
   </JobDef>
+
+  <JobDef>
+    <defName>AAFC_WaitForPawn</defName>
+    <driverClass>AnimalsAreFunContinued.JobDrivers.WaitForPawn</driverClass>
+    <reportString>waiting.</reportString>
+  </JobDef>
   
 </Defs>
